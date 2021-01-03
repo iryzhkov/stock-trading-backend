@@ -1,18 +1,18 @@
 @startuml
 class DataSource {
   Data[] sources
+  add_source()
+}
+
+class Data {
+  DataFrame data
+  boolean is_primary_source
+  boolean is_stock_specific
   get_data_for_date()
   get_data_for_date_range()
   get_available_dates()
   get_available_dates_in_range()
-}
-
-class Data {
-  boolean is_primary_source
-  boolean is_stock_specific
-  {abstract} get_data_for_date()
-  {abstract} get_data_for_date_range()
-  {abstract} get_available_dates_in_range()
+  add_data_for_date()
 }
 
 class StockData {
@@ -47,20 +47,41 @@ class RunningAverageAnalysis {
   int number_of_days
 }
 
-class SimulationData {
+class DecisionMaker {
+  check_data_source()
+  make_decision_for_data()
 }
 
-class BalanceData {
-  is_stock_specific = False
+class ReinforcementLearningDecisionMaker {
+  generate_possible_actions()
+  load_model()
+  save_model()
 }
 
-class StockOwnershipData {
-  is_stock_specific = True
+class Simulation {
+  DataSource data_source
+  Data balance
+  Data net_worth
+  Data stock_ownership
+  Data stock_actions
+  DecisionMaker decision_maker
+  run_simulation()
 }
+
 
 DataSource::sources o-- Data
 StockDataAnalysis::source o-- StockData
 RandomizedStockData::source o-- StockData
+Simulation::data_source o-- DataSource
+Simulation::balance o-- Data
+Simulation::net_worth o-- Data
+Simulation::stock_actions o-- Data
+Simulation::stock_ownership o-- Data
+Simulation::decision_maker o-- DecisionMaker
+
+DecisionMaker <|-- ReinforcementLearningDecisionMaker
+
+Data <|-- DataSource
 
 Data <|-- StockData
 StockData <|-- RandomizedStockData
@@ -71,6 +92,4 @@ Data <|-- StockDataAnalysis
 StockDataAnalysis <|-- RunningAverageAnalysis
 
 Data <|-- SimulationData
-SimulationData <|-- BalanceData
-SimulationData <|-- StockOwnershipData
 @enduml
