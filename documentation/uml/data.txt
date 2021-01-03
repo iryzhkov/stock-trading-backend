@@ -1,0 +1,76 @@
+@startuml
+class DataSource {
+  Data[] sources
+  get_data_for_date()
+  get_data_for_date_range()
+  get_available_dates()
+  get_available_dates_in_range()
+}
+
+class Data {
+  boolean is_primary_source
+  boolean is_stock_specific
+  {abstract} get_data_for_date()
+  {abstract} get_data_for_date_range()
+  {abstract} get_available_dates_in_range()
+}
+
+class StockData {
+  is_primary_source = True
+  is_stock_specific = True
+}
+
+class RandomizedStockData {
+  float error
+  String[] affected_fields
+  StockData source
+}
+
+class RealStockData {
+  String[] stock_symbols
+}
+
+class GeneratedStockData {
+  String evaluation_formula
+  String reference_date
+  float period
+  float minimum_price
+  float amplitude
+}
+
+class StockDataAnalysis {
+  StockData source
+  is_primary_source = False
+}
+
+class RunningAverageAnalysis {
+  int number_of_days
+}
+
+class SimulationData {
+}
+
+class BalanceData {
+  is_stock_specific = False
+}
+
+class StockOwnershipData {
+  is_stock_specific = True
+}
+
+DataSource::sources o-- Data
+StockDataAnalysis::source o-- StockData
+RandomizedStockData::source o-- StockData
+
+Data <|-- StockData
+StockData <|-- RandomizedStockData
+StockData <|-- RealStockData
+StockData <|-- GeneratedStockData
+
+Data <|-- StockDataAnalysis
+StockDataAnalysis <|-- RunningAverageAnalysis
+
+Data <|-- SimulationData
+SimulationData <|-- BalanceData
+SimulationData <|-- StockOwnershipData
+@enduml
