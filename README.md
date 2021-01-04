@@ -1,11 +1,9 @@
-# Stock Trading Backend
+# Stock Trading Back-end
 
 ## Overview
 
 ## Usage
 
 ## Performance
-
-## Architecture
 
 ## References
