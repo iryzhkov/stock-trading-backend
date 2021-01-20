@@ -21,24 +21,60 @@ class Data:
     def __init__(self):
         """Initializer for Data class
         """
+        self.data = None
 
-    def get_data_for_date(self, date):
+    def __getitem__(self, date):
         """Get the data for the date.
 
         Args:
             date: the specified lookup date.
 
         Returns:
-            DataFrame with the data.
+            DataFrame row with the data.
         """
+        if self.data is None:
+            raise Exception("data is not defined.")
+            return None
 
-    def get_data_for_date_range(self, range_start, range_end):
-        """Get the data for the date range.
+        if date not in self.data:
+            raise LookupError("{} is not in the data".format(date))
+            return None
 
-        Args:
-            range_start: the start of the range.
-            range_end: the end of the range.
+        return self.data[date]
+
+    def __len__(self):
+        """Get the size of the data.
 
         Returns:
-            DataFrame with the data.
+            A number of rows in the self.data
         """
+        return len(self.data)
+
+    def __contains__(self, date):
+        """Checks if date is in self.data.
+
+        Args:
+            date: the specified lookup date.
+
+        Returns:
+            Whether the date is in self.data
+        """
+        if self.data is None:
+            raise Exception("data is not defined.")
+            return None
+        return date in self.data
+
+    def __iter__(self):
+        """Iterator.
+
+        Args:
+            date: the specified lookup date.
+
+        Returns:
+            Whether the date is in self.data
+        """
+        if self.data is None:
+            raise Exception("data is not defined.")
+            return None
+
+        return self.data.__iter__()
