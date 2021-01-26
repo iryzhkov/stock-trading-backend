@@ -1,0 +1,10 @@
+---
+name: agent1
+type: q-learning
+learning-rate: 0.01
+alpha: 0.9
+location: aws
+stocks:
+  -GOOG
+  -APPL
+  -AMZN

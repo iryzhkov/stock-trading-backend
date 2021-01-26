@@ -1,0 +1,8 @@
+---
+type: randomized-stock-data
+distribution: uniform
+difference: relative
+mean: 0
+range: 5
+source:
+  type: real-stock-data
