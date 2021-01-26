@@ -8,8 +8,9 @@ class Data {
   DataFrame data
   boolean is_primary_source
   boolean is_stock_specific
-  get_data_for_date()
-  get_data_for_date_range()
+  __getitem__()
+  __len__()
+  __contains__()
   get_available_dates()
   get_available_dates_in_range()
   add_data_for_date()
@@ -64,8 +65,11 @@ class Simulation {
   Data net_worth
   Data stock_ownership
   Data stock_actions
-  DecisionMaker decision_maker
-  run_simulation()
+
+  action_space
+  step()
+  reset()
+  render()
 }
 
 
