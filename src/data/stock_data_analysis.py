@@ -2,6 +2,7 @@
 """
 from src.data import Data, DataType
 
+
 class StockDataAnalysis(Data):
     """Base class for storing stock data analysis.
     """

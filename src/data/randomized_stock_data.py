@@ -2,6 +2,7 @@
 """
 from src.data import StockData, DataType
 
+
 class RandomizedStockData(StockData):
     """Class for storing randomized stock data.
     """

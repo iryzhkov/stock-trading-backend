@@ -2,6 +2,7 @@
 """
 from src.data import StockDataAnalysis
 
+
 class RunningAverageAnalysis(StockDataAnalysis):
     """Class for running average analysis data.
     """

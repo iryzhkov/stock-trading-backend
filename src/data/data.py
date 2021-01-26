@@ -76,5 +76,4 @@ class Data:
         if self.data is None:
             raise Exception("data is not defined.")
             return None
-
         return self.data.__iter__()

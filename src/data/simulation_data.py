@@ -2,6 +2,7 @@
 """
 from src.data import Data, DataType
 
+
 class SimulationData(Data):
     """Base class for storing simulation data.
     """

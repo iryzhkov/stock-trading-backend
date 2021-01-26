@@ -2,6 +2,7 @@
 """
 from src.data import StockData, DataType
 
+
 class GeneratedStockData(StockData):
     """Class for storing generated stock data.
     """

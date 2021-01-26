@@ -2,6 +2,7 @@
 """
 from src.data import StockData
 
+
 class RealStockData(StockData):
     """Class for storing real stock data.
     """
