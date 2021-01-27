@@ -3,6 +3,7 @@
 from abc import ABCMeta
 from enum import Enum, auto
 
+
 class DataType(Enum):
     """Enumerator class for types of data.
     """
@@ -64,13 +65,9 @@ class Data(metaclass=ABCMeta):
         return date in self.data
 
     def __iter__(self):
-        """Iterator.
+        """Iterator generator.
 
-        Args:
-            date: the specified lookup date.
-
-        Returns:
-            Whether the date is in self.data
+        Returns iterator object for the data.
         """
         if self.data is None:
             raise Exception("data is not defined.")
