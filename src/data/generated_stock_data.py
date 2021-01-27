@@ -8,3 +8,11 @@ class GeneratedStockData(StockData):
     """
     id = "generated_stock_data"
     data_type = DataType.STOCK_DATA
+
+    def pre_run(self):
+        """Stuff to run before.
+        """
+
+    def reset(self):
+        """Stuff to run
+        """

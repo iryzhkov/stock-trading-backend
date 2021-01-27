@@ -2,7 +2,7 @@
 """
 import unittest
 
-from src.simulation import Simulation
+from src.simulation import StockMarketSimulation
 
 
 class TestGeneratedStockData(unittest.TestCase):
@@ -11,9 +11,9 @@ class TestGeneratedStockData(unittest.TestCase):
     def setUp(self):
         """Set up for the unit tests.
         """
-        self.simulation = Simulation()
+        self.simulation = StockMarketSimulation(None)
 
     def test_a(self):
         """A simple test method.
         """
-        self.assertTrue(True)
+        self.assertIsNone(self.simulation.data_source_config)

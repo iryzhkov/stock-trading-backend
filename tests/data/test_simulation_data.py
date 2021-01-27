@@ -16,4 +16,4 @@ class TestSimulationData(unittest.TestCase):
     def test_a(self):
         """A simple test method.
         """
-        self.assertTrue(True)
+        self.assertFalse(self.data.data)

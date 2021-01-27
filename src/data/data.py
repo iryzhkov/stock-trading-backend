@@ -1,5 +1,6 @@
 """Base class for storing data.
 """
+from abc import ABCMeta
 from enum import Enum, auto
 
 class DataType(Enum):
@@ -11,7 +12,7 @@ class DataType(Enum):
     SIMULATION_DATA = auto()
 
 
-class Data:
+class Data(metaclass=ABCMeta):
     """Base class for storing data.
     """
     id = None
@@ -21,7 +22,7 @@ class Data:
     def __init__(self):
         """Initializer for Data class
         """
-        self.data = None
+        self.data = []
 
     def __getitem__(self, date):
         """Get the data for the date.
@@ -34,11 +35,9 @@ class Data:
         """
         if self.data is None:
             raise Exception("data is not defined.")
-            return None
 
         if date not in self.data:
             raise LookupError("{} is not in the data".format(date))
-            return None
 
         return self.data[date]
 
@@ -61,7 +60,7 @@ class Data:
         """
         if self.data is None:
             raise Exception("data is not defined.")
-            return None
+
         return date in self.data
 
     def __iter__(self):
@@ -75,5 +74,5 @@ class Data:
         """
         if self.data is None:
             raise Exception("data is not defined.")
-            return None
+
         return self.data.__iter__()
