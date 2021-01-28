@@ -1,12 +1,12 @@
 """Class for running average analysis data.
 """
-from src.data import StockDataAnalysis
+from src.data.stock_data_analysis import StockDataAnalysis
 
 
 class RunningAverageAnalysis(StockDataAnalysis):
     """Class for running average analysis data.
     """
-    id = "running_{number_of_days}_average_analysis"
+    name = "running_average_analysis"
     is_stock_specific = True
 
     def pre_run(self):

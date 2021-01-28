@@ -1,13 +1,12 @@
 """Class for storing randomized stock data.
 """
-from src.data import StockData, DataType
+from src.data.stock_data import StockData
 
 
 class RandomizedStockData(StockData):
     """Class for storing randomized stock data.
     """
-    id = "randomized_stock_data"
-    data_type = DataType.STOCK_DATA
+    name = "randomized_stock_data"
 
     def pre_run(self):
         """Stuff to run before.

@@ -1,6 +1,6 @@
 """Base class for storing stock data analysis.
 """
-from src.data import Data, DataType
+from src.data.data import Data, DataType
 
 
 class StockDataAnalysis(Data):
