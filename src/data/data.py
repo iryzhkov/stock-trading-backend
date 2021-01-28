@@ -16,14 +16,33 @@ class DataType(Enum):
 class Data(metaclass=ABCMeta):
     """Base class for storing data.
     """
-    id = None
+    name = None
     data_type = DataType.NONE
     is_stock_specific = False
 
-    def __init__(self):
+    def __init__(self, dependencies=None):
         """Initializer for Data class
+
+        Args:
+            dependencies: a list of dependencies for the data.
         """
         self.data = []
+        self.ready = False
+        if dependencies:
+            self.dependencies = dependencies
+        else:
+            self.dependencies = []
+
+    def prepare_data(self, date_range, stock_names, dependencies):
+        """Data preparation.
+
+        Gets the data prepared.
+
+        Args:
+            date_range: a tuple of dates that provides a range.
+            stock_names: a list of stock names to prepare.
+            dependencies: a list of prepared dependencies.
+        """
 
     def __getitem__(self, date):
         """Get the data for the date.

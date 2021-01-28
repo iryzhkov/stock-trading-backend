@@ -1,4 +1,4 @@
-"""Unit tests for data.
+"""Unit tests for data factory.
 """
 import unittest
 
@@ -20,6 +20,10 @@ class TestDataFactory(unittest.TestCase):
     ])
     def test_creates_data(self, config_filename, expected_class):
         """Checks if created data class is of the right class.
+
+        Args:
+            config_filename: the filename for the config file.
+            expected_class: the expected class created from config file.
         """
-        created_data = create_data(read_config_file(config_filename))
-        self.assertIsInstance(created_data, expected_class)
+        data = create_data(read_config_file(config_filename))
+        self.assertIsInstance(data, expected_class)
