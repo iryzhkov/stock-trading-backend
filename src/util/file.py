@@ -1,6 +1,13 @@
 """Utils for writing / reading files.
 """
 from enum import Enum, auto
+from os.path import dirname, join
+
+import yaml
+
+
+ROOT = dirname(dirname(dirname(__file__)))
+CONFIG_PATH = join(ROOT, "config")
 
 
 class FileSourceType(Enum):
@@ -11,7 +18,6 @@ class FileSourceType(Enum):
     gce = auto()
 
 
-#pylint: disable=unused-argument
 def read_config_file(file_name, file_source=FileSourceType.local):
     """Reads a config file.
 
@@ -22,6 +28,13 @@ def read_config_file(file_name, file_source=FileSourceType.local):
     Returns:
         config dictionary that was read from the file.
     """
+    if file_source == FileSourceType.local:
+        file_path = join(CONFIG_PATH, file_name)
+        with open(file_path, 'r') as file:
+            config = yaml.safe_load(file)
+    else:
+        raise NotImplementedError()
+    return config
 
 #pylint: disable=unused-argument
 def read_manifest_file(file_name, file_source=FileSourceType.local):
