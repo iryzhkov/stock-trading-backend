@@ -11,7 +11,7 @@ class TestRandomizedStockData(unittest.TestCase):
     def setUp(self):
         """Set up for the unit tests.
         """
-        self.data = RandomizedStockData()
+        self.data = RandomizedStockData(dependencies=["real_stock_data"])
 
     def test_a(self):
         """A simple test method.
