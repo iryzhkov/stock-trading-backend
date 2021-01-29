@@ -18,4 +18,4 @@ class TestRandomizedStockData(unittest.TestCase):
         """Tests if the data is prepared properly.
         """
         data = RandomizedStockData(dependencies=["stock_data"])
-        data.prepare_data(None, None, None)
+        data.prepare_data(None, None, None, None)

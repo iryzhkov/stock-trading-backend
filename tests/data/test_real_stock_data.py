@@ -8,12 +8,8 @@ from src.data import RealStockData
 class TestRealStockData(unittest.TestCase):
     """Unit tests for real stock data data.
     """
-    def setUp(self):
-        """Set up for the unit tests.
+    def test_prepare_data(self):
+        """Tests if the data is prepared properly.
         """
-        self.data = RealStockData()
-
-    def test_a(self):
-        """A simple test method.
-        """
-        self.assertFalse(self.data.data)
+        data = RealStockData()
+        data.prepare_data(None, None, None, None)

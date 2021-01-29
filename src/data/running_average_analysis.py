@@ -21,13 +21,14 @@ class RunningAverageAnalysis(StockDataAnalysis):
         self.num_days = num_days
         self.id_str = "running_average_{}_for_{}".format(num_days, dependencies[0])
 
-    def prepare_data(self, date_range, stock_names, dependencies):
+    def prepare_data(self, from_date, to_date, stock_names, dependencies):
         """Data preparation.
 
         Gets the data prepared.
 
         Args:
-            date_range: a tuple of dates that provides a range.
+            from_date: datetime start of the date range.
+            to_date: datetime end of the date range.
             stock_names: a list of stock names to prepare.
             dependencies: a list of prepared data dependencies.
         """

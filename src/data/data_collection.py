@@ -7,15 +7,13 @@ from src.data.data import DataType
 class DataCollection:
     """Class that contains multiple Data classes.
     """
-    def __init__(self, data_objects, date_range, stock_names):
+    def __init__(self, data_objects, stock_names):
         """Initializer for DataCollection class.
 
         Args:
             data_objects: a list of Data objects. First object is used as main stock data provider.
-            date_range: a tuple of dates that provides a range.
             stock_names: a list of stock names to prepare.
         """
-        self.date_range = date_range
         self.stock_names = stock_names
         self.data_objects = data_objects
         if self.data_objects[0].data_type != DataType.STOCK_DATA:
@@ -35,11 +33,13 @@ class DataCollection:
                 elif not dep in self.id_to_data:
                     raise LookupError("Couln't find {} (dependency of {})".format(dep, data.id_str))
 
-    def _prepare_data(self, data_id):
+    def _prepare_data(self, data_id, from_date, to_date):
         """Prepares a single data object.
 
         Args:
             data_id: the id of data to prepare.
+            from_date: datetime start of the date range.
+            to_date: datetime end of the date range.
 
         Returns:
             data object that was prepared.
@@ -52,13 +52,18 @@ class DataCollection:
             return data
 
         self.busy[data_id] = True
-        dependencies = [self._prepare_data(dep_id) for dep_id in data.dependencies]
-        data.prepare_data(self.date_range, self.stock_names, dependencies)
+        dependencies = [self._prepare_data(dep_id, from_date, to_date)
+                        for dep_id in data.dependencies]
+        data.prepare_data(from_date, to_date, self.stock_names, dependencies)
         self.busy[data_id] = False
         return data
 
-    def prepare_data(self):
+    def prepare_data(self, from_date, to_date):
         """Prepares all the data in the collection.
+
+        Args:
+            from_date: datetime start of the date range.
+            to_date: datetime end of the date range.
         """
         for id_str in self.id_to_data:
-            self._prepare_data(id_str)
+            self._prepare_data(id_str, from_date, to_date)

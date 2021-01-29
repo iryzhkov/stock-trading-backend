@@ -12,4 +12,4 @@ class TestGeneratedStockData(unittest.TestCase):
         """Tests if the data is prepared properly.
         """
         data = GeneratedStockData()
-        data.prepare_data(None, None, None)
+        data.prepare_data(None, None, None, None)

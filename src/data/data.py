@@ -39,13 +39,14 @@ class Data(metaclass=ABCMeta):
             raise ValueError("Expected {} dependencies, got {}".format(
                 self.expected_num_dependencies, len(self.dependencies)))
 
-    def prepare_data(self, date_range, stock_names, dependencies):
+    def prepare_data(self, from_date, to_date, stock_names, dependencies):
         """Data preparation.
 
         Gets the data prepared.
 
         Args:
-            date_range: a tuple of dates that provides a range.
+            from_date: datetime start of the date range.
+            to_date: datetime end of the date range.
             stock_names: a list of stock names to prepare.
             dependencies: a list of prepared data dependencies.
         """
