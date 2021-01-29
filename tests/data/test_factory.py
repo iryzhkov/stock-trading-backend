@@ -32,3 +32,4 @@ class TestDataFactory(unittest.TestCase):
         """Checks if creates data collection.
         """
         data_collection = create_data_collection(read_config_file("test/data_collection.yaml"))
+        self.assertIsInstance(data_collection, DataCollection)

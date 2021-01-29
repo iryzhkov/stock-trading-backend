@@ -1,0 +1,10 @@
+stock_names:
+  - GOOG
+  - AMZN
+date_range:
+  start: 123
+  end: 321
+data:
+  - name: randomized_stock_data
+    dependencies:
+      - real_stock_data
