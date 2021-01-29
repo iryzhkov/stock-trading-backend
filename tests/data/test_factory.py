@@ -28,6 +28,13 @@ class TestDataFactory(unittest.TestCase):
         data = create_data(read_config_file(config_filename))
         self.assertIsInstance(data, expected_class)
 
+    def test_create_data_lookup_error(self):
+        """Checks if create date raises lookup error when name is incorrect.
+        """
+        with self.assertRaises(LookupError):
+            _ = create_data({"name": "fake_data"})
+
+
     def test_creates_data_collection(self):
         """Checks if creates data collection.
         """

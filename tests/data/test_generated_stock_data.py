@@ -8,12 +8,8 @@ from src.data import GeneratedStockData
 class TestGeneratedStockData(unittest.TestCase):
     """Unit tests for generated stock data.
     """
-    def setUp(self):
-        """Set up for the unit tests.
+    def test_prepare_data(self):
+        """Tests if the data is prepared properly.
         """
-        self.data = GeneratedStockData()
-
-    def test_a(self):
-        """A simple test method.
-        """
-        self.assertFalse(self.data.data)
+        data = GeneratedStockData()
+        data.prepare_data(None, None, None)

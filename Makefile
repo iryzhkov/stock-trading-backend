@@ -13,7 +13,7 @@ test:
 coverage:
 	coverage erase
 	coverage run -m pytest tests/
-	coverage report --include "src/*" --fail-under 90 
+	coverage report --include "src/*" --fail-under 100 
 
 clean:
 	find . -type f -name \*.pyc -exec rm {} \;
