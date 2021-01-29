@@ -7,8 +7,4 @@ date_range:
 data:
   - name: randomized_stock_data
     dependencies:
-      - real_stock_data
-  - name: real_stock_data
-  - name: running_average_analysis
-    dependencies:
       - stock_data

@@ -19,7 +19,6 @@ class Data(metaclass=ABCMeta):
     name = None
     data_type = DataType.NONE
     is_stock_specific = False
-    depends_on_stock_data = False
     expected_num_dependencies = 0
 
     def __init__(self, dependencies=None):
@@ -40,7 +39,7 @@ class Data(metaclass=ABCMeta):
             raise ValueError("Expected {} dependencies, got {}".format(
                 self.expected_num_dependencies, len(self.dependencies)))
 
-    def prepare_data(self, date_range, stock_names, dependencies, stock_data):
+    def prepare_data(self, date_range, stock_names, dependencies):
         """Data preparation.
 
         Gets the data prepared.
@@ -49,7 +48,6 @@ class Data(metaclass=ABCMeta):
             date_range: a tuple of dates that provides a range.
             stock_names: a list of stock names to prepare.
             dependencies: a list of prepared data dependencies.
-            stock_data: a Data object with stock data.
         """
 
     def __getitem__(self, date):

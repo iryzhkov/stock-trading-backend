@@ -9,7 +9,7 @@ class GeneratedStockData(StockData):
     """
     name = "generated_stock_data"
 
-    def prepare_data(self, date_range, stock_names, dependencies, stock_data):
+    def prepare_data(self, date_range, stock_names, dependencies):
         """Data preparation.
 
         Gets the data prepared.
@@ -18,6 +18,5 @@ class GeneratedStockData(StockData):
             date_range: a tuple of dates that provides a range.
             stock_names: a list of stock names to prepare.
             dependencies: a list of prepared data dependencies.
-            stock_data: a Data object with stock data.
         """
         self.ready = True

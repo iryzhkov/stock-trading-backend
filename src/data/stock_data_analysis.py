@@ -9,4 +9,3 @@ class StockDataAnalysis(Data, metaclass=ABCMeta):
     """Base class for storing stock data analysis.
     """
     data_type = DataType.STOCK_DATA_ANALYSIS
-    depends_on_stock_data = True

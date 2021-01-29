@@ -8,7 +8,7 @@ class RunningAverageAnalysis(StockDataAnalysis):
     """Class for running average analysis data.
     """
     name = "running_average_analysis"
-    is_stock_specific = True
+    expected_num_dependencies = 1
 
     def __init__(self, dependencies=None, num_days=1):
         """Initializer for Running Average Analysis class
@@ -19,8 +19,9 @@ class RunningAverageAnalysis(StockDataAnalysis):
         """
         super(RunningAverageAnalysis, self).__init__(dependencies)
         self.num_days = num_days
+        self.id_str = "running_average_{}_for_{}".format(num_days, dependencies[0])
 
-    def prepare_data(self, date_range, stock_names, dependencies, stock_data):
+    def prepare_data(self, date_range, stock_names, dependencies):
         """Data preparation.
 
         Gets the data prepared.
@@ -29,6 +30,5 @@ class RunningAverageAnalysis(StockDataAnalysis):
             date_range: a tuple of dates that provides a range.
             stock_names: a list of stock names to prepare.
             dependencies: a list of prepared data dependencies.
-            stock_data: a Data object with stock data.
         """
         self.ready = True
