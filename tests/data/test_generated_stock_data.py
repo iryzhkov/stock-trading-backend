@@ -13,3 +13,4 @@ class TestGeneratedStockData(unittest.TestCase):
         """
         data = GeneratedStockData()
         data.prepare_data(None, None, None, None)
+        self.assertTrue(data.ready)

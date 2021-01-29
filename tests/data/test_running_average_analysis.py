@@ -19,3 +19,4 @@ class TestRunningAverageAnalysis(unittest.TestCase):
         """
         data = RunningAverageAnalysis(dependencies=["stock_data"])
         data.prepare_data(None, None, None, None)
+        self.assertTrue(data.ready)
