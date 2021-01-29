@@ -59,9 +59,6 @@ class Data(metaclass=ABCMeta):
         Returns:
             DataFrame row with the data.
         """
-        if self.data is None:
-            raise Exception("data is not defined.")
-
         if date not in self.data:
             raise LookupError("{} is not in the data".format(date))
 
@@ -84,9 +81,6 @@ class Data(metaclass=ABCMeta):
         Returns:
             Whether the date is in self.data
         """
-        if self.data is None:
-            raise Exception("data is not defined.")
-
         return date in self.data
 
     def __iter__(self):
@@ -94,7 +88,4 @@ class Data(metaclass=ABCMeta):
 
         Returns iterator object for the data.
         """
-        if self.data is None:
-            raise Exception("data is not defined.")
-
         return self.data.__iter__()
