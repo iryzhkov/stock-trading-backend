@@ -3,6 +3,7 @@
 from src.data.stock_data import StockData
 
 
+# pylint: disable=too-few-public-methods
 class RandomizedStockData(StockData):
     """Class for storing randomized stock data.
     """
@@ -18,18 +19,15 @@ class RandomizedStockData(StockData):
         super(RandomizedStockData, self).__init__(dependencies)
         self.id_str = "randomized_{}".format(self.dependencies[0])
 
-    def prepare_data(self, date_range, stock_names, dependencies):
-        """Data preparation for randomized stock data.
+    def prepare_data(self, date_range, stock_names, dependencies, stock_data):
+        """Data preparation.
 
         Gets the data prepared.
 
         Args:
             date_range: a tuple of dates that provides a range.
             stock_names: a list of stock names to prepare.
-            dependencies: a list of prepared dependencies.
+            dependencies: a list of prepared data dependencies.
+            stock_data: a Data object with stock data.
         """
         self.ready = True
-
-    def reset(self):
-        """Stuff to run
-        """

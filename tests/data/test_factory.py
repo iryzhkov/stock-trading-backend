@@ -5,7 +5,7 @@ import unittest
 from parameterized import parameterized
 
 from src.data import create_data, GeneratedStockData, RandomizedStockData, RealStockData
-from src.data import RunningAverageAnalysis
+from src.data import RunningAverageAnalysis, create_data_collection, DataCollection
 from src.util import read_config_file
 
 
@@ -27,3 +27,8 @@ class TestDataFactory(unittest.TestCase):
         """
         data = create_data(read_config_file(config_filename))
         self.assertIsInstance(data, expected_class)
+
+    def test_creates_data_collection(self):
+        """Checks if creates data collection.
+        """
+        data_collection = create_data_collection(read_config_file("test/data_collection.yaml"))
