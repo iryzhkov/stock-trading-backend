@@ -40,6 +40,6 @@ class TestGeneratedStockData(unittest.TestCase):
         data_collection_config = read_config_file("test/data_collection.yaml")
         simulation = StockMarketSimulation(data_collection_config, from_date, to_date)
         simulation.reset()
-        observation, reward, done = simulation.step([])
+        _, reward, done = simulation.step([])
         self.assertTrue(done)
         self.assertEqual(0, reward)
