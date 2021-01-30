@@ -6,7 +6,7 @@ import random
 
 import gym
 
-from src.data import create_data_collection
+from src.data import create_data_collection, BalanceData, NetWorthData, StockOwnershipData
 
 
 # pylint: disable=too-many-instance-attributes
@@ -48,25 +48,41 @@ class StockMarketSimulation(gym.Env):
             comission: relative comission for each transcation.
         """
         self.data_collection = create_data_collection(data_collection_config)
+
+        # Setup of simulation data.
+        self.balance = BalanceData()
+        self.net_worth = NetWorthData()
+        self.stock_ownership = StockOwnershipData()
+        self.data_collection.append(self.balance)
+        self.data_collection.append(self.net_worth)
+        self.data_collection.append(self.stock_ownership)
+
+        # Adding buffer days.
         buffer = self.data_collection.get_buffer()
         from_date -= timedelta(days=buffer)
 
+        # Setting date range for data collection.
         self.data_collection.set_date_range(from_date, to_date)
         self.data_collection.prepare_data()
         self.available_dates = self.data_collection.get_available_dates()
 
+        # Setting duration range.
         max_duration = min(max_duration, len(self.available_dates))
         self.max_duration = max_duration if max_duration > 0 else len(self.available_dates)
         self.min_duration = min_duration if min_duration > 0 else self.max_duration
         self.min_duration = min(self.max_duration, self.min_duration)
 
+        # Setting starting balance range.
         self.min_start_balance = min_start_balance
         self.max_start_balance = max_start_balance
 
-        self.comission = comission
+        # Setting date tracking.
         self.curr_date_index = -1
         self.from_date_index = -1
         self.to_date_index = -1
+
+        # Setting comission.
+        self.comission = comission
 
     def _prep_for_episode(self):
         """Preparation for the episode.
@@ -77,7 +93,7 @@ class StockMarketSimulation(gym.Env):
         self.from_date_index = curr_date_index
         self.curr_date_index = curr_date_index
         self.to_date_index = curr_date_index + duration - 1
-        #return self.data_collection[self.curr_date]
+        return self.data_collection[self.available_dates[self.from_date_index]]
 
     def step(self, action):
         """Simulate a single day of trading given the action.
@@ -91,9 +107,10 @@ class StockMarketSimulation(gym.Env):
             done: True if the episode is finished
         """
         #curr_date = self.available_dates[self.curr_date_index]
-        #next_date = self.available_dates[self.curr_date_index + 1]
+        next_date = self.available_dates[self.curr_date_index + 1]
         self.curr_date_index += 1
-        observation = []
+
+        observation = self.data_collection[next_date]
         reward = 0
         done = self.curr_date_index >= self.to_date_index
         return observation, reward, done
