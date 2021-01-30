@@ -15,3 +15,11 @@ class TestGeneratedStockData(unittest.TestCase):
         data_collection_config = read_config_file("test/data_collection.yaml")
         simulation = StockMarketSimulation(data_collection_config)
         self.assertEqual(0, simulation.max_start_balance)
+
+    def test_resets(self):
+        """Test for simulation reset.
+        """
+        data_collection_config = read_config_file("test/data_collection.yaml")
+        simulation = StockMarketSimulation(data_collection_config)
+        simulation.reset()
+        self.assertIsNone(simulation.curr_date)

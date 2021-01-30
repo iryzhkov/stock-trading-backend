@@ -1,5 +1,7 @@
 """Class for running a simulation.
 """
+import random
+
 import gym
 
 from src.data import create_data_collection
@@ -45,16 +47,29 @@ class StockMarketSimulation(gym.Env):
         """
         self.data_collection = create_data_collection(data_collection_config)
 
-        self.from_date = from_date
-        self.to_date = to_date
+        self.data_collection.set_date_range(from_date, to_date)
+        self.data_collection.prepare_data()
+        self.available_dates = self.data_collection.get_available_dates()
 
-        self.min_duration = min_duration
-        self.max_duration = max_duration
+        self.max_duration = max_duration if max_duration > 0 else len(self.available_dates)
+        self.min_duration = min_duration if min_duration > 0 else self.max_duration
 
         self.min_start_balance = min_start_balance
         self.max_start_balance = max_start_balance
 
         self.comission = comission
+        self.curr_date = None
+        self.episode_end_date = None
+
+    def _prep_for_episode(self):
+        """Preparation for the episode.
+        """
+        self.data_collection.prepare_data()
+        duration = random.randint(self.min_duration, self.max_duration)
+        curr_date_index = random.randint(0, len(self.available_dates) - duration)
+        self.curr_date = self.available_dates[curr_date_index]
+        self.episode_end_date = self.available_dates[curr_date_index + duration - 1]
+        #return self.data_collection[self.curr_date]
 
     def step(self, action):
         """Simulate a single day of trading given the action.
@@ -71,6 +86,8 @@ class StockMarketSimulation(gym.Env):
     def reset(self):
         """Resets the simulation environment.
         """
+        self.data_collection.reset()
+        return self._prep_for_episode()
 
     def render(self, mode="human"):
         """Renders current situation.

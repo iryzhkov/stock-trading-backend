@@ -24,6 +24,9 @@ class DataCollection:
         if len(self.id_to_data) != len(self.data_objects):
             raise ValueError("Some data objects have conflicting ids.")
 
+        self.from_date = None
+        self.to_date = None
+
         self.stock_data_id = self.data_objects[0].id_str
 
         for data in self.data_objects:
@@ -33,13 +36,21 @@ class DataCollection:
                 elif not dep in self.id_to_data:
                     raise LookupError("Couln't find {} (dependency of {})".format(dep, data.id_str))
 
-    def _prepare_data(self, data_id, from_date, to_date):
+    def set_date_range(self, from_date, to_date):
+        """Setter for date range.
+
+        Args:
+            from_date: datetime start of the date range.
+            to_date: datetime end of the date range.
+        """
+        self.from_date = from_date
+        self.to_date = to_date
+
+    def _prepare_data(self, data_id):
         """Prepares a single data object.
 
         Args:
             data_id: the id of data to prepare.
-            from_date: datetime start of the date range.
-            to_date: datetime end of the date range.
 
         Returns:
             data object that was prepared.
@@ -52,21 +63,21 @@ class DataCollection:
             return data
 
         self.busy[data_id] = True
-        dependencies = [self._prepare_data(dep_id, from_date, to_date)
-                        for dep_id in data.dependencies]
-        data.prepare_data(from_date, to_date, self.stock_names, dependencies)
+        dependencies = [self._prepare_data(dep_id) for dep_id in data.dependencies]
+        data.prepare_data(self.from_date, self.to_date, self.stock_names, dependencies)
         self.busy[data_id] = False
         return data
 
-    def prepare_data(self, from_date, to_date):
+    def prepare_data(self):
         """Prepares all the data in the collection.
-
-        Args:
-            from_date: datetime start of the date range.
-            to_date: datetime end of the date range.
         """
         for id_str in self.id_to_data:
-            self._prepare_data(id_str, from_date, to_date)
+            self._prepare_data(id_str)
+
+    def get_available_dates(self):
+        """Returns a list of available dates for querying.
+        """
+        return [self.from_date, self.to_date]
 
     def reset(self):
         """Resets ressetable data objects.
