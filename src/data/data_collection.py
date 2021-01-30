@@ -67,3 +67,9 @@ class DataCollection:
         """
         for id_str in self.id_to_data:
             self._prepare_data(id_str, from_date, to_date)
+
+    def reset(self):
+        """Resets ressetable data objects.
+        """
+        for data in self.data_objects:
+            data.reset()

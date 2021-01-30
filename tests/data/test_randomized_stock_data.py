@@ -20,3 +20,12 @@ class TestRandomizedStockData(unittest.TestCase):
         data = RandomizedStockData(dependencies=["stock_data"])
         data.prepare_data(None, None, None, None)
         self.assertTrue(data.ready)
+
+    def test_resets_data(self):
+        """Tests if the data is reset properly.
+        """
+        data = RandomizedStockData(dependencies=["stock_data"])
+        data.prepare_data(None, None, None, None)
+        self.assertTrue(data.ready)
+        data.reset()
+        self.assertFalse(data.ready)

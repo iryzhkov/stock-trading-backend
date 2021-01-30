@@ -33,3 +33,8 @@ class RunningAverageAnalysis(StockDataAnalysis):
             dependencies: a list of prepared data dependencies.
         """
         self.ready = True
+
+    def reset(self):
+        """Reset for running average analysis.
+        """
+        self.ready = False

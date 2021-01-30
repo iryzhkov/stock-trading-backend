@@ -3,17 +3,15 @@
 import unittest
 
 from src.simulation import StockMarketSimulation
+from src.util import read_config_file
 
 
 class TestGeneratedStockData(unittest.TestCase):
     """Unit tests for generated stock data.
     """
-    def setUp(self):
-        """Set up for the unit tests.
+    def test_initializes(self):
+        """Test for simulation initializtion.
         """
-        self.simulation = StockMarketSimulation(None)
-
-    def test_a(self):
-        """A simple test method.
-        """
-        self.assertIsNone(self.simulation.data_source_config)
+        data_collection_config = read_config_file("test/data_collection.yaml")
+        simulation = StockMarketSimulation(data_collection_config)
+        self.assertEqual(0, simulation.max_start_balance)

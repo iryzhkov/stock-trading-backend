@@ -31,3 +31,8 @@ class RandomizedStockData(StockData):
             dependencies: a list of prepared data dependencies.
         """
         self.ready = True
+
+    def reset(self):
+        """Reset for randomized stock data.
+        """
+        self.ready = False

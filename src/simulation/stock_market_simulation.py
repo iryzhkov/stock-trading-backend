@@ -2,6 +2,9 @@
 """
 import gym
 
+from src.data import create_data_collection
+
+
 # pylint: disable=too-many-instance-attributes
 class StockMarketSimulation(gym.Env):
     """
@@ -26,7 +29,7 @@ class StockMarketSimulation(gym.Env):
         Episode length is greater than allowed.
     """
     # pylint: disable=too-many-arguments
-    def __init__(self, data_source_config=None, from_date=None, to_date=None, min_duration=0,
+    def __init__(self, data_collection_config=None, from_date=None, to_date=None, min_duration=0,
                  max_duration=0, min_start_balance=0, max_start_balance=0, comission=0):
         """Initializer for the simulation class.
 
@@ -40,13 +43,18 @@ class StockMarketSimulation(gym.Env):
             max_start_balance: maximum starting balance. Balance selected unifromly.
             comission: relative comission for each transcation.
         """
-        self.data_source_config = data_source_config
+        self.data_collection_config = data_collection_config
+        self.data_collection = create_data_collection(self.data_collection_config)
+
         self.from_date = from_date
         self.to_date = to_date
+
         self.min_duration = min_duration
         self.max_duration = max_duration
+
         self.min_start_balance = min_start_balance
         self.max_start_balance = max_start_balance
+
         self.comission = comission
 
     def step(self, action):

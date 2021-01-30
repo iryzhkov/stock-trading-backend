@@ -42,3 +42,19 @@ class TestDataCollection(unittest.TestCase):
         data_collection.prepare_data(None, None)
         for data in data_collection.data_objects:
             self.assertTrue(data.ready)
+
+    def test_resets_data(self):
+        """Checks if data collection prepares the data properly.
+        """
+        config = read_config_file("test/data_collection.yaml")
+        data_collection = create_data_collection(config)
+        data_collection.prepare_data(None, None)
+        for data in data_collection.data_objects:
+            self.assertTrue(data.ready)
+        data_collection.reset()
+
+        for data in data_collection.data_objects:
+            if data.name != "real_stock_data":
+                self.assertFalse(data.ready)
+            else:
+                self.assertTrue(data.ready)

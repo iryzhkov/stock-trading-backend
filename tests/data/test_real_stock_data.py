@@ -14,3 +14,12 @@ class TestRealStockData(unittest.TestCase):
         data = RealStockData()
         data.prepare_data(None, None, None, None)
         self.assertTrue(data.ready)
+
+    def test_resets_data(self):
+        """Tests if the data is reset properly.
+        """
+        data = RealStockData()
+        data.prepare_data(None, None, None, None)
+        self.assertTrue(data.ready)
+        data.reset()
+        self.assertTrue(data.ready)
