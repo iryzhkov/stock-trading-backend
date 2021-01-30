@@ -88,11 +88,18 @@ class StockMarketSimulation(gym.Env):
         """Preparation for the episode.
         """
         self.data_collection.prepare_data()
+
+        # Setting from date, to date for the next episode.
         duration = random.randint(self.min_duration, self.max_duration)
         curr_date_index = random.randint(0, len(self.available_dates) - duration)
         self.from_date_index = curr_date_index
         self.curr_date_index = curr_date_index
         self.to_date_index = curr_date_index + duration - 1
+
+        # Setting balance and net worth for the first day.
+        curr_date = self.available_dates[curr_date_index]
+        self.balance[curr_date] = random.randint(self.min_start_balance, self.max_start_balance)
+        self.net_worth[curr_date] = self.balance[curr_date]
         return self.data_collection[self.available_dates[self.from_date_index]]
 
     def step(self, action):

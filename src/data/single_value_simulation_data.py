@@ -1,16 +1,16 @@
 """Class for storing balance data from the simulation.
 """
-from src.data.single_value_simulation_data import SingleValueSimulationData
+from abc import ABCMeta
+
+from src.data.simulation_data import SimulationData
 
 
 # pylint: disable=too-few-public-methods
-class BalanceData(SingleValueSimulationData):
-    """Class for storing balance data from the simulation.
+class SingleValueSimulationData(SimulationData, metaclass=ABCMeta):
+    """Class for storing a single value from the simulation.
     """
-    name = "balance"
-
     def __setitem__(self, date, value):
-        """Setter for BalanceData.
+        """Setter for the value.
 
         Args:
             date: datetime date for which to set value

@@ -28,7 +28,7 @@ class Data(metaclass=ABCMeta):
             dependencies: a list of dependency ids for the data.
         """
         self.id_str = self.name
-        self.data = []
+        self.data = {}
         self.ready = False
         self.buffer = 0
         if dependencies:
