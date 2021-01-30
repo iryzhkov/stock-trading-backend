@@ -6,7 +6,7 @@ import random
 
 import gym
 
-from src.data import create_data_collection, BalanceData, NetWorthData, StockOwnershipData
+from src.data import create_data_collection, SingleValueSimulationData, StockOwnershipData
 
 
 # pylint: disable=too-many-instance-attributes
@@ -50,8 +50,8 @@ class StockMarketSimulation(gym.Env):
         self.data_collection = create_data_collection(data_collection_config)
 
         # Setup of simulation data.
-        self.balance = BalanceData()
-        self.net_worth = NetWorthData()
+        self.balance = SingleValueSimulationData(value_name="balance")
+        self.net_worth = SingleValueSimulationData(value_name="net_worth")
         self.stock_ownership = StockOwnershipData()
         self.data_collection.append(self.balance)
         self.data_collection.append(self.net_worth)

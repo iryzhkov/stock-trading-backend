@@ -3,6 +3,8 @@
 from abc import ABCMeta
 from enum import Enum, auto
 
+import pandas as pd
+
 
 class DataType(Enum):
     """Enumerator class for types of data.
@@ -28,7 +30,7 @@ class Data(metaclass=ABCMeta):
             dependencies: a list of dependency ids for the data.
         """
         self.id_str = self.name
-        self.data = {}
+        self.data = pd.DataFrame()
         self.ready = False
         self.buffer = 0
         if dependencies:
@@ -84,10 +86,10 @@ class Data(metaclass=ABCMeta):
         Returns:
             DataFrame row with the data.
         """
-        if date not in self.data:
+        if date not in self:
             raise LookupError("{} is not in the data".format(date))
 
-        return self.data[date]
+        return self.data.loc[date]
 
     def __len__(self):
         """Get the size of the data.
@@ -104,9 +106,9 @@ class Data(metaclass=ABCMeta):
             date: the specified lookup date.
 
         Returns:
-            Whether the date is in self.data
+            Whether the date is in self.data.index.
         """
-        return date in self.data
+        return date in self.data.index
 
     def __iter__(self):
         """Iterator generator.
