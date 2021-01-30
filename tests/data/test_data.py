@@ -54,3 +54,12 @@ class TestData(unittest.TestCase):
 
         with self.assertRaises(LookupError):
             _ = data[6]
+
+    def test_buffer_days(self):
+        """Tests buffer_days function.
+        """
+        data = Data()
+        data.buffer_days([])
+        self.assertEqual(0, data.buffer)
+        data.buffer_days([0, 10])
+        self.assertEqual(10, data.buffer)

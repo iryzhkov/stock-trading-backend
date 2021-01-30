@@ -30,6 +30,7 @@ class Data(metaclass=ABCMeta):
         self.id_str = self.name
         self.data = []
         self.ready = False
+        self.buffer = 0
         if dependencies:
             self.dependencies = dependencies
         else:
@@ -62,6 +63,17 @@ class Data(metaclass=ABCMeta):
         """
         self.ready = all(dependencies)
         return self.ready
+
+    def buffer_days(self, dependencies):
+        """Figures out the buffer for the data.
+
+        Args:
+            dependencies: The list of buffer values for the dependencies.
+        """
+        if dependencies:
+            self.buffer = max(dependencies)
+        else:
+            self.buffer = 0
 
     def __getitem__(self, date):
         """Get the data for the date.

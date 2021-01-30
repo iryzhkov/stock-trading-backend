@@ -33,3 +33,14 @@ class RunningAverageAnalysis(StockDataAnalysis):
             dependencies: a list of prepared data dependencies.
         """
         self.ready = True
+
+    def buffer_days(self, dependencies):
+        """Figures out the buffer for the running average analysis.
+
+        Args:
+            dependencies: The list of buffer values for the dependencies.
+
+        Returns:
+            Number buffer days.
+        """
+        self.buffer = dependencies[0] + self.num_days

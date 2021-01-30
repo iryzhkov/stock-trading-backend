@@ -1,11 +1,9 @@
 """A class containing multiple Data classes.
 """
-from functools import partial
-
 from src.data.data import DataType
 
 
-# pylint: disable=too-few-public-methods
+# pylint: disable=too-many-instance-attributes
 class DataCollection:
     """Class that contains multiple Data classes.
     """
@@ -21,7 +19,8 @@ class DataCollection:
         self.id_to_data = {}
         self.busy = {}
         self.done = {}
-        for data in data_objects: self.append(data)
+        for data in data_objects:
+            self.append(data)
 
         if self.data_objects[0].data_type != DataType.STOCK_DATA:
             raise ValueError("Expected first data to be stock data.")
@@ -65,7 +64,6 @@ class DataCollection:
     def get_available_dates(self):
         """Returns a list of available dates for querying.
         """
-        # TODO(igor.o.ryzhkov@gmail.com): Complete this function.
         return [self.from_date, self.to_date]
 
     def _reset_done(self):
@@ -96,6 +94,18 @@ class DataCollection:
         self.busy[data_id] = False
         self.done[data_id] = True
         return result(data)
+
+    def get_buffer(self):
+        """Returns number of buffer days.
+        """
+        def result(data):
+            return data.buffer
+
+        def function(data, dependencies):
+            data.buffer_days(dependencies)
+
+        self._reset_done()
+        return max([self._recursive_apply(id_str, function, result) for id_str in self.id_to_data])
 
     def prepare_data(self):
         """Prepares all the data in the collection.

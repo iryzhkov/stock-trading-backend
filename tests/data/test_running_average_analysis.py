@@ -29,3 +29,10 @@ class TestRunningAverageAnalysis(unittest.TestCase):
         self.assertTrue(data.ready)
         data.reset([True])
         self.assertTrue(data.ready)
+
+    def test_buffer_days(self):
+        """Tests if number of buffer days is calculated.
+        """
+        data = RunningAverageAnalysis(dependencies=["stock_data"], num_days=30)
+        data.buffer_days([0])
+        self.assertEqual(30, data.buffer)

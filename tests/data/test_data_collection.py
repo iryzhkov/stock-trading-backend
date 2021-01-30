@@ -58,3 +58,10 @@ class TestDataCollection(unittest.TestCase):
                 self.assertFalse(data.ready)
             else:
                 self.assertTrue(data.ready)
+
+    def test_get_buffer(self):
+        """Checks if buffer days is calculated correctly.
+        """
+        config = read_config_file("test/data_collection.yaml")
+        data_collection = create_data_collection(config)
+        self.assertEqual(10, data_collection.get_buffer())
