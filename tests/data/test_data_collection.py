@@ -51,13 +51,15 @@ class TestDataCollection(unittest.TestCase):
         data_collection.prepare_data()
         for data in data_collection.data_objects:
             self.assertTrue(data.ready)
+        self.assertEqual(3, data_collection.recursive_counter)
         data_collection.reset()
-
         for data in data_collection.data_objects:
             if data.name != "real_stock_data":
                 self.assertFalse(data.ready)
             else:
                 self.assertTrue(data.ready)
+        data_collection.prepare_data()
+        self.assertEqual(2, data_collection.recursive_counter)
 
     def test_get_buffer(self):
         """Checks if buffer days is calculated correctly.

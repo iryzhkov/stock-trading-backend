@@ -17,8 +17,12 @@ class DataCollection:
         self.stock_names = stock_names
         self.data_objects = []
         self.id_to_data = {}
+
+        # Helper attributes for recursive apply.
         self.busy = {}
         self.done = {}
+        self.recursive_counter = 0
+
         for data in data_objects:
             self.append(data)
 
@@ -69,6 +73,7 @@ class DataCollection:
     def _reset_done(self):
         """Helper function to reset done flags.
         """
+        self.recursive_counter = 0
         for data_id in self.id_to_data:
             self.done[data_id] = False
 
@@ -102,6 +107,7 @@ class DataCollection:
             return data.buffer
 
         def function(data, dependencies):
+            self.recursive_counter += 1
             data.buffer_days(dependencies)
 
         self._reset_done()
@@ -115,6 +121,7 @@ class DataCollection:
 
         def function(data, dependencies):
             if not data.ready:
+                self.recursive_counter += 1
                 data.prepare_data(self.from_date, self.to_date, self.stock_names, dependencies)
 
         self._reset_done()
@@ -128,6 +135,7 @@ class DataCollection:
             return data.ready
 
         def function(data, dependencies):
+            self.recursive_counter += 1
             data.reset(dependencies)
 
         self._reset_done()
