@@ -37,9 +37,8 @@ class TestData(unittest.TestCase):
     def test_contains(self):
         """Tests __contains__ function.
         """
-        df = pd.DataFrame(data=[True] * 5, index=range(5))
         data = Data()
-        data.data = df
+        data.data = pd.DataFrame(data=[True] * 5)
         for i in range(5):
             self.assertIn(i, data)
         for i in range(5, 10):
@@ -48,11 +47,10 @@ class TestData(unittest.TestCase):
     def test_get(self):
         """Tests __getitem__ function.
         """
-        df = pd.DataFrame(data=[True] * 5)
         data = Data()
-        data.data = df
+        data.data = pd.DataFrame(data=[True] * 5)
         for i in range(5):
-            self.assertEqual(df.loc[i].item(), data[i].item())
+            self.assertEqual(True, data[i].item())
 
         with self.assertRaises(LookupError):
             _ = data[6]
