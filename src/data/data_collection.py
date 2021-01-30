@@ -141,3 +141,14 @@ class DataCollection:
         self._reset_done()
         for data_id in self.id_to_data:
             self._recursive_apply(data_id, function, result)
+
+    def __getitem__(self, date):
+        """Get the data for the date.
+
+        Args:
+            date: the specified lookup date.
+
+        Returns:
+            DataFrame row with the data.
+        """
+        return []

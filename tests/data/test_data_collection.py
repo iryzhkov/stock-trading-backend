@@ -67,3 +67,10 @@ class TestDataCollection(unittest.TestCase):
         config = read_config_file("test/data_collection.yaml")
         data_collection = create_data_collection(config)
         self.assertEqual(10, data_collection.get_buffer())
+
+    def test_getitem(self):
+        """Checks if __getitem__ works as expected.
+        """
+        config = read_config_file("test/data_collection.yaml")
+        data_collection = create_data_collection(config)
+        self.assertFalse(data_collection[0])
