@@ -51,8 +51,10 @@ class StockMarketSimulation(gym.Env):
         self.data_collection.prepare_data()
         self.available_dates = self.data_collection.get_available_dates()
 
+        max_duration = min(max_duration, len(self.available_dates))
         self.max_duration = max_duration if max_duration > 0 else len(self.available_dates)
         self.min_duration = min_duration if min_duration > 0 else self.max_duration
+        self.min_duration = min(self.max_duration, self.min_duration)
 
         self.min_start_balance = min_start_balance
         self.max_start_balance = max_start_balance
@@ -79,8 +81,8 @@ class StockMarketSimulation(gym.Env):
 
         Returns:
             observation: a row of data source.
-            reward: a number representing the reward for the day.
-            done: True if the simulation is finished
+            reward: a number representing the reward associated with the action.
+            done: True if the episode is finished
         """
 
     def reset(self):
