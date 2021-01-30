@@ -34,7 +34,6 @@ class TestDataFactory(unittest.TestCase):
         with self.assertRaises(LookupError):
             _ = create_data({"name": "fake_data"})
 
-
     def test_creates_data_collection(self):
         """Checks if creates data collection.
         """

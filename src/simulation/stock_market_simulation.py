@@ -43,8 +43,7 @@ class StockMarketSimulation(gym.Env):
             max_start_balance: maximum starting balance. Balance selected unifromly.
             comission: relative comission for each transcation.
         """
-        self.data_collection_config = data_collection_config
-        self.data_collection = create_data_collection(self.data_collection_config)
+        self.data_collection = create_data_collection(data_collection_config)
 
         self.from_date = from_date
         self.to_date = to_date
