@@ -32,7 +32,14 @@ class RandomizedStockData(StockData):
         """
         self.ready = True
 
-    def reset(self):
+    def reset(self, dependencies):
         """Reset for randomized stock data.
+
+        Args:
+            dependencies: The list of .ready values for the dependencies.
+
+        Returns:
+            The value of self.ready
         """
         self.ready = False
+        return self.ready

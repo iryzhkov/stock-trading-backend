@@ -51,9 +51,17 @@ class Data(metaclass=ABCMeta):
             dependencies: a list of prepared data dependencies.
         """
 
-    def reset(self):
+    def reset(self, dependencies):
         """Reset for data object.
+
+        Args:
+            dependencies: The list of .ready values for the dependencies.
+
+        Returns:
+            The value of self.ready
         """
+        self.ready = all(dependencies)
+        return self.ready
 
     def __getitem__(self, date):
         """Get the data for the date.

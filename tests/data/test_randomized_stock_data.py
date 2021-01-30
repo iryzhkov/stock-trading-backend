@@ -27,5 +27,5 @@ class TestRandomizedStockData(unittest.TestCase):
         data = RandomizedStockData(dependencies=["stock_data"])
         data.prepare_data(None, None, None, None)
         self.assertTrue(data.ready)
-        data.reset()
+        data.reset([True])
         self.assertFalse(data.ready)

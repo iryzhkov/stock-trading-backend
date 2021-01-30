@@ -27,5 +27,5 @@ class TestRunningAverageAnalysis(unittest.TestCase):
         data = RunningAverageAnalysis(dependencies=["stock_data"])
         data.prepare_data(None, None, None, None)
         self.assertTrue(data.ready)
-        data.reset()
-        self.assertFalse(data.ready)
+        data.reset([True])
+        self.assertTrue(data.ready)
