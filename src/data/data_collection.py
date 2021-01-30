@@ -18,6 +18,10 @@ class DataCollection:
         self.data_objects = []
         self.id_to_data = {}
 
+        if data_objects[0].data_type != DataType.STOCK_DATA:
+            raise ValueError("Expected first data to be stock data.")
+        self.stock_data_id = data_objects[0].id_str
+
         # Helper attributes for recursive apply.
         self.busy = {}
         self.done = {}
@@ -25,10 +29,6 @@ class DataCollection:
 
         for data in data_objects:
             self.append(data)
-
-        if self.data_objects[0].data_type != DataType.STOCK_DATA:
-            raise ValueError("Expected first data to be stock data.")
-        self.stock_data_id = self.data_objects[0].id_str
 
         self.from_date = None
         self.to_date = None
