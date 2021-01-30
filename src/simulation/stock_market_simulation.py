@@ -1,5 +1,7 @@
 """Class for running a simulation.
 """
+from datetime import timedelta
+
 import random
 
 import gym
@@ -46,6 +48,8 @@ class StockMarketSimulation(gym.Env):
             comission: relative comission for each transcation.
         """
         self.data_collection = create_data_collection(data_collection_config)
+        buffer = self.data_collection.get_buffer()
+        from_date -= timedelta(days=buffer)
 
         self.data_collection.set_date_range(from_date, to_date)
         self.data_collection.prepare_data()
@@ -60,8 +64,9 @@ class StockMarketSimulation(gym.Env):
         self.max_start_balance = max_start_balance
 
         self.comission = comission
-        self.curr_date = None
-        self.episode_end_date = None
+        self.curr_date_index = -1
+        self.from_date_index = -1
+        self.to_date_index = -1
 
     def _prep_for_episode(self):
         """Preparation for the episode.
@@ -69,8 +74,9 @@ class StockMarketSimulation(gym.Env):
         self.data_collection.prepare_data()
         duration = random.randint(self.min_duration, self.max_duration)
         curr_date_index = random.randint(0, len(self.available_dates) - duration)
-        self.curr_date = self.available_dates[curr_date_index]
-        self.episode_end_date = self.available_dates[curr_date_index + duration - 1]
+        self.from_date_index = curr_date_index
+        self.curr_date_index = curr_date_index
+        self.to_date_index = curr_date_index + duration - 1
         #return self.data_collection[self.curr_date]
 
     def step(self, action):
