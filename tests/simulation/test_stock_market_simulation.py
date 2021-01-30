@@ -31,3 +31,15 @@ class TestGeneratedStockData(unittest.TestCase):
         self.assertEqual(0, simulation.from_date_index)
         self.assertEqual(0, simulation.curr_date_index)
         self.assertEqual(1, simulation.to_date_index)
+
+    def test_step(self):
+        """Test for simulation step.
+        """
+        from_date = datetime(2016, 1, 1)
+        to_date = datetime(2016, 2, 1)
+        data_collection_config = read_config_file("test/data_collection.yaml")
+        simulation = StockMarketSimulation(data_collection_config, from_date, to_date)
+        simulation.reset()
+        observation, reward, done = simulation.step([])
+        self.assertTrue(done)
+        self.assertEqual(0, reward)

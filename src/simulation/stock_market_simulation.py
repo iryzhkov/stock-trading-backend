@@ -90,6 +90,13 @@ class StockMarketSimulation(gym.Env):
             reward: a number representing the reward associated with the action.
             done: True if the episode is finished
         """
+        curr_date = self.available_dates[self.curr_date_index]
+        next_date = self.available_dates[self.curr_date_index + 1]
+        self.curr_date_index += 1
+        observation = []
+        reward = 0
+        done = self.curr_date_index >= self.to_date_index
+        return observation, reward, done
 
     def reset(self):
         """Resets the simulation environment.
