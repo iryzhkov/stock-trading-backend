@@ -34,7 +34,7 @@ class TestDataCollection(unittest.TestCase):
         config = read_config_file("test/circular_dependency_data_collection.yaml")
         data_collection = create_data_collection(config)
         with self.assertRaises(ValueError):
-            data_collection.prepare_data()
+            data_collection.reset()
 
     def test_prepares_data(self):
         """Checks if data collection prepares the data properly.
