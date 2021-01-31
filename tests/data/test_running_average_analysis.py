@@ -22,7 +22,8 @@ class TestRunningAverageAnalysis(unittest.TestCase):
         from_date = datetime(2016, 1, 1)
         to_date = datetime(2016, 2, 1)
         num_days = 5
-        stock_names = ["STOCK_1"]
+        stock_names = ["STOCK_1", "STOCK_2"]
+        expected_columns = ["ra_5_STOCK_1", "ra_5_STOCK_2"]
 
         dependency = GeneratedStockData(evaluation_functions=["100"])
         data = RunningAverageAnalysis(dependencies=["stock_data"], num_days=num_days)
@@ -30,9 +31,9 @@ class TestRunningAverageAnalysis(unittest.TestCase):
         data.prepare_data(from_date, to_date, stock_names, [dependency])
 
         self.assertTrue(data.ready)
-        self.assertFalse((stock_names == data.data.columns.tolist()))
+        self.assertTrue((expected_columns == data.data.columns.tolist()))
         self.assertEqual(len(dependency) - num_days + 1, len(data))
-        self.assertEqual(100, data[to_date].item())
+        self.assertEqual(100, data[to_date][0])
 
     def test_resets_data(self):
         """Tests if the data is reset properly.

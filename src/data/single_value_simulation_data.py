@@ -1,7 +1,5 @@
 """Class for storing balance data from the simulation.
 """
-from abc import ABCMeta
-
 import numpy as np
 import pandas as pd
 
@@ -9,7 +7,7 @@ from src.data.simulation_data import SimulationData
 
 
 # pylint: disable=too-few-public-methods
-class SingleValueSimulationData(SimulationData, metaclass=ABCMeta):
+class SingleValueSimulationData(SimulationData):
     """Class for storing a single value from the simulation.
     """
     def __init__(self, dependencies=None, value_name=""):
@@ -39,6 +37,17 @@ class SingleValueSimulationData(SimulationData, metaclass=ABCMeta):
                                  index=pd.date_range(from_date, to_date),
                                  columns=[self.name])
         self.ready = True
+
+    def reset(self, dependencies):
+        """Reset for data object.
+
+        Args:
+            dependencies: The list of .ready values for the dependencies.
+
+        Returns:
+            The value of self.ready
+        """
+        self.ready = False
 
     def __setitem__(self, date, value):
         """Setter for the value.

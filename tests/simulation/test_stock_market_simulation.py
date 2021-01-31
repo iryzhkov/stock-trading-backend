@@ -30,7 +30,7 @@ class TestGeneratedStockData(unittest.TestCase):
         simulation.reset()
         self.assertEqual(0, simulation.from_date_index)
         self.assertEqual(0, simulation.curr_date_index)
-        self.assertEqual(1, simulation.to_date_index)
+        self.assertEqual(16, simulation.to_date_index)
 
     def test_step(self):
         """Test for simulation step.
@@ -41,5 +41,5 @@ class TestGeneratedStockData(unittest.TestCase):
         simulation = StockMarketSimulation(data_collection_config, from_date, to_date)
         simulation.reset()
         _, reward, done = simulation.step([])
-        self.assertTrue(done)
+        self.assertFalse(done)
         self.assertEqual(0, reward)
