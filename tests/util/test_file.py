@@ -1,8 +1,11 @@
 """Unit tests for file utils.
 """
+import os
 import unittest
+import pandas as pd
 
-from src.util import read_config_file, FileSourceType
+from src.util import read_config_file, FileSourceType, read_manifest_file, write_manifest_file
+from src.util import read_csv_file, write_csv_file
 
 
 class TestFileUtilsData(unittest.TestCase):
@@ -21,3 +24,59 @@ class TestFileUtilsData(unittest.TestCase):
         """
         with self.assertRaises(NotImplementedError):
             _ = read_config_file("test/test_config.yaml", FileSourceType.aws)
+
+        with self.assertRaises(NotImplementedError):
+            _ = read_manifest_file("data/test/stock_data_manifest.json", FileSourceType.aws)
+
+        with self.assertRaises(NotImplementedError):
+            write_manifest_file({}, "data/test/stock_data_manifest.json", FileSourceType.aws)
+
+        with self.assertRaises(NotImplementedError):
+            _ = read_csv_file("data/test/test.csv", FileSourceType.aws)
+
+        with self.assertRaises(NotImplementedError):
+            write_csv_file(pd.DataFrame(), "data/test/test.csv", FileSourceType.aws)
+
+    def test_read_manifest(self):
+        """Test for manifest reader.
+        """
+        manifest = read_manifest_file("data/test/stock_data_manifest.json")
+        self.assertEqual(type({}), type(manifest))
+        self.assertIn("stock", manifest)
+        self.assertEqual("test", manifest["stock"])
+
+    def test_read_new_manifest(self):
+        """Test for manifest reader for non-existent manifest.
+        """
+        manifest = read_manifest_file("data/test/non_existent.json")
+        self.assertEqual(type({}), type(manifest))
+        self.assertEqual(0, len(manifest))
+
+    def test_write_new_manifest(self):
+        """Test for manifest writer for non-existent manifest.
+        """
+        file_path = "data/test/write_test.json"
+        manifest = {"stock": "write_test"}
+        write_manifest_file(manifest, file_path)
+        manifest = read_manifest_file(file_path)
+        os.remove(file_path)
+        self.assertIn("stock", manifest)
+        self.assertEqual("write_test", manifest["stock"])
+
+    def test_read_csv_file(self):
+        """Test for csv reader.
+        """
+        data_frame = read_csv_file("data/test/test.csv")
+        self.assertIsInstance(data_frame, pd.DataFrame)
+        self.assertEqual("test", data_frame.loc[0].item())
+
+    def test_write_csv_file(self):
+        """Test for csv reader.
+        """
+        file_path = "data/test/write_test.json"
+        data_frame = pd.DataFrame(["write_test"])
+        write_csv_file(data_frame, file_path)
+        data_frame = read_csv_file(file_path)
+        os.remove(file_path)
+        self.assertIsInstance(data_frame, pd.DataFrame)
+        self.assertEqual("write_test", data_frame.loc[0].item())
