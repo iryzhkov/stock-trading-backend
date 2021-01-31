@@ -84,6 +84,19 @@ class TestDataCollection(unittest.TestCase):
         data_collection = create_data_collection(config)
         self.assertEqual(10, data_collection.get_buffer())
 
+    def test_get_availbale_dates(self):
+        """Checks if get available dates works properly.
+        """
+        from_date = datetime(2016, 1, 1)
+        to_date = datetime(2016, 2, 1)
+        stock_names = ["GOOG", "AAPL"]
+        config = read_config_file("test/data_collection.yaml")
+        data_collection = create_data_collection(config)
+        data_collection.set_date_range(from_date, to_date)
+        data_collection.prepare_data()
+        available_dates = data_collection.get_available_dates()
+        self.assertEqual(10, len(available_dates))
+
     def test_getitem(self):
         """Checks if __getitem__ works as expected.
         """

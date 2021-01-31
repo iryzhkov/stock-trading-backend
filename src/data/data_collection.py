@@ -16,11 +16,13 @@ class DataCollection:
         """
         self.stock_names = stock_names
         self.data_objects = []
+        self.visible_data_objects = []
         self.id_to_data = {}
 
         if data_objects[0].data_type != DataType.STOCK_DATA:
             raise ValueError("Expected first data to be stock data.")
         self.stock_data_id = data_objects[0].id_str
+        self.visible_data_objects.append(data_objects[0])
 
         # Helper attributes for recursive apply.
         self.busy = {}
@@ -52,6 +54,8 @@ class DataCollection:
             self.id_to_data[data_object.id_str] = data_object
             self.busy[data_object.id_str] = False
             self.done[data_object.id_str] = False
+            if data_object.data_type != DataType.STOCK_DATA:
+                self.visible_data_objects.append(data_object)
         else:
             raise ValueError("Found Data with duplicated id: {}".format(data_object.id_str))
 
@@ -68,7 +72,10 @@ class DataCollection:
     def get_available_dates(self):
         """Returns a list of available dates for querying.
         """
-        return [self.from_date, self.to_date]
+        index = self.data_objects[0].data.index
+        for data_object in self.visible_data_objects[1:]:
+            index = index.intersection(data_object.data.index)
+        return index.tolist()
 
     def _reset_done(self):
         """Helper function to reset done flags.
