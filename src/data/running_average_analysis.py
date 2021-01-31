@@ -31,9 +31,8 @@ class RunningAverageAnalysis(StockDataAnalysis):
             stock_names: a list of stock names to prepare.
             dependencies: a list of prepared data dependencies.
         """
-        self.data = dependencies[0].data.rolling(self.num_days).mean()
-        self.data.dropna(inplace=True)
-        self.data = self.data.rename(lambda name: "ra_{}_{}".format(self.num_days, name), axis=1)
+        self.data = dependencies[0].data.rolling(self.num_days).mean().dropna()
+        self.data.rename(lambda name: "ra_{}_{}".format(self.num_days, name), axis=1, inplace=True)
         self.ready = True
 
     def buffer_days(self, dependencies):
