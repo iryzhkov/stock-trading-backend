@@ -3,7 +3,6 @@
 from src.data.stock_data_analysis import StockDataAnalysis
 
 
-# pylint: disable=too-few-public-methods
 class RunningAverageAnalysis(StockDataAnalysis):
     """Class for running average analysis data.
     """
@@ -32,6 +31,9 @@ class RunningAverageAnalysis(StockDataAnalysis):
             stock_names: a list of stock names to prepare.
             dependencies: a list of prepared data dependencies.
         """
+        self.data = dependencies[0].data.rolling(self.num_days).mean()
+        self.data.dropna(inplace=True)
+        self.data = self.data.rename(lambda name: "ra_{}_{}".format(self.num_days, name), axis=1)
         self.ready = True
 
     def buffer_days(self, dependencies):

@@ -1,5 +1,6 @@
 """Class for storing generated stock data.
 """
+# pylint: disable=unused-import
 import math
 
 from datetime import datetime
@@ -49,6 +50,7 @@ class GeneratedStockData(StockData):
             for stock_index in range(len(stock_names)):
                 evaluation_function_index = stock_index % len(self.evaluation_functions)
                 evaluation_function = self.evaluation_functions[evaluation_function_index]
+                # pylint: disable=eval-used
                 array[day_index][stock_index] = eval(evaluation_function)
             diff += 1
         index = pd.Index(pd.date_range(from_date, to_date))

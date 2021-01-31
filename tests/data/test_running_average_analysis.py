@@ -1,8 +1,10 @@
 """Unit tests for running average analysis.
 """
+from datetime import datetime
+
 import unittest
 
-from src.data import RunningAverageAnalysis
+from src.data import RunningAverageAnalysis, GeneratedStockData
 
 
 class TestRunningAverageAnalysis(unittest.TestCase):
@@ -17,15 +19,31 @@ class TestRunningAverageAnalysis(unittest.TestCase):
     def test_prepare_data(self):
         """Tests if the data is prepared properly.
         """
-        data = RunningAverageAnalysis(dependencies=["stock_data"])
-        data.prepare_data(None, None, None, None)
+        from_date = datetime(2016, 1, 1)
+        to_date = datetime(2016, 2, 1)
+        num_days = 5
+        stock_names = ["STOCK_1"]
+
+        dependency = GeneratedStockData(evaluation_functions=["100"])
+        data = RunningAverageAnalysis(dependencies=["stock_data"], num_days=num_days)
+        dependency.prepare_data(from_date, to_date, stock_names, [])
+        data.prepare_data(from_date, to_date, stock_names, [dependency])
+
         self.assertTrue(data.ready)
+        self.assertFalse((stock_names == data.data.columns.tolist()))
+        self.assertEqual(len(dependency) - num_days + 1, len(data))
+        self.assertEqual(100, data[to_date].item())
 
     def test_resets_data(self):
         """Tests if the data is reset properly.
         """
+        from_date = datetime(2016, 1, 1)
+        to_date = datetime(2020, 1, 1)
+        stock_names = ["STOCK_1"]
+        dependency = GeneratedStockData(evaluation_functions=["100"])
         data = RunningAverageAnalysis(dependencies=["stock_data"])
-        data.prepare_data(None, None, None, None)
+        dependency.prepare_data(from_date, to_date, stock_names, [])
+        data.prepare_data(from_date, to_date, stock_names, [dependency])
         self.assertTrue(data.ready)
         data.reset([True])
         self.assertTrue(data.ready)
