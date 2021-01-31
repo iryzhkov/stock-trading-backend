@@ -1,5 +1,7 @@
 """Unit tests for file utils.
 """
+from datetime import datetime
+
 import os
 import unittest
 import pandas as pd
@@ -26,10 +28,10 @@ class TestFileUtilsData(unittest.TestCase):
             _ = read_config_file("test/test_config.yaml", FileSourceType.aws)
 
         with self.assertRaises(NotImplementedError):
-            _ = read_manifest_file("data/test/stock_data_manifest.json", FileSourceType.aws)
+            _ = read_manifest_file("data/test/test_manifest.json", FileSourceType.aws)
 
         with self.assertRaises(NotImplementedError):
-            write_manifest_file({}, "data/test/stock_data_manifest.json", FileSourceType.aws)
+            write_manifest_file({}, "data/test/test_manifest.json", FileSourceType.aws)
 
         with self.assertRaises(NotImplementedError):
             _ = read_csv_file("data/test/test.csv", FileSourceType.aws)
@@ -40,7 +42,7 @@ class TestFileUtilsData(unittest.TestCase):
     def test_read_manifest(self):
         """Test for manifest reader.
         """
-        manifest = read_manifest_file("data/test/stock_data_manifest.json")
+        manifest = read_manifest_file("data/test/test_manifest.json")
         self.assertEqual(type({}), type(manifest))
         self.assertIn("stock", manifest)
         self.assertEqual("test", manifest["stock"])
@@ -51,6 +53,18 @@ class TestFileUtilsData(unittest.TestCase):
         manifest = read_manifest_file("data/test/non_existent.json")
         self.assertEqual(type({}), type(manifest))
         self.assertEqual(0, len(manifest))
+
+    def test_manifest_works_with_dates(self):
+        """Test for manifest reader and writer for dates.
+        """
+        file_path = "data/test/write_test.json"
+        date = datetime(2015, 1, 1)
+        manifest = {"stock_date": date}
+        write_manifest_file(manifest, file_path)
+        manifest = read_manifest_file(file_path)
+        os.remove(file_path)
+        self.assertIn("stock_date", manifest)
+        self.assertEqual(date, manifest["stock_date"])
 
     def test_write_new_manifest(self):
         """Test for manifest writer for non-existent manifest.

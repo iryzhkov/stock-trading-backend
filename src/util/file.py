@@ -1,5 +1,6 @@
 """Utils for writing / reading files.
 """
+from datetime import datetime
 from enum import Enum, auto
 from os.path import dirname, join, exists
 
@@ -10,6 +11,32 @@ import yaml
 
 ROOT = dirname(dirname(dirname(__file__)))
 CONFIG_PATH = join(ROOT, "config")
+DATE_FORMAT = '%d-%b-%Y'
+
+def date_serializer(date):
+    """Seializer for datetime.
+
+    Args:
+        date: date to serialize.
+
+    Rerutns
+        Serialized date as string.
+    """
+    return date.strftime(DATE_FORMAT)
+
+def date_hook(json_dict):
+    """JSON hook for converting deserialized dates.
+
+    Args:
+        json_dict: a dict to search through.
+
+    Returns:
+        dict with date objects deserialized.
+    """
+    for key, value in json_dict.items():
+        if key.endswith('date'):
+            json_dict[key] = datetime.strptime(value, DATE_FORMAT)
+    return json_dict
 
 
 class FileSourceType(Enum):
@@ -53,7 +80,7 @@ def read_manifest_file(file_path, file_source=FileSourceType.local):
         file_path = join(ROOT, file_path)
         if exists(file_path):
             with open(file_path, 'r') as file:
-                manifest = json.loads(file.read())
+                manifest = json.loads(file.read(), object_hook=date_hook)
         else:
             manifest = {}
     else:
@@ -72,7 +99,7 @@ def write_manifest_file(manifest, file_path, file_source=FileSourceType.local):
     if file_source == FileSourceType.local:
         file_path = join(ROOT, file_path)
         with open(file_path, 'w') as file:
-            file.write(json.dumps(manifest, indent=2))
+            file.write(json.dumps(manifest, indent=2, default=date_serializer))
     else:
         raise NotImplementedError()
 
@@ -89,7 +116,7 @@ def read_csv_file(file_path, file_source=FileSourceType.local):
     """
     if file_source == FileSourceType.local:
         file_path = join(ROOT, file_path)
-        data_frame = pd.read_csv(file_path, index_col=0)
+        data_frame = pd.read_csv(file_path, index_col=0, parse_dates=True)
     else:
         raise NotImplementedError()
     return data_frame
