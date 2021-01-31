@@ -1,1 +1,3 @@
 name: generated_stock_data
+evaluation_functions:
+  - "100"
