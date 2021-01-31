@@ -1,6 +1,7 @@
 """Class for storing real stock data.
 """
 from src.data.stock_data import StockData
+from src.util import get_stock_data
 
 
 # pylint: disable=too-few-public-methods
@@ -20,4 +21,5 @@ class RealStockData(StockData):
             stock_names: a list of stock names to prepare.
             dependencies: a list of prepared data dependencies.
         """
+        self.data = get_stock_data(stock_names, from_date, to_date)
         self.ready = True

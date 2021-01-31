@@ -1,5 +1,7 @@
 """Unit tests for data collection.
 """
+from datetime import datetime
+
 import unittest
 
 from parameterized import parameterized
@@ -37,17 +39,31 @@ class TestDataCollection(unittest.TestCase):
     def test_prepares_data(self):
         """Checks if data collection prepares the data properly.
         """
+        from_date = datetime(2016, 1, 1)
+        to_date = datetime(2016, 2, 1)
         config = read_config_file("test/data_collection.yaml")
         data_collection = create_data_collection(config)
+        data_collection.set_date_range(from_date, to_date)
         data_collection.prepare_data()
         for data in data_collection.data_objects:
             self.assertTrue(data.ready)
 
-    def test_resets_data(self):
-        """Checks if data collection prepares the data properly.
+    def test_checks_date_range_set(self):
+        """Checks if data collection catches when date range is not set.
         """
         config = read_config_file("test/data_collection.yaml")
         data_collection = create_data_collection(config)
+        with self.assertRaises(ValueError):
+            data_collection.prepare_data()
+
+    def test_resets_data(self):
+        """Checks if data collection prepares the data properly.
+        """
+        from_date = datetime(2016, 1, 1)
+        to_date = datetime(2016, 2, 1)
+        config = read_config_file("test/data_collection.yaml")
+        data_collection = create_data_collection(config)
+        data_collection.set_date_range(from_date, to_date)
         data_collection.prepare_data()
         for data in data_collection.data_objects:
             self.assertTrue(data.ready)

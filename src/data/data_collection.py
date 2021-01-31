@@ -124,6 +124,9 @@ class DataCollection:
                 self.recursive_counter += 1
                 data.prepare_data(self.from_date, self.to_date, self.stock_names, dependencies)
 
+        if self.from_date is None or self.to_date is None:
+            raise ValueError("Date range is not set-up.")
+
         self._reset_done()
         for id_str in self.id_to_data:
             self._recursive_apply(id_str, function, result)
