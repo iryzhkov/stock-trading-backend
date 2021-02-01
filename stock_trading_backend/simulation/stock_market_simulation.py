@@ -70,6 +70,7 @@ class StockMarketSimulation(gym.Env):
         if data_collection_config is None:
             data_collection_config = read_config_file(DEFAULT_DATA_COLLECTION_CONFIG_FILE)
         data_collection_config["stock_data_randomization"] = stock_data_randomization
+        self.data_collection_config = data_collection_config
 
         if from_date is None and to_date is None:
             from_date = datetime(2014, 1, 1)

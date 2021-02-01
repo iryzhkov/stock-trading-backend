@@ -129,7 +129,7 @@ class TestDataCollection(unittest.TestCase):
     def test_getitem(self):
         """Checks if __getitem__ works as expected.
         """
-        expected_index = ["GOOG", "AMZN", "ra_10_GOOG", "ra_10_AMZN"]
+        expected_index = ["GOOG", "AMZN", "ra_10_stock_data_GOOG", "ra_10_stock_data_AMZN"]
         from_date = datetime(2016, 1, 1)
         to_date = datetime(2016, 2, 1)
         config = read_config_file("test/data_collection.yaml")

@@ -26,8 +26,7 @@ class StockOwnershipData(SimulationData):
         self.data = pd.DataFrame(data=np.zeros((num_days, len(stock_names))),
                                  index=pd.date_range(from_date, to_date),
                                  columns=stock_names)
-        # pylint: disable=unnecessary-lambda
-        self.data.rename(lambda name: "owned_{}".format(name), axis=1, inplace=1)
+        self.data.columns = ["owned_{}".format(name) for name in stock_names]
         self.ready = True
 
     def reset(self, dependencies):

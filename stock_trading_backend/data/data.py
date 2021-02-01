@@ -34,6 +34,7 @@ class Data(metaclass=ABCMeta):
         self.id_str = self.name
         self.data = pd.DataFrame()
         self.ready = False
+        self.feature_template = "{}"
         self.buffer = 0
         if dependencies:
             self.dependencies = dependencies

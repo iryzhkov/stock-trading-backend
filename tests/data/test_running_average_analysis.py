@@ -24,7 +24,7 @@ class TestRunningAverageAnalysis(unittest.TestCase):
         to_date = datetime(2016, 2, 1)
         num_days = 5
         stock_names = ["STOCK_1", "STOCK_2"]
-        expected_columns = ["ra_5_STOCK_1", "ra_5_STOCK_2"]
+        expected_columns = ["ra_5_stock_data_STOCK_1", "ra_5_stock_data_STOCK_2"]
 
         dependency = GeneratedStockData(evaluation_functions=["100"])
         data = RunningAverageAnalysis(dependencies=["stock_data"], num_days=num_days)

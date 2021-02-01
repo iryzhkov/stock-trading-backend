@@ -1,3 +1,4 @@
 name: running_average_analysis
 dependencies:
-  - real_stock_data
+  - stock_data
+num_days: 5

@@ -17,7 +17,17 @@ class Agent():
         self.stock_names = data_collection_config["stock_names"]
         self.id_str = self.name
 
-    # pylint: disable=no-self-use
+    def extract_stock_feature(self, observation, feature_template=""):
+        """Extracts stock feature from observation.
+
+        Feature is expected to be: feature_template.format(stock_name)
+
+        Args:
+            observation: observation to extract feature from.
+            feature_template: what the feature key looks like.
+        """
+        return [observation[feature_template.format(stock_name)] for stock_name in self.stock_names]
+
     def unpack_observation(self, observation):
         """Unpacks observation into: balance, net_worth, owned_stocks, stock_prices.
 
@@ -32,11 +42,20 @@ class Agent():
         """
         balance = observation["balance"]
         net_worth = observation["net_worth"]
-        return balance, net_worth
+        stock_prices = self.extract_stock_feature(observation, "{}")
+        owned_stocks = self.extract_stock_feature(observation, "owned_{}")
+        return balance, net_worth, owned_stocks, stock_prices
 
-    def make_decision(self, env):
+    # pylint: disable=unused-argument
+    # pylint: disable=no-self-use
+    def make_decision(self, observation, env):
         """Make decision based on the given data.
+
+        Args:
+            observation: current state of the environment.
+            env: the gym environment.
         """
+        return env.action_space.sample()
 
     def apply_learning(self):
         """Applies learning if applicable for provided data.

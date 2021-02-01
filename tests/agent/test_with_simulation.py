@@ -15,7 +15,7 @@ class TestWithSimulation(unittest.TestCase):
         """Set up for the unit tests.
         """
         from_date = datetime(2016, 1, 1)
-        to_date = datetime(2016, 1, 5)
+        to_date = datetime(2016, 2, 1)
         self.data_collection_config = read_config_file("test/simulation.yaml")
         self.simulation = StockMarketSimulation(self.data_collection_config, from_date, to_date,
                                                 min_start_balance=100, max_start_balance=100,

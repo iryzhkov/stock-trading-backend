@@ -46,9 +46,7 @@ class DataCollection:
 
         for data in self.data_objects:
             for i, dep in enumerate(data.dependencies):
-                if dep == "stock_data":
-                    data.dependencies[i] = self.stock_data_id
-                elif not dep in self.id_to_data:
+                if not dep in self.id_to_data:
                     raise LookupError("Couln't find {} (dependency of {})".format(dep, data.id_str))
 
     def append(self, data_object):
@@ -63,9 +61,14 @@ class DataCollection:
         """
         if data_object.id_str not in self.id_to_data:
             self.data_objects.append(data_object)
+            for i, dep in enumerate(data_object.dependencies):
+                if dep == "stock_data":
+                    data_object.dependencies[i] = self.stock_data_id
+
             self.id_to_data[data_object.id_str] = data_object
             self.busy[data_object.id_str] = False
             self.done[data_object.id_str] = False
+
             if data_object.visible and data_object not in self.visible_data_objects:
                 self.visible_data_objects.append(data_object)
         return self.id_to_data[data_object.id_str]

@@ -20,6 +20,7 @@ class RunningAverageAnalysis(StockDataAnalysis):
         super(RunningAverageAnalysis, self).__init__(dependencies, visible)
         self.num_days = num_days
         self.id_str = "running_average_{}_for_{}".format(num_days, dependencies[0])
+        self.feature_template = "ra_{}_{}_".format(num_days, dependencies[0]) + "{}"
 
     def prepare_data(self, from_date, to_date, stock_names, dependencies):
         """Data preparation.
@@ -33,7 +34,7 @@ class RunningAverageAnalysis(StockDataAnalysis):
             dependencies: a list of prepared data dependencies.
         """
         self.data = dependencies[0].data.rolling(self.num_days).mean().dropna()
-        self.data.rename(lambda name: "ra_{}_{}".format(self.num_days, name), axis=1, inplace=True)
+        self.data.columns = [self.feature_template.format(name) for name in stock_names]
         self.ready = True
 
     def buffer_days(self, dependencies):
