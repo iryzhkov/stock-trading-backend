@@ -158,8 +158,9 @@ class StockMarketSimulation(gym.Env):
                     sale_return += owned_stocks[index] * stock_prices[index]
                     owned_stocks[index] = 0
                 elif num_owned_stocks < self.max_stock_owned:
-                    num_owned_stocks += 1
                     num_stock_purchased = math.floor(max_purchase_price / stock_prices[index])
+                    if num_stock_purchased > 0:
+                        num_owned_stocks += 1
                     purchase_price += num_stock_purchased * stock_prices[index]
                     owned_stocks[index] = num_stock_purchased
         sale_return *= 1 - self.commission

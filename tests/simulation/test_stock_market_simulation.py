@@ -70,3 +70,28 @@ class TestGeneratedStockData(unittest.TestCase):
         self.assertEqual(0, observation["owned_GOOG"])
         self.assertEqual(0, observation["owned_AMZN"])
         self.assertTrue(done)
+
+    def test_too_expensive(self):
+        """Test for ignoring expensive purchases.
+        """
+        from_date = datetime(2016, 1, 1)
+        to_date = datetime(2016, 1, 5)
+        data_collection_config = read_config_file("test/simulation.yaml")
+        simulation = StockMarketSimulation(data_collection_config, from_date, to_date,
+                                           min_start_balance=20, max_start_balance=20,
+                                           max_stock_owned=2)
+        _ = simulation.reset()
+
+        observation, _, done = simulation.step([0, 1])
+        self.assertEqual(20, observation["balance"])
+        self.assertEqual(20, observation["net_worth"])
+        self.assertEqual(0, observation["owned_GOOG"])
+        self.assertEqual(0, observation["owned_AMZN"])
+        self.assertFalse(done)
+
+        observation, _, done = simulation.step([1, 0])
+        self.assertEqual(10, observation["balance"])
+        self.assertEqual(20, observation["net_worth"])
+        self.assertEqual(1, observation["owned_GOOG"])
+        self.assertEqual(0, observation["owned_AMZN"])
+        self.assertFalse(done)
