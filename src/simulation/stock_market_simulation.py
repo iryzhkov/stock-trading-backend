@@ -190,7 +190,7 @@ class StockMarketSimulation(gym.Env):
         curr_date = self.available_dates[curr_date_index]
         self.balance[curr_date] = random.randint(self.min_start_balance, self.max_start_balance)
         self.net_worth[curr_date] = self.balance[curr_date].item()
-        return self.data_collection[self.available_dates[self.from_date_index]]
+        return self.observation
 
     def render(self, mode="human"):
         """Renders current situation.
