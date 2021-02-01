@@ -57,6 +57,9 @@ class DataCollection:
         Args:
             data_object: A Data object to add.
             index: A position where to insert.
+
+        Returns:
+            data_object that is used by data collection.
         """
         if data_object.id_str not in self.id_to_data:
             self.data_objects.append(data_object)
@@ -65,8 +68,7 @@ class DataCollection:
             self.done[data_object.id_str] = False
             if data_object.visible and data_object not in self.visible_data_objects:
                 self.visible_data_objects.append(data_object)
-        else:
-            raise ValueError("Found Data with duplicated id: {}".format(data_object.id_str))
+        return self.id_to_data[data_object.id_str]
 
     def set_date_range(self, from_date, to_date):
         """Setter for date range.

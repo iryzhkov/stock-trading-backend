@@ -6,7 +6,7 @@ import unittest
 
 from parameterized import parameterized
 
-from stock_trading_backend.data import create_data_collection
+from stock_trading_backend.data import create_data_collection, RealStockData
 from stock_trading_backend.util import read_config_file
 
 
@@ -14,7 +14,6 @@ class TestDataCollection(unittest.TestCase):
     """Unit tests for data collection.
     """
     @parameterized.expand([
-        ("test/duplicate_data_collection.yaml", ValueError),
         ("test/missing_dependency_data_collection.yaml", LookupError),
         ("test/no_stock_data_collection.yaml", ValueError),
     ])
@@ -27,6 +26,16 @@ class TestDataCollection(unittest.TestCase):
         """
         with self.assertRaises(excpecetd_exception):
             create_data_collection(read_config_file(config_filename))
+
+    def test_ignores_duplicates(self):
+        """Checks if data collection ignores duplicates.
+        """
+        config = read_config_file("test/data_collection.yaml")
+        data_collection = create_data_collection(config)
+        stock_data = RealStockData()
+        returned_stock_data = data_collection.append(stock_data)
+        self.assertIsInstance(returned_stock_data, RealStockData)
+        self.assertNotEqual(stock_data, returned_stock_data)
 
     def test_catches_circular_dependency(self):
         """Checks if data collection catches circular dependency.
