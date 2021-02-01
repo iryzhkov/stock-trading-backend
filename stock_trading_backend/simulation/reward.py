@@ -8,14 +8,6 @@ class Reward(metaclass=ABCMeta):
     """
     name = None
 
-    # pylint: disable=unused-argument
-    def __init__(self, env=None):
-        """Initializer for reward class.
-
-        Args:
-            env: StockMarketSimulation enviroment for which the Reward is build.
-        """
-
     def calculate_value(self, observation, date):
         """Calculates the value of the reward given the observation.
 

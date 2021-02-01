@@ -4,7 +4,7 @@ import unittest
 
 from parameterized import parameterized
 
-from stock_trading_backend.simulation import create_reward, StockMarketSimulation
+from stock_trading_backend.simulation import create_reward
 from stock_trading_backend.simulation.reward import Reward
 
 class TestRewardFactory(unittest.TestCase):
@@ -16,8 +16,7 @@ class TestRewardFactory(unittest.TestCase):
     def test_creates_correct_class(self, reward_config, expected_class):
         """Tests if creat_reward creates the correct class.
         """
-        simulation = StockMarketSimulation()
-        reward = create_reward(reward_config, simulation)
+        reward = create_reward(reward_config)
         self.assertIsInstance(reward, expected_class)
 
     def test_raises_lookup_error(self):
@@ -25,4 +24,4 @@ class TestRewardFactory(unittest.TestCase):
         """
         config = {"name": "not_a_real_reward_name"}
         with self.assertRaises(LookupError):
-            _ = create_reward(config, None)
+            _ = create_reward(config)

@@ -10,17 +10,17 @@ class TestConstantReward(unittest.TestCase):
     def test_initializes(self):
         """Checks if the reward is initialized properly.
         """
-        reward = ConstantReward(None)
+        reward = ConstantReward()
         self.assertIsInstance(reward, ConstantReward)
         self.assertEqual(0, reward.calculate_value(None, None))
 
-        reward = ConstantReward(None, 5)
+        reward = ConstantReward(5)
         self.assertEqual(5, reward.calculate_value(None, None))
 
     def test_resets(self):
         """Checks if Constant Reward resets properly.
         """
-        reward = ConstantReward(None)
+        reward = ConstantReward()
         reward.reset(None, None)
         reward.calculate_value(None, None)
         self.assertEqual(0, reward.calculate_value(None, None))

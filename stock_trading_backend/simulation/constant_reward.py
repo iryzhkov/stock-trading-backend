@@ -9,7 +9,7 @@ class ConstantReward(Reward):
     name = "constant"
 
     # pylint: disable=unused-argument
-    def __init__(self, env=None, value=0):
+    def __init__(self, value=0):
         """Initializer for reward class.
 
         Args:

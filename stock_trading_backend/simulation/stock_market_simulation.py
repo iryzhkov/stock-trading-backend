@@ -134,7 +134,7 @@ class StockMarketSimulation(gym.Env):
         # Setting up reward function.
         if reward_config is None:
             reward_config = {"name": "constant"}
-        self.reward_function = create_reward(reward_config, self)
+        self.reward_function = create_reward(reward_config)
 
     @property
     def done(self):
