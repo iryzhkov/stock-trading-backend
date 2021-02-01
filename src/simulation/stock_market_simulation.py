@@ -18,10 +18,22 @@ class StockMarketSimulation(gym.Env):
         A simulation of the stock market.
 
     Observation:
-        TODO(igor.o.ryzhkov@gmail.com): add description.
+        Observation space is mostly determined in the data collection config. All observation spaces
+        contain stock price data, balance data, net worth data, stocks owned data. Additional
+        features, such as running average, deriviative, date metadata, etc., can be used in this
+        environment.
 
     Actions:
-        TODO(igor.o.ryzhkov@gmail.com): add description.
+        Type: MultiBinary(len(stock_names))
+        Num Action
+        0   Hold. Does not do anything with the ith stock.
+        1   Buy/Sell. If stock is owned, then sell, if not, then buy.
+
+        Note: Sell action is not always executed. When there is not enough balance, the first stocks
+        are bought first, the last sell orders are ignored if not enough balance.
+
+        Note: The simulation spends about 1 / max_stock_owned of the net-worth on each stock
+        purchase.
 
     Reward:
         TODO(igor.o.ryzhkov@gmail.com): add description.
@@ -35,7 +47,7 @@ class StockMarketSimulation(gym.Env):
         Episode length is greater than allowed.
     """
     # pylint: disable=too-many-arguments
-    def __init__(self, data_collection_config=None, from_date=None, to_date=None, min_duration=0,
+    def __init__(self, data_collection_config, from_date, to_date, min_duration=0,
                  max_duration=0, min_start_balance=0, max_start_balance=0, commission=0,
                  max_stock_owned=1):
         """Initializer for the simulation class.
@@ -93,6 +105,24 @@ class StockMarketSimulation(gym.Env):
         # Setting up action space.
         self.action_space = gym.spaces.MultiBinary(len(self.data_collection.stock_names))
 
+    @property
+    def done(self):
+        """Property, true if episode finished.
+        """
+        return self.curr_date_index >= self.to_date_index
+
+    @property
+    def observation(self):
+        """Property for current observation.
+        """
+        return self.data_collection[self.available_dates[self.curr_date_index]]
+
+    @property
+    def reward(self):
+        """Property for current reward.
+        """
+        return 0
+
     # pylint: disable=too-many-locals
     def step(self, action):
         """Simulate a single day of trading given the action.
@@ -141,12 +171,7 @@ class StockMarketSimulation(gym.Env):
         self.balance[next_date] = balance
         self.net_worth[next_date] = balance + sum(owned_stocks * stock_prices)
         self.stock_ownership[next_date] = owned_stocks
-
-        # Prepare step output.
-        observation = self.data_collection[next_date]
-        reward = 0
-        done = self.curr_date_index >= self.to_date_index
-        return observation, reward, done
+        return self.observation, self.reward, self.done
 
     def reset(self):
         """Resets the simulation environment.
