@@ -4,6 +4,8 @@ from datetime import datetime
 
 import unittest
 
+import gym
+
 from src.simulation import StockMarketSimulation
 from src.util import read_config_file
 
@@ -12,13 +14,44 @@ class TestGeneratedStockData(unittest.TestCase):
     """Unit tests for generated stock data.
     """
     def test_initializes(self):
-        """Test for simulation initializtion.
+        """Test for simulation initialization.
         """
         from_date = datetime(2016, 1, 1)
         to_date = datetime(2016, 2, 1)
         data_collection_config = read_config_file("test/data_collection.yaml")
         simulation = StockMarketSimulation(data_collection_config, from_date, to_date)
-        self.assertEqual(0, simulation.max_start_balance)
+        self.assertEqual(1000, simulation.max_start_balance)
+
+    def test_default_initialization(self):
+        """Test for default simulation initialization.
+        """
+        simulation = StockMarketSimulation()
+        self.assertEqual(1000, simulation.max_start_balance)
+        self.assertEqual(732, len(simulation.available_dates))
+
+    def test_initializes_from_gym(self):
+        """Test if simulation can be initialized with gym.make()
+        """
+        simulation = gym.make("stock-market-v0")
+        self.assertIsInstance(simulation, StockMarketSimulation)
+        self.assertEqual(1000, simulation.max_start_balance)
+        self.assertEqual(732, len(simulation.available_dates))
+
+    def test_initializes_from_gym_with_parameters(self):
+        """Test if simulation can be initialized with gym.make()
+        """
+        simulation = gym.make("stock-market-v0", max_start_balance=500)
+        self.assertIsInstance(simulation, StockMarketSimulation)
+        self.assertEqual(500, simulation.max_start_balance)
+
+    def test_weird_date_range(self):
+        """Test simulation initialization with half of the date range.
+        """
+        date = datetime(2016, 1, 1)
+        with self.assertRaises(ValueError):
+            _ = StockMarketSimulation(from_date=date)
+        with self.assertRaises(ValueError):
+            _ = StockMarketSimulation(to_date=date)
 
     def test_resets(self):
         """Test for simulation reset.

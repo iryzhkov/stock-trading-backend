@@ -1,6 +1,6 @@
 """Class for running a simulation.
 """
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 import random
 import math
@@ -9,7 +9,9 @@ import gym
 import numpy as np
 
 from src.data import create_data_collection, SingleValueSimulationData, StockOwnershipData
+from src.util import read_config_file
 
+DEFAULT_DATA_COLLECTION_CONFIG_FILE = "default_data_collection.yaml"
 
 # pylint: disable=too-many-instance-attributes
 class StockMarketSimulation(gym.Env):
@@ -47,8 +49,8 @@ class StockMarketSimulation(gym.Env):
         Episode length is greater than allowed.
     """
     # pylint: disable=too-many-arguments
-    def __init__(self, data_collection_config, from_date, to_date, min_duration=0,
-                 max_duration=0, min_start_balance=0, max_start_balance=0, commission=0,
+    def __init__(self, data_collection_config=None, from_date=None, to_date=None, min_duration=0,
+                 max_duration=0, min_start_balance=1000, max_start_balance=1000, commission=0,
                  max_stock_owned=1):
         """Initializer for the simulation class.
 
@@ -63,6 +65,15 @@ class StockMarketSimulation(gym.Env):
             commission: relative commission for each transcation.
             max_stock_owned: a maximum number of different stocks that can be owned.
         """
+        if data_collection_config is None:
+            data_collection_config = read_config_file(DEFAULT_DATA_COLLECTION_CONFIG_FILE)
+
+        if from_date is None and to_date is None:
+            from_date = datetime(2014, 1, 1)
+            to_date = datetime(2016, 1, 1)
+        elif from_date is None or to_date is None:
+            raise ValueError("Either both from and to dates are None or none of them.")
+
         self.data_collection = create_data_collection(data_collection_config)
 
         # Setup of simulation data.
