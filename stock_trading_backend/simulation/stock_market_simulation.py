@@ -10,6 +10,7 @@ import numpy as np
 
 from stock_trading_backend.data import create_data_collection, SingleValueSimulationData
 from stock_trading_backend.data import StockOwnershipData
+from stock_trading_backend.simulation.reward_factory import create_reward
 from stock_trading_backend.util import read_config_file
 
 DEFAULT_DATA_COLLECTION_CONFIG_FILE = "default_data_collection.yaml"
@@ -26,6 +27,8 @@ class StockMarketSimulation(gym.Env):
         features, such as running average, deriviative, date metadata, etc., can be used in this
         environment.
 
+        Note: See data sub-package for more information.
+
     Actions:
         Type: MultiBinary(len(stock_names))
         Num Action
@@ -39,7 +42,14 @@ class StockMarketSimulation(gym.Env):
         purchase.
 
     Reward:
-        TODO(igor.o.ryzhkov@gmail.com): add description.
+        Reward can be set up with the reward_config parameter. Available rewards:
+
+        Name                Description
+        sharpe_ratio        Returns sharpe ratio for the agent. Only works with real stock data.
+        net_worth_ratio     Returns net_worth growth ratio - 1. (default)
+        constant            Returns the same value.
+
+        Note: See reward classes for more information.
 
     Starting State:
         Agent starts with 0 stocks. The amount of money is selected uniformly in the given range.
@@ -52,7 +62,7 @@ class StockMarketSimulation(gym.Env):
     # pylint: disable=too-many-arguments
     def __init__(self, data_collection_config=None, from_date=None, to_date=None, min_duration=0,
                  max_duration=0, min_start_balance=1000, max_start_balance=1000, commission=0,
-                 max_stock_owned=1, stock_data_randomization=False):
+                 max_stock_owned=1, stock_data_randomization=False, reward_config=None):
         """Initializer for the simulation class.
 
         Args:
@@ -66,6 +76,7 @@ class StockMarketSimulation(gym.Env):
             commission: relative commission for each transcation.
             max_stock_owned: a maximum number of different stocks that can be owned.
             stock_data_randomization: whether to add stock data randomization.
+            reward_config: the configuration for the reward.
         """
         if data_collection_config is None:
             data_collection_config = read_config_file(DEFAULT_DATA_COLLECTION_CONFIG_FILE)
@@ -120,6 +131,11 @@ class StockMarketSimulation(gym.Env):
         # Setting up action space.
         self.action_space = gym.spaces.MultiBinary(len(self.data_collection.stock_names))
 
+        # Setting up reward function.
+        if reward_config is None:
+            reward_config = {"name": "constant"}
+        self.reward_function = create_reward(reward_config, self)
+
     @property
     def done(self):
         """Property, true if episode finished.
@@ -136,7 +152,7 @@ class StockMarketSimulation(gym.Env):
     def reward(self):
         """Property for current reward.
         """
-        return 0
+        return self.reward_function.value
 
     # pylint: disable=too-many-locals
     def step(self, action):
@@ -187,12 +203,14 @@ class StockMarketSimulation(gym.Env):
         self.balance[next_date] = balance
         self.net_worth[next_date] = balance + sum(owned_stocks * stock_prices)
         self.stock_ownership[next_date] = owned_stocks
+        self.reward_function.calculate_value(self.observation)
         return self.observation, self.reward, self.done
 
     def reset(self):
         """Resets the simulation environment.
         """
         self.data_collection.reset()
+        self.reward_function.reset()
         self.data_collection.prepare_data()
 
         # Setting from date, to date for the next episode.
