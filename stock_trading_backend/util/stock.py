@@ -5,8 +5,8 @@ from os.path import join
 import pandas as pd
 import yfinance
 
-from src.util.file import read_manifest_file, write_manifest_file
-from src.util.file import read_csv_file, write_csv_file
+from stock_trading_backend.util.file import read_manifest_file, write_manifest_file
+from stock_trading_backend.util.file import read_csv_file, write_csv_file
 
 DATA_PATH = "data"
 STOCK_MANIFEST_FILE_NAME = "stock_data_manifest.json"

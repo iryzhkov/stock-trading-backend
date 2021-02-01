@@ -5,7 +5,7 @@ from datetime import datetime
 import unittest
 import numpy as np
 
-from src.data import RandomizedStockData, GeneratedStockData
+from stock_trading_backend.data import RandomizedStockData, GeneratedStockData
 
 
 class TestRandomizedStockData(unittest.TestCase):

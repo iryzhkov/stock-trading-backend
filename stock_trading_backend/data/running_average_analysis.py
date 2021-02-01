@@ -1,6 +1,6 @@
 """Class for running average analysis data.
 """
-from src.data.stock_data_analysis import StockDataAnalysis
+from stock_trading_backend.data.stock_data_analysis import StockDataAnalysis
 
 
 class RunningAverageAnalysis(StockDataAnalysis):

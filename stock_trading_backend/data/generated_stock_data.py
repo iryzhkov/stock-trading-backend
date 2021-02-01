@@ -8,7 +8,7 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 
-from src.data.stock_data import StockData
+from stock_trading_backend.data.stock_data import StockData
 
 
 # pylint: disable=too-few-public-methods

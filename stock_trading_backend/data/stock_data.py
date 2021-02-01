@@ -1,7 +1,7 @@
 """Base class for storing stock data.
 """
 from abc import ABCMeta
-from src.data.data import Data, DataType
+from stock_trading_backend.data.data import Data, DataType
 
 
 # pylint: disable=too-few-public-methods

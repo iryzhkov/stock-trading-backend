@@ -8,8 +8,8 @@ import math
 import gym
 import numpy as np
 
-from src.data import create_data_collection, SingleValueSimulationData, StockOwnershipData
-from src.util import read_config_file
+from stock_trading_backend.data import create_data_collection, SingleValueSimulationData, StockOwnershipData
+from stock_trading_backend.util import read_config_file
 
 DEFAULT_DATA_COLLECTION_CONFIG_FILE = "default_data_collection.yaml"
 

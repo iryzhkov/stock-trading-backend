@@ -3,7 +3,7 @@
 import numpy as np
 import pandas as pd
 
-from src.data.simulation_data import SimulationData
+from stock_trading_backend.data.simulation_data import SimulationData
 
 
 class StockOwnershipData(SimulationData):

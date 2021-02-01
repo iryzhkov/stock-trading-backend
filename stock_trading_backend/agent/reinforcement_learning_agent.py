@@ -1,6 +1,6 @@
 """Class for reinforcement learning based agent.
 """
-from src.agent import Agent
+from stock_trading_backend.agent import Agent
 
 class ReinforcementLearningAgent(Agent):
     """Class for reinforcement learning based agent.

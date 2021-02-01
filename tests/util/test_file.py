@@ -6,8 +6,8 @@ import os
 import unittest
 import pandas as pd
 
-from src.util import read_config_file, FileSourceType, read_manifest_file, write_manifest_file
-from src.util import read_csv_file, write_csv_file
+from stock_trading_backend.util import read_config_file, FileSourceType, read_manifest_file, write_manifest_file
+from stock_trading_backend.util import read_csv_file, write_csv_file
 
 
 class TestFileUtilsData(unittest.TestCase):

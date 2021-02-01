@@ -2,7 +2,7 @@
 """
 import numpy as np
 
-from src.data.stock_data import StockData
+from stock_trading_backend.data.stock_data import StockData
 
 
 class RandomizedStockData(StockData):

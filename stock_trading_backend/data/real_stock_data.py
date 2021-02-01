@@ -1,7 +1,7 @@
 """Class for storing real stock data.
 """
-from src.data.stock_data import StockData
-from src.util import get_stock_data
+from stock_trading_backend.data.stock_data import StockData
+from stock_trading_backend.util import get_stock_data
 
 
 # pylint: disable=too-few-public-methods

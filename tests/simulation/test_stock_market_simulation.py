@@ -6,8 +6,8 @@ import unittest
 
 import gym
 
-from src.simulation import StockMarketSimulation
-from src.util import read_config_file
+from stock_trading_backend.simulation import StockMarketSimulation
+from stock_trading_backend.util import read_config_file
 
 
 class TestGeneratedStockData(unittest.TestCase):

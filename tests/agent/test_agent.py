@@ -2,7 +2,7 @@
 """
 import unittest
 
-from src.agent import Agent
+from stock_trading_backend.agent import Agent
 
 
 class TestAgent(unittest.TestCase):

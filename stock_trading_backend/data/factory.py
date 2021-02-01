@@ -1,10 +1,10 @@
 """Factory functions for data classes.
 """
-from src.data.data_collection import DataCollection
-from src.data.generated_stock_data import GeneratedStockData
-from src.data.randomized_stock_data import RandomizedStockData
-from src.data.real_stock_data import RealStockData
-from src.data.running_average_analysis import RunningAverageAnalysis
+from stock_trading_backend.data.data_collection import DataCollection
+from stock_trading_backend.data.generated_stock_data import GeneratedStockData
+from stock_trading_backend.data.randomized_stock_data import RandomizedStockData
+from stock_trading_backend.data.real_stock_data import RealStockData
+from stock_trading_backend.data.running_average_analysis import RunningAverageAnalysis
 
 
 DATA_CLASSES = [

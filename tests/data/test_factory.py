@@ -4,9 +4,9 @@ import unittest
 
 from parameterized import parameterized
 
-from src.data import create_data, GeneratedStockData, RandomizedStockData, RealStockData
-from src.data import RunningAverageAnalysis, create_data_collection, DataCollection
-from src.util import read_config_file
+from stock_trading_backend.data import create_data, GeneratedStockData, RandomizedStockData, RealStockData
+from stock_trading_backend.data import RunningAverageAnalysis, create_data_collection, DataCollection
+from stock_trading_backend.util import read_config_file
 
 
 class TestDataFactory(unittest.TestCase):

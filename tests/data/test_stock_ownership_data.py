@@ -4,7 +4,7 @@ from datetime import datetime
 
 import unittest
 
-from src.data import StockOwnershipData
+from stock_trading_backend.data import StockOwnershipData
 
 
 class TestStockOwnershipData(unittest.TestCase):

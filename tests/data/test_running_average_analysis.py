@@ -4,7 +4,7 @@ from datetime import datetime
 
 import unittest
 
-from src.data import RunningAverageAnalysis, GeneratedStockData
+from stock_trading_backend.data import RunningAverageAnalysis, GeneratedStockData
 
 
 class TestRunningAverageAnalysis(unittest.TestCase):

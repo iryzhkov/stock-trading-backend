@@ -4,7 +4,7 @@ import unittest
 
 import pandas as pd
 
-from src.data import Data
+from stock_trading_backend.data import Data
 
 
 class TestData(unittest.TestCase):

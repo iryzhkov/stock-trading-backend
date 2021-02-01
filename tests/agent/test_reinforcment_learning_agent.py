@@ -2,7 +2,7 @@
 """
 import unittest
 
-from src.agent import ReinforcementLearningAgent
+from stock_trading_backend.agent import ReinforcementLearningAgent
 
 
 class TestReinforcementLearningAgent(unittest.TestCase):

@@ -6,8 +6,8 @@ import unittest
 
 from parameterized import parameterized
 
-from src.data import create_data_collection
-from src.util import read_config_file
+from stock_trading_backend.data import create_data_collection
+from stock_trading_backend.util import read_config_file
 
 
 class TestDataCollection(unittest.TestCase):

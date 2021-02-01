@@ -1,7 +1,7 @@
 """A class containing multiple Data classes.
 """
 import pandas as pd
-from src.data.data import DataType
+from stock_trading_backend.data.data import DataType
 
 
 # pylint: disable=too-many-instance-attributes
