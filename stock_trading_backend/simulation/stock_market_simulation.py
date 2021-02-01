@@ -148,12 +148,6 @@ class StockMarketSimulation(gym.Env):
         """
         return self.data_collection[self.available_dates[self.curr_date_index]]
 
-    @property
-    def reward(self):
-        """Property for current reward.
-        """
-        return self.reward_function.value
-
     # pylint: disable=too-many-locals
     def step(self, action):
         """Simulate a single day of trading given the action.
@@ -203,14 +197,13 @@ class StockMarketSimulation(gym.Env):
         self.balance[next_date] = balance
         self.net_worth[next_date] = balance + sum(owned_stocks * stock_prices)
         self.stock_ownership[next_date] = owned_stocks
-        self.reward_function.calculate_value(self.observation)
-        return self.observation, self.reward, self.done
+        reward = self.reward_function.calculate_value(self.observation, next_date)
+        return self.observation, reward, self.done
 
     def reset(self):
         """Resets the simulation environment.
         """
         self.data_collection.reset()
-        self.reward_function.reset()
         self.data_collection.prepare_data()
 
         # Setting from date, to date for the next episode.
@@ -224,6 +217,9 @@ class StockMarketSimulation(gym.Env):
         curr_date = self.available_dates[curr_date_index]
         self.balance[curr_date] = random.randint(self.min_start_balance, self.max_start_balance)
         self.net_worth[curr_date] = self.balance[curr_date].item()
+
+        # Reset the reward function.
+        self.reward_function.reset(self.observation, curr_date)
         return self.observation
 
     def render(self, mode="human"):

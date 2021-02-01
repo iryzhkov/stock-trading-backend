@@ -17,4 +17,12 @@ class ConstantReward(Reward):
             default_value: the default value to use for reward.
         """
         self.value = value
-        self.reset()
+
+    def calculate_value(self, observation, date):
+        """Returns the value set in the initialization.
+
+        Args:
+            observation: the state of the environment.
+            date: datetime current date in the environment
+        """
+        return self.value

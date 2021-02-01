@@ -12,22 +12,15 @@ class TestConstantReward(unittest.TestCase):
         """
         reward = ConstantReward(None)
         self.assertIsInstance(reward, ConstantReward)
-        self.assertEqual(0, reward.value)
+        self.assertEqual(0, reward.calculate_value(None, None))
 
         reward = ConstantReward(None, 5)
-        self.assertEqual(5, reward.value)
-
-    def test_calculate_value(self):
-        """Checks if calculate_value works properly.
-        """
-        reward = ConstantReward(None)
-        reward.calculate_value(None)
-        self.assertEqual(0, reward.value)
+        self.assertEqual(5, reward.calculate_value(None, None))
 
     def test_resets(self):
         """Checks if Constant Reward resets properly.
         """
         reward = ConstantReward(None)
-        reward.reset()
-        reward.calculate_value(None)
-        self.assertEqual(0, reward.value)
+        reward.reset(None, None)
+        reward.calculate_value(None, None)
+        self.assertEqual(0, reward.calculate_value(None, None))

@@ -16,13 +16,18 @@ class Reward(metaclass=ABCMeta):
             env: StockMarketSimulation enviroment for which the Reward is build.
         """
 
-    def calculate_value(self, observation):
+    def calculate_value(self, observation, date):
         """Calculates the value of the reward given the observation.
 
         Args:
             observation: observation from the environemnt.
+            date: datetime current date in the environment
         """
 
-    def reset(self):
+    def reset(self, observation, date):
         """Resets the internal reward state.
+
+        Args:
+            observation: state of the reset environment.
+            date: datetime current date in the environment
         """
