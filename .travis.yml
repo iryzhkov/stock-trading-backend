@@ -4,8 +4,5 @@ python:
   - "3.7"
   - "3.8"
   - "3.9"
-install:
-  - pip install -r requirements.txt
-script:
-  - python -m pytest tests/ -v
-	- coverage run -m pytest tests/
+install: pip install -r requirements.txt
+script: python -m pytest tests/ -v
