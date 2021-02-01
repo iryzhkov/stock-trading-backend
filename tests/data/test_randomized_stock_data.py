@@ -32,8 +32,8 @@ class TestRandomizedStockData(unittest.TestCase):
         data.prepare_data(from_date, to_date, stock_names, [dependency])
         self.assertTrue(data.ready)
         self.assertTrue((stock_names == data.data.columns.tolist()))
-        self.assertTrue(np.isclose(value * (1 + mean), data.data["STOCK_1"].mean(), rtol=0.05))
-        self.assertTrue(np.isclose(value * stdev, data.data["STOCK_1"].std(), rtol=0.05))
+        self.assertTrue(np.isclose(value * (1 + mean), data.data["STOCK_1"].mean(), rtol=0.1))
+        self.assertTrue(np.isclose(value * stdev, data.data["STOCK_1"].std(), rtol=0.1))
 
     def test_resets_data(self):
         """Tests if the data is reset properly.
