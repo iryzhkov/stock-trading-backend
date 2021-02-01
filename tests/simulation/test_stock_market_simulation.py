@@ -115,7 +115,7 @@ class TestGeneratedStockData(unittest.TestCase):
                                            max_stock_owned=1)
         _ = simulation.reset()
 
-        observation, _, done = simulation.step([0, 1])
+        observation, _, done = simulation.step([1, 1])
         self.assertEqual(0, observation["balance"])
         self.assertEqual(10, observation["net_worth"])
         self.assertEqual(0, observation["owned_GOOG"])
