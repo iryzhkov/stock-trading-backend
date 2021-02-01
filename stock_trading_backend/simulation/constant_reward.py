@@ -8,7 +8,6 @@ class ConstantReward(Reward):
     """
     name = "constant"
 
-    # pylint: disable=unused-argument
     def __init__(self, value=0):
         """Initializer for reward class.
 
@@ -18,6 +17,7 @@ class ConstantReward(Reward):
         """
         self.value = value
 
+    # pylint: disable=unused-argument
     def calculate_value(self, observation, date):
         """Returns the value set in the initialization.
 

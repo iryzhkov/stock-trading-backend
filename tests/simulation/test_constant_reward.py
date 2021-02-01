@@ -5,7 +5,7 @@ import unittest
 from stock_trading_backend.simulation.constant_reward import ConstantReward
 
 class TestConstantReward(unittest.TestCase):
-    """Unit test for Reard class.
+    """Unit test for Constant Reward class.
     """
     def test_initializes(self):
         """Checks if the reward is initialized properly.
