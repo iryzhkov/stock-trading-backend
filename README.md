@@ -1,7 +1,6 @@
 # Stock Trading Back-end
 
 [![Build Status](https://travis-ci.com/iryzhkov/stock-trading-backend.svg?branch=main)](https://travis-ci.com/iryzhkov/stock-trading-backend)
-[![Inline docs](http://inch-ci.org/github/iryzhkov/stock-trading-backend.svg?branch=master)](http://inch-ci.org/github/iryzhkov/stock-trading-backend)
 
 A back-end for AI-based (simulated) stock trading.
 
