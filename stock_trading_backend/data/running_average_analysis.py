@@ -9,14 +9,15 @@ class RunningAverageAnalysis(StockDataAnalysis):
     name = "running_average_analysis"
     expected_num_dependencies = 1
 
-    def __init__(self, dependencies=None, num_days=1):
+    def __init__(self, dependencies=None, visible=True, num_days=1):
         """Initializer for Running Average Analysis class
 
         Args:
             dependencies: a list of dependency ids for the data.
+            visible: whether the data is visible in data_collection[date].
             num_days: number of days to take the average of.
         """
-        super(RunningAverageAnalysis, self).__init__(dependencies)
+        super(RunningAverageAnalysis, self).__init__(dependencies, visible)
         self.num_days = num_days
         self.id_str = "running_average_{}_for_{}".format(num_days, dependencies[0])
 

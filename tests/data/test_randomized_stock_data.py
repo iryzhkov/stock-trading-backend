@@ -11,11 +11,12 @@ from stock_trading_backend.data import RandomizedStockData, GeneratedStockData
 class TestRandomizedStockData(unittest.TestCase):
     """Unit tests for randomized stock data.
     """
-    def test_id_str(self):
-        """Tests if the id_str is correct.
+    def test_initializes(self):
+        """Tests if initializes properly.
         """
         data = RandomizedStockData(dependencies=["stock_data"])
         self.assertEqual("randomized_stock_data", data.id_str)
+        self.assertFalse(data.visible)
 
     def test_prepare_data(self):
         """Tests if the data is prepared properly.

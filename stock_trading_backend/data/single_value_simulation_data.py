@@ -10,14 +10,15 @@ from stock_trading_backend.data.simulation_data import SimulationData
 class SingleValueSimulationData(SimulationData):
     """Class for storing a single value from the simulation.
     """
-    def __init__(self, dependencies=None, value_name=""):
+    def __init__(self, dependencies=None, visible=True, value_name=""):
         """Initializer for Single Value Simulation Data class
 
         Args:
             dependencies: a list of dependency ids for the data.
+            visible: whether the data is visible in data_collection[date].
             num_days: number of days to take the average of.
         """
-        super(SingleValueSimulationData, self).__init__(dependencies)
+        super(SingleValueSimulationData, self).__init__(dependencies, visible)
         self.name = value_name
         self.id_str = self.name
 

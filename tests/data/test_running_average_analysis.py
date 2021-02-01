@@ -10,11 +10,12 @@ from stock_trading_backend.data import RunningAverageAnalysis, GeneratedStockDat
 class TestRunningAverageAnalysis(unittest.TestCase):
     """Unit tests for running average analysis.
     """
-    def test_id_str(self):
-        """Tests if the id_str is correct.
+    def test_initializes(self):
+        """Tests if initializes properly.
         """
         data = RunningAverageAnalysis(dependencies=["stock_data"])
         self.assertEqual("running_average_1_for_stock_data", data.id_str)
+        self.assertTrue(data.visible)
 
     def test_prepare_data(self):
         """Tests if the data is prepared properly.

@@ -11,15 +11,16 @@ class RandomizedStockData(StockData):
     name = "randomized_stock_data"
     expected_num_dependencies = 1
 
-    def __init__(self, dependencies=None, mean=0, stdev=0.025):
+    def __init__(self, dependencies=None, visible=False, mean=0, stdev=0.025):
         """Initializer for Randomized Stock Data class
 
         Args:
             dependencies: a list of dependency ids for the data.
+            visible: whether the data is visible in data_collection[date].
             mean: the mean relative difference for the randomized data.
             stdev: the standart deviation for the relative difference.
         """
-        super(RandomizedStockData, self).__init__(dependencies)
+        super(RandomizedStockData, self).__init__(dependencies, visible)
         self.id_str = "randomized_{}".format(self.dependencies[0])
         self.mean = mean
         self.stdev = stdev

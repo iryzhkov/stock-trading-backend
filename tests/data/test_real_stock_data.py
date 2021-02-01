@@ -10,6 +10,12 @@ from stock_trading_backend.data import RealStockData
 class TestRealStockData(unittest.TestCase):
     """Unit tests for real stock data data.
     """
+    def test_initializes(self):
+        """Tests if initializes properly.
+        """
+        data = RealStockData()
+        self.assertFalse(data.visible)
+
     def test_prepare_data(self):
         """Tests if the data is prepared properly.
         """

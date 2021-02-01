@@ -17,14 +17,15 @@ class GeneratedStockData(StockData):
     """
     name = "generated_stock_data"
 
-    def __init__(self, dependencies=None, evaluation_functions=None):
+    def __init__(self, dependencies=None, visible=False, evaluation_functions=None):
         """Initializer for Generated Stock Data class
 
         Args:
             dependencies: a list of dependency ids for the data.
-
+            visible: whether the data is visible in data_collection[date].
+            evaluation_functions: the functions used for evaluating stock data.
         """
-        super(GeneratedStockData, self).__init__(dependencies)
+        super(GeneratedStockData, self).__init__(dependencies, visible)
         if not evaluation_functions:
             raise ValueError("No evaluation functions provided.")
         self.evaluation_functions = evaluation_functions

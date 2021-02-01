@@ -16,6 +16,12 @@ class TestGeneratedStockData(unittest.TestCase):
         with self.assertRaises(ValueError):
             _ = GeneratedStockData()
 
+    def test_initializes(self):
+        """Tests if initializes properly.
+        """
+        data = GeneratedStockData(evaluation_functions=["100", "200"])
+        self.assertFalse(data.visible)
+
     def test_prepare_data(self):
         """Tests if the data is prepared properly.
         """

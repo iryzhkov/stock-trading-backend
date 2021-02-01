@@ -10,6 +10,12 @@ from stock_trading_backend.data import StockOwnershipData
 class TestStockOwnershipData(unittest.TestCase):
     """Unit tests for simulation stock ownership data.
     """
+    def test_initializes(self):
+        """Tests if initializes properly.
+        """
+        data = StockOwnershipData()
+        self.assertTrue(data.visible)
+
     def test_prepare_data(self):
         """Tests if the data is prepared properly.
         """

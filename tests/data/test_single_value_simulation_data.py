@@ -10,6 +10,13 @@ from stock_trading_backend.data import SingleValueSimulationData
 class TestSingleValueSimulationData(unittest.TestCase):
     """Unit tests for single value simulation data.
     """
+    def test_initializes(self):
+        """Tests if initializes properly.
+        """
+        data = SingleValueSimulationData(value_name="balance")
+        self.assertEqual("balance", data.id_str)
+        self.assertTrue(data.visible)
+
     def test_prepare_data(self):
         """Tests if the data is prepared properly.
         """

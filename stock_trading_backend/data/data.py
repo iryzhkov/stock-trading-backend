@@ -23,12 +23,14 @@ class Data(metaclass=ABCMeta):
     is_stock_specific = False
     expected_num_dependencies = 0
 
-    def __init__(self, dependencies=None):
+    def __init__(self, dependencies=None, visible=True):
         """Initializer for Data class
 
         Args:
             dependencies: a list of dependency ids for the data.
+            visible: whether the data is visible in data_collection[date].
         """
+        self.visible = visible
         self.id_str = self.name
         self.data = pd.DataFrame()
         self.ready = False
