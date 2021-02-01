@@ -2,7 +2,7 @@ PYTHON = python3
 PIP = pip3
 
 lint:
-	pylint src/ tests/
+	pylint stock_trading_backend/ tests/
 
 install:
 	 $(PIP) install -r requirements.txt
@@ -13,7 +13,7 @@ test:
 coverage:
 	coverage erase
 	coverage run -m pytest tests/
-	coverage report --include "stock_trading_backend/*" --fail-under 100 
+	coverage report --include "stock_trading_backend/*" --fail-under 100
 
 clean:
 	find . -type f -name \*.pyc -exec rm {} \;

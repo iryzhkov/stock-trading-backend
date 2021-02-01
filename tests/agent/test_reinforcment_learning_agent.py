@@ -1,19 +1,15 @@
 """Unit tests for reinforcement learning agent.
 """
-import unittest
-
 from stock_trading_backend.agent import ReinforcementLearningAgent
 
+from tests.agent.test_with_simulation import TestWithSimulation
 
-class TestReinforcementLearningAgent(unittest.TestCase):
+
+class TestReinforcementLearningAgent(TestWithSimulation):
     """Unit tests for reinforcement learning agent.
     """
-    def setUp(self):
-        """Set up for the unit tests.
+    def test_initializes(self):
+        """A test to see if agent is initialized properly.
         """
-        self.agent = ReinforcementLearningAgent(None, None)
-
-    def test_a(self):
-        """A simple test method.
-        """
-        self.assertFalse(self.agent.data_source_config)
+        agent = ReinforcementLearningAgent(data_collection_config=self.data_collection_config)
+        self.assertEqual(self.data_collection_config, agent.data_collection_config)

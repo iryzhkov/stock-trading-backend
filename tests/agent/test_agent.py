@@ -1,19 +1,29 @@
 """Unit tests for agent.
 """
-import unittest
-
 from stock_trading_backend.agent import Agent
 
+from tests.agent.test_with_simulation import TestWithSimulation
 
-class TestAgent(unittest.TestCase):
+
+class TestAgent(TestWithSimulation):
     """Unit tests for agent.
     """
-    def setUp(self):
-        """Set up for the unit tests.
+    def test_initializes(self):
+        """A test to see if agent is initialized properly.
         """
-        self.agent = Agent(None)
+        agent = Agent(data_collection_config=self.data_collection_config)
+        self.assertEqual(self.data_collection_config, agent.data_collection_config)
 
-    def test_a(self):
-        """A simple test method.
+    def test_observation_unpack(self):
+        """A test to see if observation unpack works.
         """
-        self.assertFalse(self.agent.data_source_config)
+        agent = Agent(data_collection_config=self.data_collection_config)
+        observation = self.simulation.reset()
+        balance, net_worth = agent.unpack_observation(observation)
+        self.assertEqual(100, balance)
+        self.assertEqual(100, net_worth)
+
+        observation, _, _ = self.simulation.step([1, 1])
+        balance, net_worth = agent.unpack_observation(observation)
+        self.assertEqual(10, balance)
+        self.assertEqual(100, net_worth)

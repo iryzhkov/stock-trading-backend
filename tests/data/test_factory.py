@@ -4,8 +4,9 @@ import unittest
 
 from parameterized import parameterized
 
-from stock_trading_backend.data import create_data, GeneratedStockData, RandomizedStockData, RealStockData
-from stock_trading_backend.data import RunningAverageAnalysis, create_data_collection, DataCollection
+from stock_trading_backend.data import create_data, GeneratedStockData, RandomizedStockData
+from stock_trading_backend.data import RealStockData, DataCollection
+from stock_trading_backend.data import RunningAverageAnalysis, create_data_collection
 from stock_trading_backend.util import read_config_file
 
 

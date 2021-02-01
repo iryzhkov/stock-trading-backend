@@ -8,7 +8,8 @@ from datetime import datetime
 import pandas as pd
 
 from stock_trading_backend.util import write_manifest_file, read_manifest_file, write_csv_file
-from stock_trading_backend.util import get_stock_data, get_stock_data_for_single_stock, STOCK_MANIFEST_FILE_NAME
+from stock_trading_backend.util import get_stock_data, get_stock_data_for_single_stock
+from stock_trading_backend.util import STOCK_MANIFEST_FILE_NAME
 
 class TestFileUtilsData(unittest.TestCase):
     """Unit tests for stock utils.
