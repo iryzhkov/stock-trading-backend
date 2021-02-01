@@ -57,14 +57,14 @@ class TestGeneratedStockData(unittest.TestCase):
         self.assertEqual(2, observation["owned_AMZN"])
         self.assertFalse(done)
 
-        observation, _, done = simulation.step([-1, 0])
+        observation, _, done = simulation.step([1, 0])
         self.assertEqual(60, observation["balance"])
         self.assertEqual(100, observation["net_worth"])
         self.assertEqual(0, observation["owned_GOOG"])
         self.assertEqual(2, observation["owned_AMZN"])
         self.assertFalse(done)
 
-        observation, _, done = simulation.step([0, -1])
+        observation, _, done = simulation.step([0, 1])
         self.assertEqual(100, observation["balance"])
         self.assertEqual(100, observation["net_worth"])
         self.assertEqual(0, observation["owned_GOOG"])

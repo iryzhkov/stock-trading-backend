@@ -90,31 +90,15 @@ class StockMarketSimulation(gym.Env):
         self.commission = commission
         self.max_stock_owned = max_stock_owned
 
-    def _prep_for_episode(self):
-        """Preparation for the episode.
-        """
-        self.data_collection.prepare_data()
-
-        # Setting from date, to date for the next episode.
-        duration = random.randint(self.min_duration, self.max_duration)
-        curr_date_index = random.randint(0, len(self.available_dates) - duration)
-        self.from_date_index = curr_date_index
-        self.curr_date_index = curr_date_index
-        self.to_date_index = curr_date_index + duration - 1
-
-        # Setting balance and net worth for the first day.
-        curr_date = self.available_dates[curr_date_index]
-        self.balance[curr_date] = random.randint(self.min_start_balance, self.max_start_balance)
-        self.net_worth[curr_date] = self.balance[curr_date].item()
-        return self.data_collection[self.available_dates[self.from_date_index]]
+        # Setting up action space.
+        self.action_space = gym.spaces.MultiBinary(len(self.data_collection.stock_names))
 
     # pylint: disable=too-many-locals
     def step(self, action):
         """Simulate a single day of trading given the action.
 
         Args:
-            action: a list of 1/0/-1 (buy/hold/sell), where ith element shows what to do with ith
-                    stock.
+            action: a list of 1/0 (action/hold), where ith element shows what to do with ith stock.
 
         Returns:
             observation: a row of data source.
@@ -139,13 +123,15 @@ class StockMarketSimulation(gym.Env):
         sale_return = 0
         purchase_price = 0
         for index, sub_action in enumerate(action):
-            if sub_action == -1:
-                sale_return += owned_stocks[index] * stock_prices[index]
-                owned_stocks[index] = 0
-            elif sub_action == 1:
-                num_stock_purchased = math.floor(max_purchase_price / stock_prices[index])
-                purchase_price += num_stock_purchased * stock_prices[index]
-                owned_stocks[index] = num_stock_purchased
+            if sub_action == 1:
+                if owned_stocks[index] > 0:
+                    sale_return += owned_stocks[index] * stock_prices[index]
+                    owned_stocks[index] = 0
+                elif num_owned_stocks < self.max_stock_owned:
+                    num_owned_stocks += 1
+                    num_stock_purchased = math.floor(max_purchase_price / stock_prices[index])
+                    purchase_price += num_stock_purchased * stock_prices[index]
+                    owned_stocks[index] = num_stock_purchased
         sale_return *= 1 - self.commission
         purchase_price *= 1 + self.commission
         balance = balance + sale_return - purchase_price
@@ -166,7 +152,20 @@ class StockMarketSimulation(gym.Env):
         """Resets the simulation environment.
         """
         self.data_collection.reset()
-        return self._prep_for_episode()
+        self.data_collection.prepare_data()
+
+        # Setting from date, to date for the next episode.
+        duration = random.randint(self.min_duration, self.max_duration)
+        curr_date_index = random.randint(0, len(self.available_dates) - duration)
+        self.from_date_index = curr_date_index
+        self.curr_date_index = curr_date_index
+        self.to_date_index = curr_date_index + duration - 1
+
+        # Setting balance and net worth for the first day.
+        curr_date = self.available_dates[curr_date_index]
+        self.balance[curr_date] = random.randint(self.min_start_balance, self.max_start_balance)
+        self.net_worth[curr_date] = self.balance[curr_date].item()
+        return self.data_collection[self.available_dates[self.from_date_index]]
 
     def render(self, mode="human"):
         """Renders current situation.
