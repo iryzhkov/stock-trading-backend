@@ -55,7 +55,7 @@ class DataCollection:
             self.id_to_data[data_object.id_str] = data_object
             self.busy[data_object.id_str] = False
             self.done[data_object.id_str] = False
-            if data_object.data_type != DataType.STOCK_DATA:
+            if data_object.visible and data_object not in self.visible_data_objects:
                 self.visible_data_objects.append(data_object)
         else:
             raise ValueError("Found Data with duplicated id: {}".format(data_object.id_str))
