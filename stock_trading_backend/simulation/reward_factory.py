@@ -1,10 +1,10 @@
 """Factory function for reward.
 """
-from stock_trading_backend.simulation.reward import Reward
+from stock_trading_backend.simulation.constant_reward import ConstantReward
 
 
 REWARD_CLASSES = [
-    Reward,
+    ConstantReward,
 ]
 REWARD_NAME_MAPPING = {reward.name:reward for reward in REWARD_CLASSES}
 

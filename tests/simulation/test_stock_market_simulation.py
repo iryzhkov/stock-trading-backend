@@ -71,7 +71,7 @@ class TestGeneratedStockData(unittest.TestCase):
         from_date = datetime(2016, 1, 1)
         to_date = datetime(2016, 1, 5)
         data_collection_config = read_config_file("test/simulation.yaml")
-        reward_config = {"name": "constant", "default_value": 5}
+        reward_config = {"name": "constant", "value": 5}
         simulation = StockMarketSimulation(data_collection_config, from_date, to_date,
                                            min_start_balance=100, max_start_balance=100,
                                            max_stock_owned=2, reward_config=reward_config)
