@@ -52,7 +52,7 @@ class StockMarketSimulation(gym.Env):
     # pylint: disable=too-many-arguments
     def __init__(self, data_collection_config=None, from_date=None, to_date=None, min_duration=0,
                  max_duration=0, min_start_balance=1000, max_start_balance=1000, commission=0,
-                 max_stock_owned=1):
+                 max_stock_owned=1, stock_data_randomization=False):
         """Initializer for the simulation class.
 
         Args:
@@ -65,9 +65,11 @@ class StockMarketSimulation(gym.Env):
             max_start_balance: maximum starting balance. Balance selected unifromly.
             commission: relative commission for each transcation.
             max_stock_owned: a maximum number of different stocks that can be owned.
+            stock_data_randomization: whether to add stock data randomization.
         """
         if data_collection_config is None:
             data_collection_config = read_config_file(DEFAULT_DATA_COLLECTION_CONFIG_FILE)
+        data_collection_config["stock_data_randomization"] = stock_data_randomization
 
         if from_date is None and to_date is None:
             from_date = datetime(2014, 1, 1)
