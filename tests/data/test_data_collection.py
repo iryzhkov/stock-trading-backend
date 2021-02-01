@@ -89,7 +89,6 @@ class TestDataCollection(unittest.TestCase):
         """
         from_date = datetime(2016, 1, 1)
         to_date = datetime(2016, 2, 1)
-        stock_names = ["GOOG", "AAPL"]
         config = read_config_file("test/data_collection.yaml")
         data_collection = create_data_collection(config)
         data_collection.set_date_range(from_date, to_date)
@@ -100,6 +99,12 @@ class TestDataCollection(unittest.TestCase):
     def test_getitem(self):
         """Checks if __getitem__ works as expected.
         """
+        expected_index = ["GOOG", "AMZN", "ra_10_GOOG", "ra_10_AMZN"]
+        from_date = datetime(2016, 1, 1)
+        to_date = datetime(2016, 2, 1)
         config = read_config_file("test/data_collection.yaml")
         data_collection = create_data_collection(config)
-        self.assertFalse(data_collection[0])
+        data_collection.set_date_range(from_date, to_date)
+        data_collection.prepare_data()
+        available_dates = data_collection.get_available_dates()
+        self.assertTrue((expected_index == data_collection[available_dates[0]].index.tolist()))

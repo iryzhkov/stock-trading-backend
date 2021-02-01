@@ -1,5 +1,6 @@
 """A class containing multiple Data classes.
 """
+import pandas as pd
 from src.data.data import DataType
 
 
@@ -161,4 +162,4 @@ class DataCollection:
         Returns:
             DataFrame row with the data.
         """
-        return []
+        return pd.concat([data_object[date] for data_object in self.visible_data_objects])

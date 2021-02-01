@@ -39,4 +39,4 @@ class TestSingleValueSimulationData(unittest.TestCase):
         data = SingleValueSimulationData(value_name="balance")
         data.prepare_data(from_date, to_date, None, None)
         data[from_date] = 100
-        self.assertEqual(100, data[from_date])
+        self.assertEqual(100, data[from_date].item())
