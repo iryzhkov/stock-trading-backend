@@ -1,0 +1,8 @@
+stock_names:
+  - GOOG
+  - AMZN
+data:
+  - name: generated_stock_data
+    evaluation_functions:
+      - "10"
+      - "20"

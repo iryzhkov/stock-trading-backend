@@ -48,12 +48,3 @@ class SingleValueSimulationData(SimulationData):
             The value of self.ready
         """
         self.ready = False
-
-    def __setitem__(self, date, value):
-        """Setter for the value.
-
-        Args:
-            date: datetime date for which to set value
-            value: new value.
-        """
-        self.data.loc[date] = value

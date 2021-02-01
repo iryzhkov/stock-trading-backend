@@ -3,8 +3,10 @@
 from datetime import timedelta
 
 import random
+import math
 
 import gym
+import numpy as np
 
 from src.data import create_data_collection, SingleValueSimulationData, StockOwnershipData
 
@@ -34,7 +36,8 @@ class StockMarketSimulation(gym.Env):
     """
     # pylint: disable=too-many-arguments
     def __init__(self, data_collection_config=None, from_date=None, to_date=None, min_duration=0,
-                 max_duration=0, min_start_balance=0, max_start_balance=0, comission=0):
+                 max_duration=0, min_start_balance=0, max_start_balance=0, commission=0,
+                 max_stock_owned=1):
         """Initializer for the simulation class.
 
         Args:
@@ -45,11 +48,13 @@ class StockMarketSimulation(gym.Env):
             max_duration: maximum length of the episode (if 0 will run for all available dates).
             min_start_balance: minimum starting balance.
             max_start_balance: maximum starting balance. Balance selected unifromly.
-            comission: relative comission for each transcation.
+            commission: relative commission for each transcation.
+            max_stock_owned: a maximum number of different stocks that can be owned.
         """
         self.data_collection = create_data_collection(data_collection_config)
 
         # Setup of simulation data.
+        self.stock_data = self.data_collection.data_objects[0]
         self.balance = SingleValueSimulationData(value_name="balance")
         self.net_worth = SingleValueSimulationData(value_name="net_worth")
         self.stock_ownership = StockOwnershipData()
@@ -81,8 +86,9 @@ class StockMarketSimulation(gym.Env):
         self.from_date_index = -1
         self.to_date_index = -1
 
-        # Setting comission.
-        self.comission = comission
+        # Setting commission and max stock owned.
+        self.commission = commission
+        self.max_stock_owned = max_stock_owned
 
     def _prep_for_episode(self):
         """Preparation for the episode.
@@ -99,24 +105,58 @@ class StockMarketSimulation(gym.Env):
         # Setting balance and net worth for the first day.
         curr_date = self.available_dates[curr_date_index]
         self.balance[curr_date] = random.randint(self.min_start_balance, self.max_start_balance)
-        self.net_worth[curr_date] = self.balance[curr_date]
+        self.net_worth[curr_date] = self.balance[curr_date].item()
         return self.data_collection[self.available_dates[self.from_date_index]]
 
+    # pylint: disable=too-many-locals
     def step(self, action):
         """Simulate a single day of trading given the action.
 
         Args:
-            action: a list of buy/hold/sell, where ith element shows what to do with ith stock.
+            action: a list of 1/0/-1 (buy/hold/sell), where ith element shows what to do with ith
+                    stock.
 
         Returns:
             observation: a row of data source.
             reward: a number representing the reward associated with the action.
             done: True if the episode is finished
         """
-        #curr_date = self.available_dates[self.curr_date_index]
+        curr_date = self.available_dates[self.curr_date_index]
         next_date = self.available_dates[self.curr_date_index + 1]
-        self.curr_date_index += 1
 
+        # Load state values
+        balance = self.balance[curr_date].item()
+        owned_stocks = self.stock_ownership[curr_date].copy().to_numpy()
+        stock_prices = self.stock_data[curr_date].to_numpy()
+        num_owned_stocks = np.count_nonzero(owned_stocks)
+        if num_owned_stocks < self.max_stock_owned:
+            max_purchase_price = balance / (self.max_stock_owned - num_owned_stocks)
+            max_purchase_price /= 1 + self.commission
+        else:
+            max_purchase_price = 0
+
+        # Simulate buy and sell actions
+        sale_return = 0
+        purchase_price = 0
+        for index, sub_action in enumerate(action):
+            if sub_action == -1:
+                sale_return += owned_stocks[index] * stock_prices[index]
+                owned_stocks[index] = 0
+            elif sub_action == 1:
+                num_stock_purchased = math.floor(max_purchase_price / stock_prices[index])
+                purchase_price += num_stock_purchased * stock_prices[index]
+                owned_stocks[index] = num_stock_purchased
+        sale_return *= 1 - self.commission
+        purchase_price *= 1 + self.commission
+        balance = balance + sale_return - purchase_price
+
+        # Update internal state vales.
+        self.curr_date_index += 1
+        self.balance[next_date] = balance
+        self.net_worth[next_date] = balance + sum(owned_stocks * stock_prices)
+        self.stock_ownership[next_date] = owned_stocks
+
+        # Prepare step output.
         observation = self.data_collection[next_date]
         reward = 0
         done = self.curr_date_index >= self.to_date_index

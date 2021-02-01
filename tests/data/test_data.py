@@ -55,6 +55,14 @@ class TestData(unittest.TestCase):
         with self.assertRaises(LookupError):
             _ = data[6]
 
+    def test_setitem(self):
+        """Tests if the data can be set properly.
+        """
+        data = Data()
+        data.data = pd.DataFrame(data=[True] * 5)
+        data[0] = False
+        self.assertFalse(data[0].item())
+
     def test_buffer_days(self):
         """Tests buffer_days function.
         """

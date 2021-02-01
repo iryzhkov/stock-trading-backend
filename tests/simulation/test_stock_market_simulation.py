@@ -36,10 +36,37 @@ class TestGeneratedStockData(unittest.TestCase):
         """Test for simulation step.
         """
         from_date = datetime(2016, 1, 1)
-        to_date = datetime(2016, 2, 1)
-        data_collection_config = read_config_file("test/data_collection.yaml")
-        simulation = StockMarketSimulation(data_collection_config, from_date, to_date)
-        simulation.reset()
-        _, reward, done = simulation.step([])
+        to_date = datetime(2016, 1, 5)
+        data_collection_config = read_config_file("test/simulation.yaml")
+        simulation = StockMarketSimulation(data_collection_config, from_date, to_date,
+                                           min_start_balance=100, max_start_balance=100,
+                                           max_stock_owned=2)
+        _ = simulation.reset()
+
+        observation, _, done = simulation.step([1, 0])
+        self.assertEqual(50, observation["balance"])
+        self.assertEqual(100, observation["net_worth"])
+        self.assertEqual(5, observation["owned_GOOG"])
+        self.assertEqual(0, observation["owned_AMZN"])
         self.assertFalse(done)
-        self.assertEqual(0, reward)
+
+        observation, _, done = simulation.step([0, 1])
+        self.assertEqual(10, observation["balance"])
+        self.assertEqual(100, observation["net_worth"])
+        self.assertEqual(5, observation["owned_GOOG"])
+        self.assertEqual(2, observation["owned_AMZN"])
+        self.assertFalse(done)
+
+        observation, _, done = simulation.step([-1, 0])
+        self.assertEqual(60, observation["balance"])
+        self.assertEqual(100, observation["net_worth"])
+        self.assertEqual(0, observation["owned_GOOG"])
+        self.assertEqual(2, observation["owned_AMZN"])
+        self.assertFalse(done)
+
+        observation, _, done = simulation.step([0, -1])
+        self.assertEqual(100, observation["balance"])
+        self.assertEqual(100, observation["net_worth"])
+        self.assertEqual(0, observation["owned_GOOG"])
+        self.assertEqual(0, observation["owned_AMZN"])
+        self.assertTrue(done)

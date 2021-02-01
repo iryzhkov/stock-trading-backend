@@ -116,3 +116,12 @@ class Data(metaclass=ABCMeta):
         Returns iterator object for the data.
         """
         return self.data.__iter__()
+
+    def __setitem__(self, date, value):
+        """Setter for the value.
+
+        Args:
+            date: datetime date for which to set value
+            value: new value.
+        """
+        self.data.loc[date] = value
