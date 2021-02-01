@@ -65,7 +65,6 @@ def read_config_file(file_name, file_source=FileSourceType.local):
         raise NotImplementedError()
     return config
 
-#pylint: disable=unused-argument
 def read_manifest_file(file_path, file_source=FileSourceType.local):
     """Reads a manifest file.
 
@@ -87,7 +86,6 @@ def read_manifest_file(file_path, file_source=FileSourceType.local):
         raise NotImplementedError()
     return manifest
 
-#pylint: disable=unused-argument
 def write_manifest_file(manifest, file_path, file_source=FileSourceType.local):
     """Writes a manifest file.
 
@@ -103,7 +101,6 @@ def write_manifest_file(manifest, file_path, file_source=FileSourceType.local):
     else:
         raise NotImplementedError()
 
-#pylint: disable=unused-argument
 def read_csv_file(file_path, file_source=FileSourceType.local):
     """Reads a csv file.
 
@@ -121,7 +118,6 @@ def read_csv_file(file_path, file_source=FileSourceType.local):
         raise NotImplementedError()
     return data_frame
 
-#pylint: disable=unused-argument
 def write_csv_file(data_frame, file_path, file_source=FileSourceType.local):
     """Writes a csv file.
 

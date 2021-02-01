@@ -17,7 +17,7 @@ class Agent():
         self.stock_names = data_collection_config["stock_names"]
         self.id_str = self.name
 
-    #pylint: disable=no-self-use
+    # pylint: disable=no-self-use
     def unpack_observation(self, observation):
         """Unpacks observation into: balance, net_worth, owned_stocks, stock_prices.
 

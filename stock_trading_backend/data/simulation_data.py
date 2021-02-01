@@ -10,6 +10,7 @@ class SimulationData(Data, metaclass=ABCMeta):
     """
     data_type = DataType.SIMULATION_DATA
 
+    # pylint: disable=useless-super-delegation
     def __init__(self, dependencies=None, visible=True):
         """Initializer for Generated Stock Data class
 
