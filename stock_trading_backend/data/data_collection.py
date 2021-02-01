@@ -2,18 +2,20 @@
 """
 import pandas as pd
 from stock_trading_backend.data.data import DataType
+from stock_trading_backend.data.randomized_stock_data import RandomizedStockData
 
 
 # pylint: disable=too-many-instance-attributes
 class DataCollection:
     """Class that contains multiple Data classes.
     """
-    def __init__(self, data_objects, stock_names):
+    def __init__(self, data_objects, stock_names, stock_data_randomization=False):
         """Initializer for DataCollection class.
 
         Args:
             data_objects: a list of Data objects. First object is used as main stock data provider.
             stock_names: a list of stock names to prepare.
+            stock_data_randomization: whether to add stock data randomization.
         """
         self.stock_names = stock_names
         self.data_objects = []
@@ -23,6 +25,12 @@ class DataCollection:
         if data_objects[0].data_type != DataType.STOCK_DATA:
             raise ValueError("Expected first data to be stock data.")
         self.stock_data_id = data_objects[0].id_str
+
+        if stock_data_randomization and not isinstance(data_objects[0], RandomizedStockData):
+            randomization_layer = RandomizedStockData(dependencies=[self.stock_data_id])
+            self.stock_data_id = randomization_layer.id_str
+            data_objects.insert(0, randomization_layer)
+
         self.visible_data_objects.append(data_objects[0])
 
         # Helper attributes for recursive apply.

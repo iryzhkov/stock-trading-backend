@@ -36,6 +36,27 @@ class TestDataCollection(unittest.TestCase):
         with self.assertRaises(ValueError):
             data_collection.reset()
 
+    def test_adds_randomization(self):
+        """Checks if data collection adds randomization properly.
+        """
+        config = read_config_file("test/data_collection.yaml")
+        config["stock_data_randomization"] = True
+        data_collection = create_data_collection(config)
+        self.assertEqual(3, len(data_collection.data_objects))
+
+        config = read_config_file("test/simulation.yaml")
+        config["stock_data_randomization"] = False
+        data_collection = create_data_collection(config)
+        self.assertEqual(1, len(data_collection.data_objects))
+
+        config = read_config_file("test/simulation.yaml")
+        config["stock_data_randomization"] = True
+        data_collection = create_data_collection(config)
+        self.assertEqual(2, len(data_collection.data_objects))
+        randomization_layer = data_collection.data_objects[0]
+        stock_data = data_collection.data_objects[1]
+        self.assertEqual(randomization_layer.dependencies[0], stock_data.id_str)
+
     def test_prepares_data(self):
         """Checks if data collection prepares the data properly.
         """
