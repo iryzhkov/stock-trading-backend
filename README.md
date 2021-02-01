@@ -1,5 +1,7 @@
 # Stock Trading Back-end
 
+[![Build Status](https://travis-ci.com/iryzhkov/stock-trading-backend.svg?branch=main)
+
 A back-end for AI-based (simulated) stock trading.
 
 Current status: in progress
