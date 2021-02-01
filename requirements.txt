@@ -1,6 +1,6 @@
 coverage
 gym
-numpy
+numpy>=1.16.5
 pandas
 parameterized
 pyyaml
