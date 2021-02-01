@@ -4,5 +4,5 @@ stock_names:
 data:
   - name: generated_stock_data
     evaluation_functions:
-      - "10"
       - "20"
+      - "10"
