@@ -1,18 +1,14 @@
 language: python
-
 python:
   - "3.6"
   - "3.7"
   - "3.8"
   - "3.9"
-
 install:
   - pip install -r requirements.txt
   - pip install codecov
-
 script:
   - python -m pytest tests/ -v
 	- coverage run -m pytest tests/
-
 after_success:
   - codecov
