@@ -134,7 +134,7 @@ class StockMarketSimulation(gym.Env):
         # Setting up reward function.
         if reward_config is None:
             reward_config = {"name": "net_worth_ratio"}
-        self.reward_function = create_reward(reward_config)
+        self.reward_function = create_reward(reward_config, from_date, to_date)
 
     @property
     def done(self):

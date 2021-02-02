@@ -8,12 +8,15 @@ class ConstantReward(Reward):
     """
     name = "constant"
 
-    def __init__(self, value=0):
+    # pylint: disable=unused-argument
+    def __init__(self, value=0, from_date=None, to_date=None):
         """Initializer for reward class.
 
         Args:
             env: StockMarketSimulation enviroment for which the Reward is build.
             default_value: the default value to use for reward.
+            from_date: datetime start of the date range.
+            to_date: datetime end of the date range.
         """
         self.value = value
 
