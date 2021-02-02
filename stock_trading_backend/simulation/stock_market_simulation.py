@@ -7,9 +7,9 @@ import math
 
 import gym
 import numpy as np
+import pandas as pd
 
-from stock_trading_backend.data import create_data_collection, SingleValueSimulationData
-from stock_trading_backend.data import StockOwnershipData
+from stock_trading_backend.data import create_data_collection
 from stock_trading_backend.simulation.reward_factory import create_reward
 from stock_trading_backend.util import read_config_file
 
@@ -93,12 +93,10 @@ class StockMarketSimulation(gym.Env):
 
         # Setup of simulation data.
         self.stock_data = self.data_collection.data_objects[0]
-        self.balance = SingleValueSimulationData(value_name="balance")
-        self.net_worth = SingleValueSimulationData(value_name="net_worth")
-        self.stock_ownership = StockOwnershipData()
-        self.data_collection.append(self.balance)
-        self.data_collection.append(self.net_worth)
-        self.data_collection.append(self.stock_ownership)
+        self.stock_names = self.data_collection.stock_names
+        self.balance = 0
+        self.net_worth = 0
+        self.owned_stocks = None
 
         # Adding buffer days.
         buffer = self.data_collection.get_buffer()
@@ -136,6 +134,10 @@ class StockMarketSimulation(gym.Env):
             reward_config = {"name": "net_worth_ratio"}
         self.reward_function = create_reward(reward_config, from_date, to_date)
 
+        # Setting up observatino cache.
+        self.saved_date_index = -1
+        self.saved_observation = None
+
     @property
     def done(self):
         """Property, true if episode finished.
@@ -146,7 +148,16 @@ class StockMarketSimulation(gym.Env):
     def observation(self):
         """Property for current observation.
         """
-        return self.data_collection[self.available_dates[self.curr_date_index]]
+        if self.saved_date_index == self.curr_date_index:
+            return self.saved_observation
+
+        self.saved_date_index = self.curr_date_index
+        owned_stocks = pd.Series(self.owned_stocks,
+                                 ["owned_{}".format(name) for name in self.stock_names])
+        balance_and_net_worth = pd.Series([self.balance, self.net_worth], ["balance", "net_worth"])
+        data = self.data_collection[self.available_dates[self.curr_date_index]]
+        self.saved_observation = pd.concat([owned_stocks, balance_and_net_worth, data])
+        return self.saved_observation
 
     # pylint: disable=too-many-locals
     def step(self, action):
@@ -164,12 +175,10 @@ class StockMarketSimulation(gym.Env):
         next_date = self.available_dates[self.curr_date_index + 1]
 
         # Load state values
-        balance = self.balance[curr_date].item()
-        owned_stocks = self.stock_ownership[curr_date].copy().to_numpy()
         stock_prices = self.stock_data[curr_date].to_numpy()
-        num_owned_stocks = np.count_nonzero(owned_stocks)
+        num_owned_stocks = np.count_nonzero(self.owned_stocks)
         if num_owned_stocks < self.max_stock_owned:
-            max_purchase_price = balance / (self.max_stock_owned - num_owned_stocks)
+            max_purchase_price = self.balance / (self.max_stock_owned - num_owned_stocks)
             max_purchase_price /= 1 + self.commission
         else:
             max_purchase_price = 0
@@ -179,24 +188,22 @@ class StockMarketSimulation(gym.Env):
         purchase_price = 0
         for index, sub_action in enumerate(action):
             if sub_action == 1:
-                if owned_stocks[index] > 0:
-                    sale_return += owned_stocks[index] * stock_prices[index]
-                    owned_stocks[index] = 0
+                if self.owned_stocks[index] > 0:
+                    sale_return += self.owned_stocks[index] * stock_prices[index]
+                    self.owned_stocks[index] = 0
                 elif num_owned_stocks < self.max_stock_owned:
                     num_stock_purchased = math.floor(max_purchase_price / stock_prices[index])
                     if num_stock_purchased > 0:
                         num_owned_stocks += 1
                     purchase_price += num_stock_purchased * stock_prices[index]
-                    owned_stocks[index] = num_stock_purchased
+                    self.owned_stocks[index] = num_stock_purchased
         sale_return *= 1 - self.commission
         purchase_price *= 1 + self.commission
-        balance = balance + sale_return - purchase_price
+        self.balance += sale_return - purchase_price
 
         # Update internal state vales.
         self.curr_date_index += 1
-        self.balance[next_date] = balance
-        self.net_worth[next_date] = balance + sum(owned_stocks * stock_prices)
-        self.stock_ownership[next_date] = owned_stocks
+        self.net_worth = self.balance + sum(self.owned_stocks * stock_prices)
         reward = self.reward_function.calculate_value(self.observation, next_date)
         return self.observation, reward, self.done
 
@@ -215,8 +222,13 @@ class StockMarketSimulation(gym.Env):
 
         # Setting balance and net worth for the first day.
         curr_date = self.available_dates[curr_date_index]
-        self.balance[curr_date] = random.randint(self.min_start_balance, self.max_start_balance)
-        self.net_worth[curr_date] = self.balance[curr_date].item()
+        self.balance = random.randint(self.min_start_balance, self.max_start_balance)
+        self.net_worth = self.balance
+        self.owned_stocks = np.zeros(len(self.stock_names))
+
+        # Reset observation cache.
+        self.saved_date_index = -1
+        self.saved_observation = None
 
         # Reset the reward function.
         self.reward_function.reset(self.observation, curr_date)

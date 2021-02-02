@@ -6,10 +6,12 @@ features:
       - running_average_20_for_stock_data
       - running_average_60_for_stock_data
   - name: running_average_analysis
+    visible: False
     num_days: 20
     dependencies:
       - stock_data
   - name: running_average_analysis
+    visible: False
     num_days: 60
     dependencies:
       - stock_data

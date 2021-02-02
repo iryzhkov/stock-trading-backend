@@ -31,11 +31,11 @@ class TestFollowingAgent(unittest.TestCase):
         agent = create_agent(agent_config, data_collection_config)
         simulation = StockMarketSimulation(data_collection_config, from_date, to_date,
                                            min_start_balance=1000, max_start_balance=1000,
-                                           max_stock_owned=2)
+                                           max_stock_owned=1)
         observation = simulation.reset()
         while not simulation.done:
             observation, _, _ = simulation.step(agent.make_decision(observation, simulation))
-        self.assertTrue(observation["net_worth"] >= 2000)
+        self.assertTrue(observation["net_worth"] >= 2500)
 
     def test_make_decision(self):
         """A test to see if make decision works properly.

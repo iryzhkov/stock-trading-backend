@@ -20,6 +20,7 @@ class DataCollection:
         self.stock_names = stock_names
         self.data_objects = []
         self.visible_data_objects = []
+        self.visible_df = None
         self.id_to_data = {}
 
         if data_objects[0].data_type != DataType.STOCK_DATA:
@@ -152,6 +153,9 @@ class DataCollection:
         for id_str in self.id_to_data:
             self._recursive_apply(id_str, function, result)
 
+        self.visible_df = pd.concat([data_object.data for data_object in self.visible_data_objects],
+                                    axis=1, join="inner", copy=False)
+
     def reset(self):
         """Resets ressetable data objects.
         """
@@ -175,4 +179,4 @@ class DataCollection:
         Returns:
             DataFrame row with the data.
         """
-        return pd.concat([data_object[date] for data_object in self.visible_data_objects])
+        return self.visible_df.loc[date]
