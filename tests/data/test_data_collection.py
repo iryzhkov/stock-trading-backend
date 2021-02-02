@@ -124,7 +124,7 @@ class TestDataCollection(unittest.TestCase):
         data_collection.set_date_range(from_date, to_date)
         data_collection.prepare_data()
         available_dates = data_collection.get_available_dates()
-        self.assertEqual(10, len(available_dates))
+        self.assertEqual(11, len(available_dates))
 
     def test_getitem(self):
         """Checks if __getitem__ works as expected.

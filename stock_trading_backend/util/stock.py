@@ -61,4 +61,5 @@ def get_stock_data_for_single_stock(stock_name, from_date, to_date, manifest, pa
         data = data.rename(stock_name)
         manifest[stock_name] = {"from_date": from_date, "to_date": to_date}
         write_csv_file(data, join(path, "{}.csv".format(stock_name)))
+        data = data.loc[from_date:to_date]
     return data

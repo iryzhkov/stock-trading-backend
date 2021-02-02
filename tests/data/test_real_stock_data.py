@@ -28,7 +28,7 @@ class TestRealStockData(unittest.TestCase):
         data.prepare_data(from_date, to_date, stock_names, dependencies)
         self.assertTrue(data.ready)
         self.assertTrue((stock_names == data.data.columns.tolist()))
-        self.assertEqual(19, len(data))
+        self.assertEqual(20, len(data))
 
     def test_resets_data(self):
         """Tests if the data is reset properly.
