@@ -12,7 +12,6 @@ class DataType(Enum):
     NONE = auto()
     STOCK_DATA = auto()
     STOCK_DATA_ANALYSIS = auto()
-    SIMULATION_DATA = auto()
 
 
 class Data(metaclass=ABCMeta):
