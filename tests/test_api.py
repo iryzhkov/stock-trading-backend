@@ -51,7 +51,7 @@ class TestAPI(unittest.TestCase):
     def test_long_backtest(self):
         """Check how backtesting works for 4-year simulation.
         """
-        agent = api.get_agent_object("following_feature_agent_1")
-        observation = api.backtest_agent(agent, from_date=datetime(2014, 1, 1),
-                                         to_date=datetime(2018, 1, 1))
-        self.assertTrue(observation["net_worth"] > 0)
+        agent = api.get_agent_object("following_feature_agent_1", "real_stock_1")
+        observation = api.backtest_agent(agent, commission=0.005, from_date=datetime(2014, 1, 1),
+                                         to_date=datetime(2018, 1, 1), start_balance=10000)
+        self.assertTrue(observation["net_worth"] >= 20000)

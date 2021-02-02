@@ -4,7 +4,7 @@ features:
     operator: ge
     dependencies:
       - running_average_20_for_stock_data
-      - running_average_60_for_stock_data
+      - running_average_50_for_stock_data
   - name: running_average_analysis
     visible: False
     num_days: 20
@@ -12,6 +12,6 @@ features:
       - stock_data
   - name: running_average_analysis
     visible: False
-    num_days: 60
+    num_days: 50
     dependencies:
       - stock_data

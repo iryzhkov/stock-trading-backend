@@ -63,7 +63,6 @@ class TestGeneratedStockData(unittest.TestCase):
         simulation.reset()
         self.assertEqual(0, simulation.from_date_index)
         self.assertEqual(0, simulation.curr_date_index)
-        self.assertEqual(16, simulation.to_date_index)
 
     def test_reward_is_used(self):
         """Test if reward config is used in initialization funciton.
