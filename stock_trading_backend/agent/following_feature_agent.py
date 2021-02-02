@@ -25,7 +25,7 @@ class FollowingFeatureAgent(Agent):
         """
         super(FollowingFeatureAgent, self).__init__(data_collection_config)
         features[0]["visible"] = True
-        data_collection_config["data"].append(*features)
+        data_collection_config["data"] += features
         followed_data = create_data(copy.copy(features[0]))
         self.feature_template = followed_data.feature_template
 
