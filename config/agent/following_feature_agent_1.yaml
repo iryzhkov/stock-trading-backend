@@ -1,0 +1,15 @@
+name: following_feature_agent
+features:
+  - name: comparator
+    operator: ge
+    dependencies:
+      - running_average_20_stock_data
+      - running_average_60_stock_data
+  - name: running_average_analysis
+    num_days: 20
+    dependencies:
+      - stock_data
+  - name: running_average_analysis
+    num_days: 60
+    dependencies:
+      - stock_data
