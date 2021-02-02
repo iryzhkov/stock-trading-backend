@@ -18,6 +18,7 @@ class ConstantReward(Reward):
             from_date: datetime start of the date range.
             to_date: datetime end of the date range.
         """
+        super(ConstantReward, self).__init__(from_date, to_date)
         self.value = value
 
     # pylint: disable=unused-argument

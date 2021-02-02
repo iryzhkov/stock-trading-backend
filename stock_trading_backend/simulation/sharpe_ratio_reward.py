@@ -18,6 +18,7 @@ class SharpeRatioReward(Reward):
             from_date: datetime start of the date range.
             to_date: datetime end of the date range.
         """
+        super(SharpeRatioReward, self).__init__(from_date, to_date)
         self.prev_net_worth = 0
         self.prev_market_value = 0
         self.market_data = get_stock_data(["SPY"], from_date, to_date)

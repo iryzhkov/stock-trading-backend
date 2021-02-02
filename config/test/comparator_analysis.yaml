@@ -1,0 +1,5 @@
+name: comparator
+operator: eq
+dependencies:
+  - stock_data
+  - stock_data

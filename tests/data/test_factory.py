@@ -5,7 +5,7 @@ import unittest
 from parameterized import parameterized
 
 from stock_trading_backend.data import create_data, GeneratedStockData, RandomizedStockData
-from stock_trading_backend.data import RealStockData, DataCollection
+from stock_trading_backend.data import RealStockData, DataCollection, ComparatorAnalysis
 from stock_trading_backend.data import RunningAverageAnalysis, create_data_collection
 from stock_trading_backend.util import read_config_file
 
@@ -14,6 +14,7 @@ class TestDataFactory(unittest.TestCase):
     """Unit tests for data factory.
     """
     @parameterized.expand([
+        ("test/comparator_analysis.yaml", ComparatorAnalysis),
         ("test/generated_stock_data.yaml", GeneratedStockData),
         ("test/randomized_stock_data.yaml", RandomizedStockData),
         ("test/real_stock_data.yaml", RealStockData),

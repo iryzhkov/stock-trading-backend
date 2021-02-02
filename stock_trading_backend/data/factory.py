@@ -1,5 +1,6 @@
 """Factory functions for data classes.
 """
+from stock_trading_backend.data.comparator_analysis import ComparatorAnalysis
 from stock_trading_backend.data.data_collection import DataCollection
 from stock_trading_backend.data.generated_stock_data import GeneratedStockData
 from stock_trading_backend.data.randomized_stock_data import RandomizedStockData
@@ -8,6 +9,7 @@ from stock_trading_backend.data.running_average_analysis import RunningAverageAn
 
 
 DATA_CLASSES = [
+    ComparatorAnalysis,
     GeneratedStockData,
     RandomizedStockData,
     RealStockData,

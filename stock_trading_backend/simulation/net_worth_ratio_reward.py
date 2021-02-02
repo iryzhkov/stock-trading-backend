@@ -16,6 +16,7 @@ class NetWorthRatioReward(Reward):
             from_date: datetime start of the date range.
             to_date: datetime end of the date range.
         """
+        super(NetWorthRatioReward, self).__init__(from_date, to_date)
         self.prev_net_worth = 0
 
     # pylint: disable=unused-argument
