@@ -13,7 +13,7 @@ from stock_trading_backend.data import StockOwnershipData
 from stock_trading_backend.simulation.reward_factory import create_reward
 from stock_trading_backend.util import read_config_file
 
-DEFAULT_DATA_COLLECTION_CONFIG_FILE = "data/default_data_collection.yaml"
+DEFAULT_DATA_COLLECTION_CONFIG_FILE = "data/default.yaml"
 
 # pylint: disable=too-many-instance-attributes
 class StockMarketSimulation(gym.Env):
