@@ -25,7 +25,7 @@ class TestFollowingAgent(unittest.TestCase):
         """A test for following feature agent 1 for 1 year.
         """
         from_date = datetime(2016, 1, 1)
-        to_date = datetime(2017, 1, 1)
+        to_date = datetime(2019, 1, 1)
         data_collection_config = read_config_file("data/default.yaml")
         agent_config = read_config_file("agent/following_feature_agent_1.yaml")
         agent = create_agent(agent_config, data_collection_config)
@@ -35,7 +35,7 @@ class TestFollowingAgent(unittest.TestCase):
         observation = simulation.reset()
         while not simulation.done:
             observation, _, _ = simulation.step(agent.make_decision(observation, simulation))
-        self.assertTrue(observation["net_worth"] >= 2500)
+        self.assertTrue(observation["net_worth"] >= 44000)
 
     def test_make_decision(self):
         """A test to see if make decision works properly.
