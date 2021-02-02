@@ -1,14 +1,10 @@
 """Unit tests for agent.
 """
-from datetime import datetime
-
 import unittest
 
 from parameterized import parameterized
 
 from stock_trading_backend.agent import create_agent, FollowingFeatureAgent
-from stock_trading_backend.data import create_data_collection
-from stock_trading_backend.simulation import StockMarketSimulation
 from stock_trading_backend.util import read_config_file
 
 
