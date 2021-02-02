@@ -4,7 +4,7 @@ from datetime import datetime
 
 import unittest
 
-from stock_trading_backend.agent import FollowingFeatureAgent
+from stock_trading_backend.agent import create_agent, FollowingFeatureAgent
 from stock_trading_backend.simulation import StockMarketSimulation
 from stock_trading_backend.util import read_config_file
 
@@ -20,6 +20,22 @@ class TestFollowingAgent(unittest.TestCase):
         agent = FollowingFeatureAgent(data_collection_config, features)
         self.assertEqual(data_collection_config, agent.data_collection_config)
         self.assertEqual("ra_5_stock_data_{}", agent.feature_template)
+
+    def test_long_term(self):
+        """A test for following feature agent 1 for 1 year.
+        """
+        from_date = datetime(2016, 1, 1)
+        to_date = datetime(2017, 1, 1)
+        data_collection_config = read_config_file("data/default.yaml")
+        agent_config = read_config_file("agent/following_feature_agent_1.yaml")
+        agent = create_agent(agent_config, data_collection_config)
+        simulation = StockMarketSimulation(data_collection_config, from_date, to_date,
+                                           min_start_balance=1000, max_start_balance=1000,
+                                           max_stock_owned=2)
+        observation = simulation.reset()
+        while not simulation.done:
+            observation, _, _ = simulation.step(agent.make_decision(observation, simulation))
+        self.assertTrue(observation["net_worth"] >= 2000)
 
     def test_make_decision(self):
         """A test to see if make decision works properly.

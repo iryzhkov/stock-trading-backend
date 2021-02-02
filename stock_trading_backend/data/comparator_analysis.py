@@ -38,7 +38,13 @@ class ComparatorAnalysis(StockDataAnalysis):
             stock_names: a list of stock names to prepare.
             dependencies: a list of prepared data dependencies.
         """
-        exec_str = "dependencies[0].data.{}(dependencies[1].data).dropna()".format(self.operator)
+        index = dependencies[0].data.index.intersection(dependencies[1].data.index)
+        dependency_1 = dependencies[0].data.filter(index, axis=0)
+        dependency_1.columns = stock_names
+        dependency_2 = dependencies[1].data.filter(index, axis=0)
+        dependency_2.columns = stock_names
+
+        exec_str = "dependency_1.{}(dependency_2)".format(self.operator)
         # pylint: disable=eval-used
         self.data = eval(exec_str)
         self.data = self.data.astype("int32")

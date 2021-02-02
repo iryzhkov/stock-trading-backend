@@ -31,6 +31,7 @@ class TestComparatorAnalysis(unittest.TestCase):
         """
         from_date = datetime(2016, 1, 1)
         to_date = datetime(2016, 1, 1)
+        to_date_2 = datetime(2016, 1, 2)
         stock_names = ["STOCK_1"]
 
         generated_data_1 = GeneratedStockData(evaluation_functions=["1"])
@@ -38,7 +39,7 @@ class TestComparatorAnalysis(unittest.TestCase):
         dependencies = [generated_data_1, generated_data_2]
 
         generated_data_1.prepare_data(from_date, to_date, stock_names, [])
-        generated_data_2.prepare_data(from_date, to_date, stock_names, [])
+        generated_data_2.prepare_data(from_date, to_date_2, stock_names, [])
 
         for operator in ["ge", "gt", "eq"]:
             comparator = ComparatorAnalysis(dependencies=["x", "x"], operator=operator)

@@ -3,8 +3,8 @@ features:
   - name: comparator
     operator: ge
     dependencies:
-      - running_average_20_stock_data
-      - running_average_60_stock_data
+      - running_average_20_for_stock_data
+      - running_average_60_for_stock_data
   - name: running_average_analysis
     num_days: 20
     dependencies:
