@@ -3,19 +3,23 @@
 import pandas as pd
 from stock_trading_backend.data.data import DataType
 from stock_trading_backend.data.randomized_stock_data import RandomizedStockData
+from stock_trading_backend.data.relative_stock_data import RelativeStockData
 
 
 # pylint: disable=too-many-instance-attributes
 class DataCollection:
     """Class that contains multiple Data classes.
     """
-    def __init__(self, data_objects, stock_names, stock_data_randomization=False):
+    def __init__(self, data_objects, stock_names, stock_data_randomization=False,
+                 use_relative_stock_data=False):
         """Initializer for DataCollection class.
 
         Args:
             data_objects: a list of Data objects. First object is used as main stock data provider.
             stock_names: a list of stock names to prepare.
             stock_data_randomization: whether to add stock data randomization.
+            use_relative_stock_data: whether to use relative price as stock data. This works as a
+                                     pseudo-normalization for stock price data.
         """
         self.stock_names = stock_names
         self.data_objects = []
@@ -25,12 +29,19 @@ class DataCollection:
 
         if data_objects[0].data_type != DataType.STOCK_DATA:
             raise ValueError("Expected first data to be stock data.")
-        self.stock_data_id = data_objects[0].id_str
+        self.absolute_stock_data_id = data_objects[0].id_str
 
         if stock_data_randomization and not isinstance(data_objects[0], RandomizedStockData):
-            randomization_layer = RandomizedStockData(dependencies=[self.stock_data_id])
-            self.stock_data_id = randomization_layer.id_str
+            randomization_layer = RandomizedStockData(dependencies=[self.absolute_stock_data_id])
+            self.absolute_stock_data_id = randomization_layer.id_str
             data_objects.insert(0, randomization_layer)
+
+        if use_relative_stock_data:
+            relative_layer = RelativeStockData(dependencies=[self.absolute_stock_data_id])
+            self.stock_data_id = relative_layer.id_str
+            data_objects.insert(0, relative_layer)
+        else:
+            self.stock_data_id = self.absolute_stock_data_id
 
         self.visible_data_objects.append(data_objects[0])
 

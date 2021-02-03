@@ -66,6 +66,15 @@ class TestDataCollection(unittest.TestCase):
         stock_data = data_collection.data_objects[1]
         self.assertEqual(randomization_layer.dependencies[0], stock_data.id_str)
 
+    def test_use_relative(self):
+        """Checks if data collection uses relative stock data properly.
+        """
+        config = read_config_file("test/data_collection.yaml")
+        config["use_relative_stock_data"] = True
+        data_collection = create_data_collection(config)
+        self.assertEqual(4, len(data_collection.data_objects))
+        self.assertNotEqual(data_collection.stock_data_id, data_collection.absolute_stock_data_id)
+
     def test_prepares_data(self):
         """Checks if data collection prepares the data properly.
         """
@@ -73,6 +82,7 @@ class TestDataCollection(unittest.TestCase):
         to_date = datetime(2016, 2, 1)
         config = read_config_file("test/data_collection.yaml")
         data_collection = create_data_collection(config)
+        self.assertEqual(data_collection.stock_data_id, data_collection.absolute_stock_data_id)
         data_collection.set_date_range(from_date, to_date)
         data_collection.prepare_data()
         for data in data_collection.data_objects:

@@ -92,7 +92,8 @@ class StockMarketSimulation(gym.Env):
         self.data_collection = create_data_collection(data_collection_config)
 
         # Setup of simulation data.
-        self.stock_data = self.data_collection.data_objects[0]
+        stock_data_id = self.data_collection.absolute_stock_data_id
+        self.stock_data = self.data_collection.id_to_data[stock_data_id]
         self.stock_names = self.data_collection.stock_names
         self.balance = 0
         self.net_worth = 0
@@ -134,7 +135,7 @@ class StockMarketSimulation(gym.Env):
             reward_config = {"name": "net_worth_ratio"}
         self.reward_function = create_reward(reward_config, from_date, to_date)
 
-        # Setting up observatino cache.
+        # Setting up observation cache.
         self.saved_date_index = -1
         self.saved_observation = None
 

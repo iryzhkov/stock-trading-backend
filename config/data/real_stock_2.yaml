@@ -1,0 +1,16 @@
+use_relative_stock_data: True
+stock_names:
+  - GOOG
+  - AMZN
+  - AAPL
+  - TSLA
+data:
+  - name: real_stock_data
+  - name: running_average_analysis
+    num_days: 10
+    dependencies:
+      - stock_data
+  - name: running_average_analysis
+    num_days: 20
+    dependencies:
+      - stock_data

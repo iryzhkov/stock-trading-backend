@@ -8,3 +8,4 @@ from stock_trading_backend.data.generated_stock_data import GeneratedStockData
 from stock_trading_backend.data.randomized_stock_data import RandomizedStockData
 from stock_trading_backend.data.real_stock_data import RealStockData
 from stock_trading_backend.data.running_average_analysis import RunningAverageAnalysis
+from stock_trading_backend.data.relative_stock_data import RelativeStockData

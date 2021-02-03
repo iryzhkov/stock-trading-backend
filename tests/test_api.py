@@ -24,9 +24,10 @@ class TestAPI(unittest.TestCase):
         """Checks if get_data_collections works properly
         """
         available_data_collections = api.get_available_data_collections()
-        self.assertEqual(2, len(available_data_collections))
+        self.assertEqual(3, len(available_data_collections))
         self.assertIn("default", available_data_collections)
         self.assertIn("real_stock_1", available_data_collections)
+        self.assertIn("real_stock_2", available_data_collections)
 
     def test_get_available_rewards(self):
         """Checks if get_available_rewards works properly
@@ -71,7 +72,6 @@ class TestAPI(unittest.TestCase):
     def test_long_backtest(self):
         """Check how backtesting works for 4-year simulation.
         """
-        agent = api.get_agent_object("following_feature_agent_1", "real_stock_1", "sharpe_ratio")
-        reward = backtest_agent(agent, from_date=datetime(2014, 1, 1),
-                                to_date=datetime(2018, 1, 1), start_balance=10000)
-        self.assertTrue(reward > 0.04)
+        agent = api.get_agent_object("following_feature_agent_1", "real_stock_2", "net_worth_ratio")
+        reward = backtest_agent(agent, from_date=datetime(2014, 1, 1), to_date=datetime(2018, 1, 1))
+        self.assertTrue(reward > 1.97)
