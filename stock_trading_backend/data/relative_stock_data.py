@@ -1,7 +1,5 @@
 """Class for storing relative.
 """
-import numpy as np
-
 from stock_trading_backend.data.stock_data import StockData
 
 

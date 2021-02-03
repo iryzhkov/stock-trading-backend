@@ -3,7 +3,6 @@
 from datetime import datetime
 
 import unittest
-import numpy as np
 
 from stock_trading_backend.data import RelativeStockData, GeneratedStockData
 
@@ -46,7 +45,6 @@ class TestRelativeStockData(unittest.TestCase):
         data = RelativeStockData(dependencies=["stock_data"])
         dependency.prepare_data(from_date, to_date, stock_names, [])
         data.prepare_data(from_date, to_date, stock_names, [dependency])
-        self.assertTrue(data.ready)
         data.reset([True])
         self.assertTrue(data.ready)
         data.reset([False])
