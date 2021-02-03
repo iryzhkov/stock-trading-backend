@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 
 import random
 import math
+import itertools
 
 import gym
 import numpy as np
@@ -138,6 +139,39 @@ class StockMarketSimulation(gym.Env):
         # Setting up observation cache.
         self.saved_date_index = -1
         self.saved_observation = None
+
+    def action_space_generator(self):
+        """Generator for action space.
+
+        Takes into account max stocks owned.
+
+        If you want to iterate over all legitimate actions use this.
+
+        Returns:
+            Generator obejct with all possible actions.
+        """
+        num_owned_stocks = np.count_nonzero(self.owned_stocks)
+        num_not_owned_stocks = len(self.owned_stocks) - num_owned_stocks
+        num_possible_to_purchase = self.max_stock_owned - num_owned_stocks
+
+        for num_purchases in range(num_possible_to_purchase + 1):
+            indexes_iter = itertools.combinations(range(num_not_owned_stocks), num_purchases)
+            for indexes in indexes_iter:
+                sell_actions = itertools.product([0, 1], repeat=num_owned_stocks)
+                purchase_action = [0] * num_not_owned_stocks
+                for i in indexes:
+                    purchase_action[i] = 1
+                for sell_action in sell_actions:
+                    action = [0] * len(self.owned_stocks)
+                    sell_index, purchase_index = 0, 0
+                    for i, owned_num in enumerate(self.owned_stocks):
+                        if owned_num > 0:
+                            action[i] = sell_action[sell_index]
+                            sell_index += 1
+                        else:
+                            action[i] = purchase_action[purchase_index]
+                            purchase_index += 1
+                    yield action
 
     @property
     def overall_reward(self):

@@ -29,6 +29,29 @@ class TestStockMarketSimulation(unittest.TestCase):
         self.assertEqual(1000, simulation.max_start_balance)
         self.assertEqual(732, len(simulation.available_dates))
 
+    def test_action_space_generator(self):
+        """Test if action space generator works properly.
+        """
+        simulation = StockMarketSimulation()
+        simulation.reset()
+
+        # 3 possible actions: [0, 0], [1, 0], [1, 1]
+        self.assertEqual(3, len(list(simulation.action_space_generator())))
+        for action in simulation.action_space_generator():
+            self.assertEqual(2, len(action))
+
+        # 2 possible actions: [0, 0], [1, 0]
+        simulation.owned_stocks[0] = 1
+        self.assertEqual(2, len(list(simulation.action_space_generator())))
+        for action in simulation.action_space_generator():
+            self.assertEqual(2, len(action))
+
+        # 4 possible actions: [0, 0], [1, 0], [0, 1], [1, 1]
+        simulation.max_stock_owned = 2
+        self.assertEqual(4, len(list(simulation.action_space_generator())))
+        for action in simulation.action_space_generator():
+            self.assertEqual(2, len(action))
+
     def test_initializes_from_gym(self):
         """Test if simulation can be initialized with gym.make()
         """
