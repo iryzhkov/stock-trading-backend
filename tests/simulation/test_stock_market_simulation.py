@@ -77,6 +77,7 @@ class TestStockMarketSimulation(unittest.TestCase):
         _ = simulation.reset()
         _, reward, _ = simulation.step([0, 0])
         self.assertEqual(5, reward)
+        self.assertEqual(5, simulation.overall_reward)
 
     def test_step(self):
         """Test for simulation step.

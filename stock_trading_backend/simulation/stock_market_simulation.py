@@ -139,6 +139,12 @@ class StockMarketSimulation(gym.Env):
         self.saved_observation = None
 
     @property
+    def overall_reward(self):
+        """Property, returns overall reward for the current episode.
+        """
+        return self.reward_function.calculate_overall_reward()
+
+    @property
     def done(self):
         """Property, true if episode finished.
         """

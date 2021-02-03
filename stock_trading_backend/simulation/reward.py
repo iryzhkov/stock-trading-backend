@@ -24,6 +24,10 @@ class Reward(metaclass=ABCMeta):
             date: datetime current date in the environment
         """
 
+    def calculate_overall_reward(self):
+        """Calculates the value of the reward for the whole episode.
+        """
+
     def reset(self, observation, date):
         """Resets the internal reward state.
 

@@ -21,6 +21,16 @@ class TestNetWorthRatioReward(unittest.TestCase):
         self.assertEqual(0, reward.calculate_value({"net_worth": 100}, None))
         self.assertEqual(1, reward.calculate_value({"net_worth": 200}, None))
 
+    def test_overall_reward(self):
+        """Checks if overall reward works properly.
+        """
+        reward = NetWorthRatioReward()
+        reward.reset({"net_worth": 100}, None)
+        self.assertEqual(1, reward.calculate_value({"net_worth": 200}, None))
+        self.assertEqual(0, reward.calculate_value({"net_worth": 200}, None))
+        self.assertEqual(0, reward.calculate_value({"net_worth": 200}, None))
+        self.assertEqual(1, reward.calculate_overall_reward())
+
     def test_handles_zero(self):
         """Checks if calculaet value handles zero properly.
         """

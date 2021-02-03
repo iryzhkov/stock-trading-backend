@@ -24,3 +24,9 @@ class TestConstantReward(unittest.TestCase):
         reward.reset(None, None)
         reward.calculate_value(None, None)
         self.assertEqual(0, reward.calculate_value(None, None))
+
+    def test_overall_reward(self):
+        """Checks if overall_reward works properly.
+        """
+        reward = ConstantReward()
+        self.assertEqual(0, reward.calculate_overall_reward())

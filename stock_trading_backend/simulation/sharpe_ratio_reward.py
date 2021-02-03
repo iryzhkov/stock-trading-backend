@@ -21,6 +21,8 @@ class SharpeRatioReward(Reward):
         super(SharpeRatioReward, self).__init__(from_date, to_date)
         self.prev_net_worth = 0
         self.prev_market_value = 0
+        self.first_net_worth = 0
+        self.first_market_value = 0
         self.market_data = get_stock_data(["SPY"], from_date, to_date)
         self.ratios = []
 
@@ -49,6 +51,16 @@ class SharpeRatioReward(Reward):
         self.prev_market_value = curr_market_value
         return result
 
+    def calculate_overall_reward(self):
+        """Calculates the value of the reward for the whole episode.
+        """
+        net_worth_ratio = self.prev_net_worth / self.first_net_worth
+        market_ratio = self.prev_market_value / self.first_market_value
+        result = net_worth_ratio - market_ratio
+        if len(self.ratios) > 1:
+            result /= np.std(self.ratios)
+        return result
+
     def reset(self, observation, date):
         """Resets the internal reward state.
 
@@ -58,4 +70,6 @@ class SharpeRatioReward(Reward):
         """
         self.prev_net_worth = observation["net_worth"]
         self.prev_market_value = self.market_data.loc[date].item()
+        self.first_net_worth = self.prev_net_worth
+        self.first_market_value = self.prev_market_value
         self.ratios = []

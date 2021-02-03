@@ -18,6 +18,7 @@ class NetWorthRatioReward(Reward):
         """
         super(NetWorthRatioReward, self).__init__(from_date, to_date)
         self.prev_net_worth = 0
+        self.first_net_worth = 0
 
     # pylint: disable=unused-argument
     def calculate_value(self, observation, date):
@@ -34,6 +35,11 @@ class NetWorthRatioReward(Reward):
         self.prev_net_worth = curr_net_worth
         return result
 
+    def calculate_overall_reward(self):
+        """Calculates the value of the reward for the whole episode.
+        """
+        return (self.prev_net_worth / self.first_net_worth)  - 1
+
     # pylint: disable=unused-argument
     def reset(self, observation, date):
         """Resets the internal reward state.
@@ -43,3 +49,4 @@ class NetWorthRatioReward(Reward):
             date: datetime current date in the environment
         """
         self.prev_net_worth = observation["net_worth"]
+        self.first_net_worth = observation["net_worth"]

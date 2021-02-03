@@ -30,3 +30,8 @@ class ConstantReward(Reward):
             date: datetime current date in the environment
         """
         return self.value
+
+    def calculate_overall_reward(self):
+        """Calculates the value of the reward for the whole episode.
+        """
+        return self.value
