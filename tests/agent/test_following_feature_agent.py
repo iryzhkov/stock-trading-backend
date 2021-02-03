@@ -17,7 +17,7 @@ class TestFollowingAgent(unittest.TestCase):
         """
         data_collection_config = read_config_file("test/simulation.yaml")
         features = [read_config_file("test/running_average_analysis.yaml")]
-        agent = FollowingFeatureAgent(data_collection_config, features)
+        agent = FollowingFeatureAgent(data_collection_config, None, features)
         self.assertEqual(data_collection_config, agent.data_collection_config)
         self.assertEqual("ra_5_stock_data_{}", agent.feature_template)
 
@@ -28,7 +28,7 @@ class TestFollowingAgent(unittest.TestCase):
         to_date = datetime(2016, 2, 1)
         data_collection_config = read_config_file("test/simulation.yaml")
         features = [read_config_file("test/running_average_analysis.yaml")]
-        agent = FollowingFeatureAgent(data_collection_config, features)
+        agent = FollowingFeatureAgent(data_collection_config, None, features)
         simulation = StockMarketSimulation(data_collection_config, from_date, to_date,
                                            min_start_balance=100, max_start_balance=100,
                                            max_stock_owned=2)

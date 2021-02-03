@@ -11,13 +11,13 @@ class TestAgent(TestWithSimulation):
     def test_initializes(self):
         """A test to see if agent is initialized properly.
         """
-        agent = Agent(data_collection_config=self.data_collection_config)
+        agent = Agent(self.data_collection_config, None)
         self.assertEqual(self.data_collection_config, agent.data_collection_config)
 
     def test_observation_unpack(self):
         """A test to see if observation unpack works.
         """
-        agent = Agent(data_collection_config=self.data_collection_config)
+        agent = Agent(self.data_collection_config, None)
         observation = self.simulation.reset()
         balance, net_worth, owned_stocks, stock_prices = agent.unpack_observation(observation)
         self.assertEqual(100, balance)
@@ -35,7 +35,7 @@ class TestAgent(TestWithSimulation):
     def test_make_decision(self):
         """A test to see if agent can make decisions.
         """
-        agent = Agent(data_collection_config=self.data_collection_config)
+        agent = Agent(self.data_collection_config, None)
         observation = self.simulation.reset()
 
         while not self.simulation.done:

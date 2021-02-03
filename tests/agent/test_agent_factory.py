@@ -22,11 +22,11 @@ class TestFollowingAgent(unittest.TestCase):
             expected_class: the expected class created from config file.
         """
         data_collection_config = read_config_file("data/default.yaml")
-        agent = create_agent(read_config_file(config_filename), data_collection_config)
+        agent = create_agent(read_config_file(config_filename), data_collection_config, None)
         self.assertIsInstance(agent, expected_class)
 
     def test_lookup_error(self):
         """Checks if create agent raises lookup error.
         """
         with self.assertRaises(LookupError):
-            _ = create_agent({"name": "not_the_right_name"}, None)
+            _ = create_agent({"name": "not_the_right_name"}, None, None)

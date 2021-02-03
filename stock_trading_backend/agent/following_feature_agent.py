@@ -16,14 +16,14 @@ class FollowingFeatureAgent(Agent):
     """
     name = "following_feature_agent"
 
-    def __init__(self, data_collection_config, features=None):
+    def __init__(self, data_collection_config, reward_config, features=None):
         """Initializer for FollowingFeatureAgent class.
 
         Args:
-            env: StockTradingSimulation environment.
-            features: a list of data configs. The first one is going to be followed.
+            data_collection_config: configuration for the data collection used by the agent.
+            reward_config: configuration for reward used by the agent.
         """
-        super(FollowingFeatureAgent, self).__init__(data_collection_config)
+        super(FollowingFeatureAgent, self).__init__(data_collection_config, reward_config)
         features[0]["visible"] = True
         data_collection_config["data"] += features
         followed_data = create_data(copy.copy(features[0]))

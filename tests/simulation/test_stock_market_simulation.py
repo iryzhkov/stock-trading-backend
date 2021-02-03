@@ -10,8 +10,8 @@ from stock_trading_backend.simulation import StockMarketSimulation
 from stock_trading_backend.util import read_config_file
 
 
-class TestGeneratedStockData(unittest.TestCase):
-    """Unit tests for generated stock data.
+class TestStockMarketSimulation(unittest.TestCase):
+    """Unit tests for stock market simulation.
     """
     def test_initializes(self):
         """Test for simulation initialization.

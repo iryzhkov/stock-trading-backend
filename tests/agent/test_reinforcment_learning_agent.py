@@ -11,5 +11,5 @@ class TestReinforcementLearningAgent(TestWithSimulation):
     def test_initializes(self):
         """A test to see if agent is initialized properly.
         """
-        agent = ReinforcementLearningAgent(data_collection_config=self.data_collection_config)
+        agent = ReinforcementLearningAgent(self.data_collection_config, None)
         self.assertEqual(self.data_collection_config, agent.data_collection_config)

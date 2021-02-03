@@ -7,13 +7,15 @@ class Agent():
     name = None
     requires_learning = False
 
-    def __init__(self, data_collection_config):
+    def __init__(self, data_collection_config, reward_config):
         """Initializer for Agent.
 
         Args:
             data_collection_config: configuration for the data collection used by the agent.
+            reward_config: configuration for reward used by the agent.
         """
         self.data_collection_config = data_collection_config
+        self.reward_config = reward_config
         self.stock_names = data_collection_config["stock_names"]
         self.id_str = self.name
 

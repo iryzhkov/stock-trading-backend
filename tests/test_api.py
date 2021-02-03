@@ -20,12 +20,22 @@ class TestAPI(unittest.TestCase):
         self.assertEqual("following_feature_agent_1", available_agents[0])
 
     def test_get_available_data_collections(self):
-        """Checks if get_available_agents works properly
+        """Checks if get_data_collections works properly
         """
         available_data_collections = api.get_available_data_collections()
         self.assertEqual(2, len(available_data_collections))
         self.assertIn("default", available_data_collections)
         self.assertIn("real_stock_1", available_data_collections)
+
+    def test_get_available_rewards(self):
+        """Checks if get_available_rewards works properly
+        """
+        available_rewards = api.get_available_rewards()
+        print(available_rewards)
+        self.assertEqual(3, len(available_rewards))
+        self.assertIn("constant", available_rewards)
+        self.assertIn("sharpe_ratio", available_rewards)
+        self.assertIn("net_worth_ratio", available_rewards)
 
     def test_get_agent_object(self):
         """Checks if get_agent_object works properly
