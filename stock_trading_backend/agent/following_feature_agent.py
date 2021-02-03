@@ -1,7 +1,5 @@
 """An agent that tries to follow a feature as its policy.
 """
-import copy
-
 from stock_trading_backend.agent.agent import Agent
 from stock_trading_backend.data import create_data
 
@@ -26,7 +24,7 @@ class FollowingFeatureAgent(Agent):
         super(FollowingFeatureAgent, self).__init__(data_collection_config, reward_config)
         features[0]["visible"] = True
         data_collection_config["data"] += features
-        followed_data = create_data(copy.copy(features[0]))
+        followed_data = create_data(features[0])
         self.feature_template = followed_data.feature_template
 
     def make_decision(self, observation, env):
