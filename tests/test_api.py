@@ -58,6 +58,15 @@ class TestAPI(unittest.TestCase):
         reward = api.backtest_agent(agent)
         self.assertTrue(reward > -0.5)
 
+    def test_multiple_backtests(self):
+        """Checks if can run the backtest multiple times on an agent.
+        """
+        agent = api.get_agent_object()
+        reward = api.backtest_agent(agent)
+        self.assertTrue(reward > -0.5)
+        reward = api.backtest_agent(agent)
+        self.assertTrue(reward > -0.5)
+
     def test_long_backtest(self):
         """Check how backtesting works for 4-year simulation.
         """

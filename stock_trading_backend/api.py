@@ -1,5 +1,6 @@
 """APIs for the package.
 """
+from copy import deepcopy
 from datetime import datetime, timedelta
 import os
 
@@ -48,7 +49,8 @@ def get_available_rewards():
     """
     return _get_list_of_config_names("reward")
 
-def get_agent_object(agent_name, data_collection_name="default", reward_name="net_worth_ratio"):
+def get_agent_object(agent_name="following_feature_agent_1", data_collection_name="default",
+                     reward_name="net_worth_ratio"):
     """Creates an agent with provided agent name and data collection name.
 
     Args:
@@ -83,11 +85,13 @@ def backtest_agent(agent, from_date=None, to_date=None, start_balance=1000, comm
         from_date = today - timedelta(days=60)
         to_date = today - timedelta(days=1)
 
-    simulation = StockMarketSimulation(agent.data_collection_config, from_date=from_date,
+    data_collection_config = deepcopy(agent.data_collection_config)
+    reward_config = deepcopy(agent.reward_config)
+
+    simulation = StockMarketSimulation(data_collection_config, from_date=from_date,
                                        to_date=to_date, min_start_balance=start_balance,
                                        max_start_balance=start_balance, commission=commission,
-                                       max_stock_owned=max_stock_owned,
-                                       reward_config=agent.reward_config)
+                                       max_stock_owned=max_stock_owned, reward_config=reward_config)
 
     observation = simulation.reset()
     while not simulation.done:
