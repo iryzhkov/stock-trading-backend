@@ -7,6 +7,7 @@ import unittest
 from parameterized import parameterized
 
 from stock_trading_backend import api
+from stock_trading_backend.backtest import backtest_agent
 from stock_trading_backend.agent import FollowingFeatureAgent
 
 class TestAPI(unittest.TestCase):
@@ -55,22 +56,22 @@ class TestAPI(unittest.TestCase):
             data_collection_name: the data collection to test backtesting with.
         """
         agent = api.get_agent_object(agent_name, data_collection_name)
-        reward = api.backtest_agent(agent)
+        reward = backtest_agent(agent)
         self.assertTrue(reward > -0.5)
 
     def test_multiple_backtests(self):
         """Checks if can run the backtest multiple times on an agent.
         """
         agent = api.get_agent_object()
-        reward = api.backtest_agent(agent)
+        reward = backtest_agent(agent)
         self.assertTrue(reward > -0.5)
-        reward = api.backtest_agent(agent)
+        reward = backtest_agent(agent)
         self.assertTrue(reward > -0.5)
 
     def test_long_backtest(self):
         """Check how backtesting works for 4-year simulation.
         """
         agent = api.get_agent_object("following_feature_agent_1", "real_stock_1", "sharpe_ratio")
-        reward = api.backtest_agent(agent, from_date=datetime(2014, 1, 1),
-                                    to_date=datetime(2018, 1, 1), start_balance=10000)
+        reward = backtest_agent(agent, from_date=datetime(2014, 1, 1),
+                                to_date=datetime(2018, 1, 1), start_balance=10000)
         self.assertTrue(reward > 0.04)

@@ -1,11 +1,8 @@
 """APIs for the package.
 """
-from datetime import datetime, timedelta
 import os
 
 from stock_trading_backend.agent import create_agent
-from stock_trading_backend.backtest import backtest_agent
-from stock_trading_backend.simulation import StockMarketSimulation
 from stock_trading_backend.util import read_config_file
 
 ROOT = os.path.dirname(os.path.dirname(__file__))

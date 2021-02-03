@@ -18,6 +18,13 @@ class Agent():
         self.reward_config = reward_config
         self.stock_names = data_collection_config["stock_names"]
         self.id_str = self.name
+        self.trained = False
+
+    @property
+    def usable(self):
+        """Returns true if the agent can be used for backtesting.
+        """
+        return not self.requires_learning or self.trained
 
     def extract_stock_feature(self, observation, feature_template=""):
         """Extracts stock feature from observation.

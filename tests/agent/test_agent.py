@@ -13,6 +13,7 @@ class TestAgent(TestWithSimulation):
         """
         agent = Agent(self.data_collection_config, None)
         self.assertEqual(self.data_collection_config, agent.data_collection_config)
+        self.assertTrue(agent.usable)
 
     def test_observation_unpack(self):
         """A test to see if observation unpack works.
