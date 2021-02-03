@@ -1,2 +1,0 @@
-"""Amortized QLearning agent.
-"""
