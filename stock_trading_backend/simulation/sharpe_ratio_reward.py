@@ -19,12 +19,13 @@ class SharpeRatioReward(Reward):
             to_date: datetime end of the date range.
         """
         super(SharpeRatioReward, self).__init__(from_date, to_date)
-        self.prev_net_worth = 0
-        self.prev_market_value = 0
         self.first_net_worth = 0
+        self.prev_net_worth = 0
         self.first_market_value = 0
+        self.prev_market_value = 0
+        self.returns = []
+        self.market_returns = []
         self.market_data = get_stock_data(["SPY"], from_date, to_date)
-        self.ratios = []
 
     def calculate_value(self, observation, date):
         """Calculates the value of the reward given the observation.
@@ -39,13 +40,14 @@ class SharpeRatioReward(Reward):
         curr_net_worth = observation["net_worth"]
         curr_market_value = self.market_data.loc[date].item()
 
-        net_worth_ratio = curr_net_worth / self.prev_net_worth
-        market_ratio = curr_market_value / self.prev_market_value
-        self.ratios.append(net_worth_ratio)
+        curr_return = curr_net_worth / self.prev_net_worth - 1
+        market_return = curr_market_value / self.prev_market_value - 1
+        self.returns.append(curr_return)
+        self.market_returns.append(market_return)
 
-        result = net_worth_ratio - market_ratio
-        if len(self.ratios) > 1:
-            result /= np.std(self.ratios)
+        result = np.mean(self.returns) - np.mean(self.market_returns)
+        if len(self.returns) > 1:
+            result /= np.std(self.returns)
 
         self.prev_net_worth = curr_net_worth
         self.prev_market_value = curr_market_value
@@ -54,11 +56,9 @@ class SharpeRatioReward(Reward):
     def calculate_overall_reward(self):
         """Calculates the value of the reward for the whole episode.
         """
-        net_worth_ratio = self.prev_net_worth / self.first_net_worth
-        market_ratio = self.prev_market_value / self.first_market_value
-        result = net_worth_ratio - market_ratio
-        if len(self.ratios) > 1:
-            result /= np.std(self.ratios)
+        result = np.mean(self.returns) - np.mean(self.market_returns)
+        if len(self.returns) > 1:
+            result /= np.std(self.returns)
         return result
 
     def reset(self, observation, date):
@@ -72,4 +72,5 @@ class SharpeRatioReward(Reward):
         self.prev_market_value = self.market_data.loc[date].item()
         self.first_net_worth = self.prev_net_worth
         self.first_market_value = self.prev_market_value
-        self.ratios = []
+        self.returns = []
+        self.market_returns = []

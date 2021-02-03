@@ -55,13 +55,13 @@ class TestAPI(unittest.TestCase):
             data_collection_name: the data collection to test backtesting with.
         """
         agent = api.get_agent_object(agent_name, data_collection_name)
-        observation = api.backtest_agent(agent)
-        self.assertTrue(observation["net_worth"] > 0)
+        reward = api.backtest_agent(agent)
+        self.assertTrue(reward > -0.5)
 
     def test_long_backtest(self):
         """Check how backtesting works for 4-year simulation.
         """
-        agent = api.get_agent_object("following_feature_agent_1", "real_stock_1")
-        observation = api.backtest_agent(agent, commission=0.005, from_date=datetime(2014, 1, 1),
-                                         to_date=datetime(2018, 1, 1), start_balance=10000)
-        self.assertTrue(observation["net_worth"] >= 20000)
+        agent = api.get_agent_object("following_feature_agent_1", "real_stock_1", "sharpe_ratio")
+        reward = api.backtest_agent(agent, from_date=datetime(2014, 1, 1),
+                                    to_date=datetime(2018, 1, 1), start_balance=10000)
+        self.assertTrue(reward > 0.04)

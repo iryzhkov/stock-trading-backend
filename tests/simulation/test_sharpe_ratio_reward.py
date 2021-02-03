@@ -26,7 +26,7 @@ class TestSharpeRatioReward(unittest.TestCase):
         date = reward.market_data.index[0]
         reward.reset({"net_worth": 100}, date)
         self.assertEqual(0, reward.calculate_value({"net_worth": 100}, date))
-        self.assertEqual(2, reward.calculate_value({"net_worth": 200}, date))
+        self.assertEqual(1, reward.calculate_value({"net_worth": 200}, date))
 
     def test_overall_reward(self):
         """Checks if overall reward works properly.
@@ -36,10 +36,10 @@ class TestSharpeRatioReward(unittest.TestCase):
         reward = SharpeRatioReward(from_date, to_date)
         date = reward.market_data.index[0]
         reward.reset({"net_worth": 100}, date)
-        self.assertEqual(0, reward.calculate_value({"net_worth": 100}, date))
-        self.assertEqual(2, reward.calculate_value({"net_worth": 200}, date))
-        self.assertEqual(0, reward.calculate_value({"net_worth": 200}, date))
-        self.assertTrue(reward.calculate_overall_reward() > 2.12)
+        reward.calculate_value({"net_worth": 100}, date)
+        reward.calculate_value({"net_worth": 200}, date)
+        reward.calculate_value({"net_worth": 200}, date)
+        self.assertTrue(reward.calculate_overall_reward() > 0.7)
 
     def test_handles_zero(self):
         """Checks if calculaet value handles zero properly.

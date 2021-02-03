@@ -86,10 +86,11 @@ def backtest_agent(agent, from_date=None, to_date=None, start_balance=1000, comm
     simulation = StockMarketSimulation(agent.data_collection_config, from_date=from_date,
                                        to_date=to_date, min_start_balance=start_balance,
                                        max_start_balance=start_balance, commission=commission,
-                                       max_stock_owned=max_stock_owned)
+                                       max_stock_owned=max_stock_owned,
+                                       reward_config=agent.reward_config)
 
     observation = simulation.reset()
     while not simulation.done:
         action = agent.make_decision(observation, simulation)
         observation, _, _ = simulation.step(action)
-    return observation
+    return simulation.overall_reward
