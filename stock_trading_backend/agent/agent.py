@@ -9,15 +9,17 @@ class Agent(metaclass=ABCMeta):
     name = None
     requires_learning = False
 
-    def __init__(self, data_collection_config, reward_config):
+    def __init__(self, data_collection_config, reward_config, model_config=None):
         """Initializer for Agent.
 
         Args:
             data_collection_config: configuration for the data collection used by the agent.
             reward_config: configuration for reward used by the agent.
+            model_config: configuration for model used by the agent.
         """
         self.data_collection_config = data_collection_config
         self.reward_config = reward_config
+        self.model_config = model_config
         self.stock_names = data_collection_config["stock_names"]
         self.id_str = self.name
         self.trained = False

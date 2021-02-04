@@ -119,7 +119,6 @@ def get_agent_object(agent_name="following_feature_agent_1", data_collection_nam
     data_collection_config = get_data_collection_config(data_collection_name)
     agent_config = get_agent_config(agent_name)
     reward_config = get_reward_config(reward_name)
-    # pylint: disable=unused-variable
     model_config = get_model_config(model_name)
-    agent = create_agent(agent_config, data_collection_config, reward_config)
+    agent = create_agent(agent_config, data_collection_config, reward_config, model_config)
     return agent
