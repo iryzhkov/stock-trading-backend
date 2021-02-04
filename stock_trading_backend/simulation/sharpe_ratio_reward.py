@@ -56,9 +56,13 @@ class SharpeRatioReward(Reward):
     def calculate_overall_reward(self):
         """Calculates the value of the reward for the whole episode.
         """
-        result = np.mean(self.returns) - np.mean(self.market_returns)
+        agent_return = self.prev_net_worth / self.first_net_worth - 1
+        market_return = self.prev_market_value / self.first_market_value - 1
+
+        result = (agent_return - market_return) / len(self.returns)
         if len(self.returns) > 1:
             result /= np.std(self.returns)
+
         return result
 
     def reset(self, observation, date):

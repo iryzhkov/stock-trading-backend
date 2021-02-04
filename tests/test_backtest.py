@@ -38,8 +38,8 @@ class TestBacktest(unittest.TestCase):
         self.assertTrue(reward > -0.5)
 
     def test_long_backtest(self):
-        """Check how backtesting works for 4-year simulation.
+        """Check how backtesting works for 2-year simulation.
         """
         agent = api.get_agent_object("following_feature_agent_1", "real_stock_2", "net_worth_ratio")
-        reward = backtest_agent(agent, from_date=datetime(2014, 1, 1), to_date=datetime(2018, 1, 1))
-        self.assertTrue(reward > 1.97)
+        reward = backtest_agent(agent, from_date=datetime(2014, 1, 1), to_date=datetime(2016, 1, 1))
+        self.assertTrue(reward > 0)
