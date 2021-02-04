@@ -1,4 +1,4 @@
-"""Unit tests for agent.
+"""Unit tests for agent factory.
 """
 import unittest
 
@@ -8,8 +8,8 @@ from stock_trading_backend.agent import create_agent, FollowingFeatureAgent
 from stock_trading_backend.util import read_config_file
 
 
-class TestFollowingAgent(unittest.TestCase):
-    """Unit tests for agent.
+class TestAgentFactory(unittest.TestCase):
+    """Unit tests for agent factory.
     """
     @parameterized.expand([
         ("agent/following_feature_agent_1.yaml", FollowingFeatureAgent),

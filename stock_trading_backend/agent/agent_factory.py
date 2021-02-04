@@ -1,4 +1,4 @@
-"""Factory function for reward.
+"""Factory function for agents.
 """
 from copy import deepcopy
 

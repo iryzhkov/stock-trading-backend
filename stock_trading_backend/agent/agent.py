@@ -1,7 +1,9 @@
 """Base class for stock market agent.
 """
+from abc import ABCMeta
 
-class Agent():
+
+class Agent(metaclass=ABCMeta):
     """Base class for stock market agent.
     """
     name = None

@@ -20,6 +20,12 @@ class TestAPI(unittest.TestCase):
         self.assertEqual(1, len(available_agents))
         self.assertEqual("following_feature_agent_1", available_agents[0])
 
+    def test_get_agent_config(self):
+        """Checks if get_agent_config works properly.
+        """
+        agent_config = api.get_agent_config("following_feature_agent_1")
+        self.assertEqual("following_feature_agent", agent_config["name"])
+
     def test_get_available_data_collections(self):
         """Checks if get_data_collections works properly
         """
@@ -29,15 +35,39 @@ class TestAPI(unittest.TestCase):
         self.assertIn("real_stock_1", available_data_collections)
         self.assertIn("real_stock_2", available_data_collections)
 
+    def test_get_data_collection_config(self):
+        """Checks if get_data_collection_config works properly.
+        """
+        data_collection_config = api.get_data_collection_config("default")
+        self.assertEqual(2, len(data_collection_config["stock_names"]))
+
     def test_get_available_rewards(self):
         """Checks if get_available_rewards works properly
         """
         available_rewards = api.get_available_rewards()
-        print(available_rewards)
         self.assertEqual(3, len(available_rewards))
         self.assertIn("constant", available_rewards)
         self.assertIn("sharpe_ratio", available_rewards)
         self.assertIn("net_worth_ratio", available_rewards)
+
+    def test_get_reward_config(self):
+        """Checks if get_reward_config works properly.
+        """
+        reward_config = api.get_reward_config("sharpe_ratio")
+        self.assertEqual("sharpe_ratio", reward_config["name"])
+
+    def test_get_available_models(self):
+        """Checks if get_available_models works properly
+        """
+        available_models = api.get_available_models()
+        self.assertEqual(1, len(available_models))
+        self.assertIn("linear", available_models)
+
+    def test_get_model_config(self):
+        """Checks if get_model_config works properly.
+        """
+        model_config = api.get_model_config("linear")
+        self.assertEqual("polynomial", model_config["name"])
 
     def test_get_agent_object(self):
         """Checks if get_agent_object works properly
