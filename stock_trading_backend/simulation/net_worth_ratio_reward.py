@@ -6,7 +6,7 @@ from stock_trading_backend.simulation.reward import Reward
 class NetWorthRatioReward(Reward):
     """Net worth growth ratio reward class.
     """
-    name = "net_worth_ratio"
+    name = "net_worth_ratio_reward"
 
     # pylint: disable=unused-argument
     def __init__(self, from_date=None, to_date=None):

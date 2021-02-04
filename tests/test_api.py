@@ -54,7 +54,7 @@ class TestAPI(unittest.TestCase):
         """Checks if get_reward_config works properly.
         """
         reward_config = api.get_reward_config("sharpe_ratio")
-        self.assertEqual("sharpe_ratio", reward_config["name"])
+        self.assertEqual("sharpe_ratio_reward", reward_config["name"])
 
     def test_get_available_models(self):
         """Checks if get_available_models works properly
@@ -67,7 +67,7 @@ class TestAPI(unittest.TestCase):
         """Checks if get_model_config works properly.
         """
         model_config = api.get_model_config("linear")
-        self.assertEqual("polynomial", model_config["name"])
+        self.assertEqual("polynomial_model", model_config["name"])
 
     def test_get_agent_object(self):
         """Checks if get_agent_object works properly

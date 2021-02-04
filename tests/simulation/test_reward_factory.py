@@ -15,9 +15,9 @@ class TestRewardFactory(unittest.TestCase):
     """Tests for reward factory.
     """
     @parameterized.expand([
-        ({"name": "constant"}, ConstantReward),
-        ({"name": "net_worth_ratio"}, NetWorthRatioReward),
-        ({"name": "sharpe_ratio"}, SharpeRatioReward),
+        ({"name": "constant_reward"}, ConstantReward),
+        ({"name": "net_worth_ratio_reward"}, NetWorthRatioReward),
+        ({"name": "sharpe_ratio_reward"}, SharpeRatioReward),
     ])
     def test_creates_correct_class(self, reward_config, expected_class):
         """Tests if creat_reward creates the correct class.

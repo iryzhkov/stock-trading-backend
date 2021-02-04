@@ -133,7 +133,7 @@ class StockMarketSimulation(gym.Env):
 
         # Setting up reward function.
         if reward_config is None:
-            reward_config = {"name": "net_worth_ratio"}
+            reward_config = {"name": "net_worth_ratio_reward"}
         self.reward_function = create_reward(reward_config, from_date, to_date)
 
         # Setting up observation cache.

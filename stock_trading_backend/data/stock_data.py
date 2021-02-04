@@ -9,7 +9,6 @@ class StockData(Data, metaclass=ABCMeta):
     """Base class for storing stock data.
     """
     data_type = DataType.STOCK_DATA
-    is_stock_specific = True
 
     def __init__(self, dependencies=None, visible=False):
         """Initializer for Generated Stock Data class

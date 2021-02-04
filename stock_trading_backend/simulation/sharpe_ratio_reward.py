@@ -9,7 +9,7 @@ from stock_trading_backend.util import get_stock_data
 class SharpeRatioReward(Reward):
     """Sharpe ratio reward class.
     """
-    name = "sharpe_ratio"
+    name = "sharpe_ratio_reward"
 
     def __init__(self, from_date=None, to_date=None):
         """Initializer for reward class.

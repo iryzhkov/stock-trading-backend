@@ -6,7 +6,7 @@ from stock_trading_backend.agent.model import Model
 class PolynomialModel(Model):
     """Polynomial model class.
     """
-    name = "polynomial"
+    name = "polynomial_model"
 
     def __init__(self, degree=1):
         """Initializer for model class.

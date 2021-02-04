@@ -6,7 +6,7 @@ from stock_trading_backend.simulation.reward import Reward
 class ConstantReward(Reward):
     """Constant reward class.
     """
-    name = "constant"
+    name = "constant_reward"
 
     # pylint: disable=unused-argument
     def __init__(self, value=0, from_date=None, to_date=None):
