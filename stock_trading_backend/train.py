@@ -4,14 +4,15 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
+import progressbar
 
 from stock_trading_backend.simulation import StockMarketSimulation
 
 # pylint: disable=too-many-arguments
 # pylint: disable=too-many-locals
-def train_agent(agent, from_date=None, to_date=None, min_duration=40, max_duration=60, commission=0,
+def train_agent(agent, from_date=None, to_date=None, min_duration=60, max_duration=90, commission=0,
                 max_stock_owned=1, min_start_balance=1000, max_start_balance=4000,
-                stock_data_randomization=False, episode_batch_size=1, num_episodes=10):
+                stock_data_randomization=False, episode_batch_size=5, num_episodes=10):
     """Train an agent with provided params.
 
     Args:
@@ -49,40 +50,42 @@ def train_agent(agent, from_date=None, to_date=None, min_duration=40, max_durati
     overall_reward_history = []
     loss_history = []
 
-    while num_episodes_run < num_episodes:
-        batch_rewards = []
-        batch_observations = []
-        batch_actions = []
-        batch_reward = 0
-        num_episodes_left_in_batch = episode_batch_size
+    with progressbar.ProgressBar(max_value=num_episodes) as bar:
+        while num_episodes_run < num_episodes:
+            batch_rewards = []
+            batch_observations = []
+            batch_actions = []
+            batch_reward = 0
+            num_episodes_left_in_batch = episode_batch_size
 
-        # Run the simulations in the batch.
-        while num_episodes_left_in_batch > 0 and num_episodes_run < num_episodes:
-            rewards = []
-            actions = []
-            observation = simulation.reset()
-            observations = pd.DataFrame(columns=observation.index)
+            # Run the simulations in the batch.
+            while num_episodes_left_in_batch > 0 and num_episodes_run < num_episodes:
+                rewards = []
+                actions = []
+                observation = simulation.reset()
+                observations = pd.DataFrame(columns=observation.index)
 
-            while not simulation.done:
-                action = agent.make_decision(observation, simulation, True)
-                observations = observations.append(observation, ignore_index=True)
-                actions.append(action)
-                observation, reward, _ = simulation.step(action)
-                rewards.append(reward)
+                while not simulation.done:
+                    action = agent.make_decision(observation, simulation, True)
+                    observations = observations.append(observation, ignore_index=True)
+                    actions.append(action)
+                    observation, reward, _ = simulation.step(action)
+                    rewards.append(reward)
 
-            overall_reward = simulation.overall_reward
-            batch_reward += overall_reward
-            rewards = np.asarray(rewards) + overall_reward
-            batch_rewards.append(rewards)
-            batch_observations.append(observations)
-            batch_actions.append(actions)
-            num_episodes_run += 1
-            num_episodes_left_in_batch -= 1
+                overall_reward = simulation.overall_reward
+                batch_reward += overall_reward
+                rewards = np.asarray(rewards) + overall_reward
+                batch_rewards.append(rewards)
+                batch_observations.append(observations)
+                batch_actions.append(actions)
+                num_episodes_run += 1
+                num_episodes_left_in_batch -= 1
+                bar.update(num_episodes_run)
 
-        # Utilize data from the simulations to train agents.
-        loss = agent.apply_learning(batch_observations, batch_actions, batch_rewards)
+            # Utilize data from the simulations to train agents.
+            loss = agent.apply_learning(batch_observations, batch_actions, batch_rewards)
 
-        overall_reward_history += [batch_reward / episode_batch_size]
-        loss_history.append(loss)
+            overall_reward_history += [batch_reward / episode_batch_size]
+            loss_history.append(loss)
 
     return overall_reward_history, loss_history

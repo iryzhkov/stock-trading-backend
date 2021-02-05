@@ -16,7 +16,8 @@ class SARSALearningAgent(Agent):
     requires_learning = True
 
     def __init__(self, data_collection_config, reward_config=None, model_config=None,
-                 discount_factor=0.1, epsilon=0.1, learning_rate=0.1, num_epochs=20):
+                 discount_factor=0.1, epsilon=0.1, learning_rate=0.1, num_epochs=5,
+                 initial_num_epochs=50):
         """Initializer for FollowingFeatureAgent class.
 
         Args:
@@ -27,6 +28,7 @@ class SARSALearningAgent(Agent):
             epsilon: epsilon value for epsilon-greedy exploration strategy.
             learning_rate: learning rate of the agent.
             num_epochs: number of epochs to run for each apply_learning.
+            initial_num_epochs: number of epochs to run on the first apply_learning.
         """
         super(SARSALearningAgent, self).__init__(data_collection_config, reward_config,
                                                  model_config)
@@ -35,8 +37,9 @@ class SARSALearningAgent(Agent):
         self.model = create_model(model_config)
         self.discount_factor = discount_factor
         self.epsilon = epsilon
-        self.num_epochs = num_epochs
         self.learning_rate = learning_rate
+        self.num_epochs = num_epochs
+        self.initial_num_epochs = initial_num_epochs
 
     # pylint: disable=unused-argument
     def make_decision(self, observation, env, training=False):
@@ -89,7 +92,7 @@ class SARSALearningAgent(Agent):
                 expected_values = rewards
                 _observations = _observations.append(observations, ignore_index=True)
                 _actions += actions
-                num_epochs = 2 * self.num_epochs
+                num_epochs = self.initial_num_epochs
 
             _expected_values.extend(expected_values)
 
