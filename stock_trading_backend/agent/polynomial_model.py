@@ -90,7 +90,7 @@ class PolynomialModel(Model):
         state_action_tensor = self._convert_tensor_to_polynomial(state_action_tensor)
         if self.model is None:
             self._init_model(state_action_tensor.shape[1])
-        return self.model(state_action_tensor).detach()
+        return self.model(state_action_tensor).detach().reshape(-1)
 
     def _train(self, state_action_tensor, expected_values_tensor):
         """Train the model for 1 epoch.
@@ -109,7 +109,7 @@ class PolynomialModel(Model):
         self.optimizer.zero_grad()
         output = self.model(state_action_tensor)
         loss = self.criterion(output, expected_values_tensor)
+        loss_value = loss.data.item()
         loss.backward()
         self.optimizer.step()
-
-        return loss.data.item()
+        return loss_value

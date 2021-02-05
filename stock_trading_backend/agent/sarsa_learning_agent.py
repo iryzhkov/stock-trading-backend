@@ -62,13 +62,20 @@ class SARSALearningAgent(Agent):
         Returns:
             Loss after training.
         """
-        observations = observations.iloc[:-1]
-        actions = actions[:-1]
+        _observations = observations.iloc[:-1]
+        _actions = actions[:-1]
+        q_values = self.model.predict_with_multiple_observations(observations, actions).tolist()
+
+        if self.trained:
+            expected_values = [r + q_v * self.discount_factor
+                               for r, q_v in zip(rewards[:-1], q_values[1:])]
+        else:
+            expected_values = rewards[:-1]
+
         # pylint: disable=unused-variable
         for i in range(self.num_epochs):
+            loss = self.model.train(_observations, _actions, expected_values)
             q_values = self.model.predict_with_multiple_observations(observations, actions).tolist()
-            expected_values = [r + q_v[0] * self.discount_factor
-                               for r, q_v in zip(rewards[:-1], q_values[1:])]
-            loss = self.model.train(observations, actions, expected_values)
+
         self.trained = True
         return loss

@@ -96,5 +96,5 @@ class Model(metaclass=ABCMeta):
         state_action_tensor = torch.tensor(state_action_df.values, dtype=torch.float32)
         # pylint: disable=no-member
         # pylint: disable=not-callable
-        expected_values_tensor = torch.tensor(expected_values, dtype=torch.float32)
+        expected_values_tensor = torch.tensor(expected_values, dtype=torch.float32).reshape(-1, 1)
         return self._train(state_action_tensor, expected_values_tensor)

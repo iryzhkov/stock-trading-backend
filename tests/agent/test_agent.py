@@ -30,7 +30,7 @@ class TestAgent(TestWithSimulation):
         balance, net_worth, owned_stocks, stock_prices = agent.unpack_observation(observation)
         self.assertEqual(10, balance)
         self.assertEqual(100, net_worth)
-        self.assertTrue(([2, 5] == owned_stocks))
+        self.assertTrue(([1, 1] == owned_stocks))
         self.assertTrue(([20, 10] == stock_prices))
 
     def test_make_decision(self):

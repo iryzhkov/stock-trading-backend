@@ -1,1 +1,2 @@
-name: polynomial_model 
+name: polynomial_model
+learning_rate: 0.000000001

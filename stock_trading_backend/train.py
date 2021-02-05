@@ -1,0 +1,89 @@
+"""Training.
+"""
+from datetime import datetime, timedelta
+
+import numpy as np
+import pandas as pd
+
+from stock_trading_backend.simulation import StockMarketSimulation
+
+# pylint: disable=too-many-arguments
+# pylint: disable=too-many-locals
+def train_agent(agent, from_date=None, to_date=None, min_duration=40, max_duration=60, commission=0,
+                max_stock_owned=1, min_start_balance=1000, max_start_balance=4000,
+                stock_data_randomization=False, episode_batch_size=1, num_episodes=10):
+    """Train an agent with provided params.
+
+    Args:
+        agent: the agent to train.
+        from_date: datetime date for the start of the range.
+        to_date: datetime date for the end of the range.
+        min_duration: minimum length of the episode.
+        max_duration: maximum length of the episode (if 0 will run for all available dates).
+        max_stock_owned: a maximum number of different stocks that can be owned.
+        commission: relative commission for each transcation.
+        max_stock_owned: a maximum number of different stocks that can be owned.
+        min_start_balance: the minimum starting balance.
+        max_start_balance: the maximum starting balance.
+        stock_data_randomization: whether to add stock data randomization.
+        episode_batch_size: the number of episodes in a training batch.
+        num_episodes: number of episodes that training going to last.
+    """
+    if not agent.requires_learning:
+        raise ValueError("This agent does not need learning")
+
+    if from_date is None or to_date is None:
+        today = datetime.today()
+        today = datetime(today.year, today.month, today.day)
+        from_date = today - timedelta(days=720)
+        to_date = today - timedelta(days=60)
+
+    simulation = StockMarketSimulation(agent.data_collection_config, from_date=from_date,
+                                       to_date=to_date, min_start_balance=min_start_balance,
+                                       max_start_balance=max_start_balance, commission=commission,
+                                       max_stock_owned=max_stock_owned, min_duration=min_duration,
+                                       max_duration=max_duration, reward_config=agent.reward_config,
+                                       stock_data_randomization=stock_data_randomization)
+
+    num_episodes_run = 0
+    overall_reward_history = []
+    loss_history = []
+
+    while num_episodes_run < num_episodes:
+        batch_rewards = []
+        batch_observations = []
+        batch_actions = []
+        batch_reward = 0
+        batch_loss = 0
+
+        # Run the simulations in the batch.
+        for i in range(episode_batch_size):
+            rewards = []
+            actions = []
+            observation = simulation.reset()
+            observations = pd.DataFrame(columns=observation.index)
+
+            while not simulation.done:
+                action = agent.make_decision(observation, simulation, True)
+                observations = observations.append(observation, ignore_index=True)
+                actions.append(action)
+                observation, reward, _ = simulation.step(action)
+                rewards.append(reward)
+
+            overall_reward = simulation.overall_reward
+            batch_reward += overall_reward
+            rewards = np.asarray(rewards) + overall_reward
+            batch_rewards.append(rewards)
+            batch_observations.append(observations)
+            batch_actions.append(actions)
+            num_episodes_run += 1
+
+        # Utilize data from the simulations to train agents.
+        for i in range(episode_batch_size):
+            loss = agent.apply_learning(batch_observations[i], batch_actions[i], batch_rewards[i])
+            batch_loss += loss
+
+        overall_reward_history += [batch_reward / episode_batch_size]
+        loss_history += [batch_loss / episode_batch_size]
+
+    return overall_reward_history, loss_history

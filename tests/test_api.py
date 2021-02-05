@@ -56,7 +56,7 @@ class TestAPI(unittest.TestCase):
         """Checks if get_available_models works properly
         """
         available_models = api.get_available_models()
-        self.assertEqual(1, len(available_models))
+        self.assertTrue(len(available_models) >= 1)
         self.assertIn("linear", available_models)
 
     def test_get_model_config(self):

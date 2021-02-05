@@ -193,7 +193,7 @@ class StockMarketSimulation(gym.Env):
             return self.saved_observation
 
         self.saved_date_index = self.curr_date_index
-        owned_stocks = pd.Series(self.owned_stocks,
+        owned_stocks = pd.Series(np.where(self.owned_stocks > 0, 1, 0),
                                  ["owned_{}".format(name) for name in self.stock_names])
         balance_and_net_worth = pd.Series([self.balance, self.net_worth], ["balance", "net_worth"])
         data = self.data_collection[self.available_dates[self.curr_date_index]]
