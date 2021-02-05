@@ -1,7 +1,5 @@
 """Unit tests for training.
 """
-from datetime import datetime
-
 import unittest
 
 from parameterized import parameterized

@@ -1,0 +1,13 @@
+use_relative_stock_data: True
+stock_names:
+  - STOCK_1
+  - STOCK_2
+data:
+  - name: generated_stock_data
+    evaluation_functions:
+      - "200 + 100 * math.sin(math.pi * 2 * diff / 40)"
+      - "200 + 100 * math.cos(math.pi * 2 * diff / 40)"
+  - name: running_average_analysis
+    num_days: 5
+    dependencies:
+      - stock_data

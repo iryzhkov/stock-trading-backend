@@ -1,3 +1,4 @@
 name: sarsa_learning_agent
-discount_factor: 0.1
-num_epochs: 10 
+discount_factor: 0.4
+num_epochs: 5
+learning_rate: 0.075

@@ -26,7 +26,7 @@ class TestAPI(unittest.TestCase):
         """Checks if get_data_collections works properly
         """
         available_data_collections = api.get_available_data_collections()
-        self.assertEqual(3, len(available_data_collections))
+        self.assertTrue(len(available_data_collections) >= 3)
         self.assertIn("default", available_data_collections)
         self.assertIn("real_stock_1", available_data_collections)
         self.assertIn("real_stock_2", available_data_collections)

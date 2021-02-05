@@ -4,6 +4,8 @@ from abc import ABCMeta
 
 import pandas as pd
 import torch
+# pylint: disable=no-member
+torch.set_default_dtype(torch.float64)
 
 
 class Model(metaclass=ABCMeta):
@@ -44,7 +46,7 @@ class Model(metaclass=ABCMeta):
         state_action_df = observation_df.merge(action_df, left_index=True, right_index=True)
         # pylint: disable=no-member
         # pylint: disable=not-callable
-        state_action_tensor = torch.tensor(state_action_df.values, dtype=torch.float32)
+        state_action_tensor = torch.tensor(state_action_df.values, dtype=torch.float64)
         return self._predict(state_action_tensor)
 
     def predict_with_multiple_observations(self, observations, actions):
@@ -62,7 +64,7 @@ class Model(metaclass=ABCMeta):
         state_action_df = observation_df.merge(action_df, left_index=True, right_index=True)
         # pylint: disable=no-member
         # pylint: disable=not-callable
-        state_action_tensor = torch.tensor(state_action_df.values, dtype=torch.float32)
+        state_action_tensor = torch.tensor(state_action_df.values, dtype=torch.float64)
         return self._predict(state_action_tensor)
 
     # pylint: disable=no-self-use
@@ -93,8 +95,8 @@ class Model(metaclass=ABCMeta):
         state_action_df = observation_df.merge(action_df, left_index=True, right_index=True)
         # pylint: disable=no-member
         # pylint: disable=not-callable
-        state_action_tensor = torch.tensor(state_action_df.values, dtype=torch.float32)
+        state_action_tensor = torch.tensor(state_action_df.values, dtype=torch.float64)
         # pylint: disable=no-member
         # pylint: disable=not-callable
-        expected_values_tensor = torch.tensor(expected_values, dtype=torch.float32).reshape(-1, 1)
+        expected_values_tensor = torch.tensor(expected_values, dtype=torch.float64).reshape(-1, 1)
         return self._train(state_action_tensor, expected_values_tensor)
