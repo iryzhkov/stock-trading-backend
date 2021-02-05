@@ -23,19 +23,21 @@ class FollowingFeatureAgent(Agent):
             model_config: configuration for model used by the agent.
             features: list of data configs, the first one is used for following.
         """
-        super(FollowingFeatureAgent, self).__init__(data_collection_config, reward_config,
-                                                    model_config)
+        super(FollowingFeatureAgent, self).__init__(data_collection_config, reward_config=None,
+                                                    model_config=None)
         features[0]["visible"] = True
         data_collection_config["data"] += features
         followed_data = create_data(features[0])
         self.feature_template = followed_data.feature_template
 
-    def make_decision(self, observation, env):
+    # pylint: disable=unused-argument
+    def make_decision(self, observation, env, training=False):
         """Make decision based on the given data.
 
         Args:
             observation: current state of the environment.
             env: the gym environment.
+            training: boolean flag for specifying if this is training or testing.
         """
         # Prepare information for decision making.
         _, _, owned_stocks, _ = self.unpack_observation(observation)

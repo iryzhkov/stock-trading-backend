@@ -26,5 +26,5 @@ def create_agent(agent_config, data_collection_config, reward_config, model_conf
     agent_name = agent_config["name"]
     del agent_config["name"]
     return AGENT_NAME_MAPPING[agent_name](data_collection_config=data_collection_config,
-                                          reward_config=reward_config, model_config=model_config, 
+                                          reward_config=reward_config, model_config=model_config,
                                           **agent_config)

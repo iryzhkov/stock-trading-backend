@@ -12,8 +12,9 @@ class TestAPI(unittest.TestCase):
         """Checks if get_agent_names works properly
         """
         available_agents = api.get_available_agents()
-        self.assertEqual(1, len(available_agents))
-        self.assertEqual("following_feature_agent_1", available_agents[0])
+        self.assertEqual(2, len(available_agents))
+        self.assertIn("following_feature_agent_1", available_agents)
+        self.assertIn("sarsa_learning_agent_1", available_agents)
 
     def test_get_agent_config(self):
         """Checks if get_agent_config works properly.

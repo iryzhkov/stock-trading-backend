@@ -9,7 +9,7 @@ class Agent(metaclass=ABCMeta):
     name = None
     requires_learning = False
 
-    def __init__(self, data_collection_config, reward_config, model_config=None):
+    def __init__(self, data_collection_config, reward_config=None, model_config=None):
         """Initializer for Agent.
 
         Args:
@@ -61,17 +61,26 @@ class Agent(metaclass=ABCMeta):
 
     # pylint: disable=unused-argument
     # pylint: disable=no-self-use
-    def make_decision(self, observation, env):
+    def make_decision(self, observation, env, training=False):
         """Make decision based on the given data.
 
         Args:
             observation: current state of the environment.
             env: the gym environment.
+            training: boolean flag for specifying if this is training or testing.
         """
         return env.action_space.sample()
 
-    def apply_learning(self):
-        """Applies learning if applicable for provided data.
+    def apply_learning(self, observations, actions, rewards):
+        """Applies learning for provided data.
+
+        Args:
+            observations: DataFrame with observations.
+            actions: a list of actions.
+            rewards: a list of rewards.
+
+        Returns:
+            Loss after training.
         """
 
     def save_agent(self):

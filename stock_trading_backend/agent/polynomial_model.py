@@ -90,7 +90,7 @@ class PolynomialModel(Model):
         state_action_tensor = self._convert_tensor_to_polynomial(state_action_tensor)
         if self.model is None:
             self._init_model(state_action_tensor.shape[1])
-        return self.model(state_action_tensor)
+        return self.model(state_action_tensor).detach()
 
     def _train(self, state_action_tensor, expected_values_tensor):
         """Train the model for 1 epoch.

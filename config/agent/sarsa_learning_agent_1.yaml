@@ -1,0 +1,2 @@
+name: sarsa_learning_agent
+discount_factor: 0.8
