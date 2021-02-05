@@ -19,6 +19,9 @@ def backtest_agent(agent, from_date=None, to_date=None, start_balance=1000, comm
     Returns:
         overall reward for the backtest.
     """
+    if not agent.usable:
+        raise ValueError("Agent is not ready for back-testing.")
+
     if from_date is None or to_date is None:
         today = datetime.today()
         today = datetime(today.year, today.month, today.day)

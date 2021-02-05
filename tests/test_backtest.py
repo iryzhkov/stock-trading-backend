@@ -28,6 +28,13 @@ class TestBacktest(unittest.TestCase):
         reward = backtest_agent(agent)
         self.assertTrue(reward > -0.5)
 
+    def test_not_usable_agent(self):
+        """Checks if non-usable agents raise error with backtest.
+        """
+        with self.assertRaises(ValueError):
+            agent = api.get_agent_object("sarsa_learning_agent_1", model_name="linear")
+            backtest_agent(agent)
+
     def test_multiple_backtests(self):
         """Checks if can run the backtest multiple times on an agent.
         """
@@ -38,8 +45,8 @@ class TestBacktest(unittest.TestCase):
         self.assertTrue(reward > -0.5)
 
     def test_long_backtest(self):
-        """Check how backtesting works for 2-year simulation.
+        """Check how backtesting works for 1-year simulation.
         """
         agent = api.get_agent_object("following_feature_agent_1", "real_stock_2", "net_worth_ratio")
-        reward = backtest_agent(agent, from_date=datetime(2014, 1, 1), to_date=datetime(2016, 1, 1))
+        reward = backtest_agent(agent, from_date=datetime(2014, 1, 1), to_date=datetime(2015, 1, 1))
         self.assertTrue(reward > 0)
