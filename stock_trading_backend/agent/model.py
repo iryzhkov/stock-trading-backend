@@ -2,6 +2,7 @@
 """
 from abc import ABCMeta
 
+import numpy as np
 import pandas as pd
 import torch
 # pylint: disable=no-member
@@ -83,7 +84,7 @@ class Model(metaclass=ABCMeta):
         """Convert observations and actions into tensor and pass them to _train.
 
         Args:
-            observations: a list of simulation states.
+            observations: a dataframe of simulation states.
             actions: a list of actions.
             expected_values: a list of expected values for each observation-action pair.
 
@@ -93,9 +94,8 @@ class Model(metaclass=ABCMeta):
         action_df = pd.DataFrame(actions)
         observation_df = pd.DataFrame(observations)
         state_action_df = observation_df.merge(action_df, left_index=True, right_index=True)
-        # pylint: disable=no-member
         # pylint: disable=not-callable
-        state_action_tensor = torch.tensor(state_action_df.values, dtype=torch.float64)
+        state_action_tensor = torch.tensor(state_action_df.values.astype(np.float64, copy=False))
         # pylint: disable=no-member
         # pylint: disable=not-callable
         expected_values_tensor = torch.tensor(expected_values, dtype=torch.float64).reshape(-1, 1)

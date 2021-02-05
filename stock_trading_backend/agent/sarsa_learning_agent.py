@@ -3,6 +3,7 @@
 import random
 
 import numpy as np
+import pandas as pd
 
 from stock_trading_backend.agent.agent import Agent
 from stock_trading_backend.agent.model_factory import create_model
@@ -53,37 +54,50 @@ class SARSALearningAgent(Agent):
         state_action_values = self.model.predict(observation, possible_actions)
         return possible_actions[np.argmax(state_action_values)]
 
-    def apply_learning(self, observations, actions, rewards):
+    # pylint: disable=too-many-locals
+    def apply_learning(self, observations_batch, actions_batch, rewards_batch):
         """Applies learning for provided data.
 
         Args:
-            observations: DataFrame with observations.
-            actions: a list of actions.
-            rewards: a list of rewards.
+            observations_batch: a list of DataFrames with observations.
+            actions_batch: a list of a list of actions.
+            rewards_batch: a list of a list of rewards.
 
         Returns:
-            Loss after training.
+            Loss before training.
         """
-        _observations = observations.iloc[:-1]
-        _actions = actions[:-1]
-        q_values = self.model.predict_with_multiple_observations(observations, actions).tolist()
+        _observations = pd.DataFrame(columns=observations_batch[0].columns)
+        _actions = []
+        _expected_values = []
 
-        def calculate_expected_value(i):
-            result = q_values[i] * (1 - self.learning_rate)
-            result += self.learning_rate * (rewards[i] + q_values[i+1] * self.discount_factor)
-            return result
+        # Unpack episodes in a batch
+        for observations, actions, rewards in zip(observations_batch, actions_batch, rewards_batch):
+            q_values = self.model.predict_with_multiple_observations(observations, actions).tolist()
 
-        if self.trained:
-            expected_values = list(map(calculate_expected_value, range(len(actions) - 1)))
-        else:
-            # Model's initial estimations are random, so use rewards for first pass.
-            expected_values = rewards[:-1]
+            def calculate_expected_value(i):
+                result = q_values[i] * (1 - self.learning_rate)
+                result += self.learning_rate * (rewards[i] + q_values[i+1] * self.discount_factor)
+                return result
+
+            if self.trained:
+                expected_values = list(map(calculate_expected_value, range(len(actions) - 1)))
+                _observations = _observations.append(observations.iloc[:-1], ignore_index=True)
+                _actions += actions[:-1]
+                num_epochs = self.num_epochs
+            else:
+                # Model's initial estimations are random, so use rewards for first pass.
+                expected_values = rewards
+                _observations = _observations.append(observations, ignore_index=True)
+                _actions += actions
+                num_epochs = 2 * self.num_epochs
+
+            _expected_values.extend(expected_values)
 
         losses = []
 
         # pylint: disable=unused-variable
-        for i in range(self.num_epochs):
-            losses.append(self.model.train(_observations, _actions, expected_values))
+        for i in range(num_epochs):
+            losses.append(self.model.train(_observations, _actions, _expected_values))
 
         self.trained = True
         return losses[0]

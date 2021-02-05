@@ -54,10 +54,10 @@ def train_agent(agent, from_date=None, to_date=None, min_duration=40, max_durati
         batch_observations = []
         batch_actions = []
         batch_reward = 0
-        batch_loss = 0
+        num_episodes_left_in_batch = episode_batch_size
 
         # Run the simulations in the batch.
-        for i in range(episode_batch_size):
+        while num_episodes_left_in_batch > 0 and num_episodes_run < num_episodes:
             rewards = []
             actions = []
             observation = simulation.reset()
@@ -77,13 +77,12 @@ def train_agent(agent, from_date=None, to_date=None, min_duration=40, max_durati
             batch_observations.append(observations)
             batch_actions.append(actions)
             num_episodes_run += 1
+            num_episodes_left_in_batch -= 1
 
         # Utilize data from the simulations to train agents.
-        for i in range(episode_batch_size):
-            loss = agent.apply_learning(batch_observations[i], batch_actions[i], batch_rewards[i])
-            batch_loss += loss
+        loss = agent.apply_learning(batch_observations, batch_actions, batch_rewards)
 
         overall_reward_history += [batch_reward / episode_batch_size]
-        loss_history += [batch_loss / episode_batch_size]
+        loss_history.append(loss)
 
     return overall_reward_history, loss_history

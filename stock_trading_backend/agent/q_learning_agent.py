@@ -20,15 +20,16 @@ class QLearningAgent(Agent):
         """
         return env.action_space.sample()
 
-    def apply_learning(self, observations, actions, rewards):
+    # pylint: disable=unused-argument
+    def apply_learning(self, observations_batch, actions_batch, rewards_batch):
         """Applies learning for provided data.
 
         Args:
-            observations: DataFrame with observations.
-            actions: a list of actions.
-            rewards: a list of rewards.
+            observations_batch: a list of DataFrames with observations.
+            actions_batch: a list of a list of actions.
+            rewards_batch: a list of a list of rewards.
 
         Returns:
-            Loss after training.
+            Loss before training.
         """
         self.trained = True

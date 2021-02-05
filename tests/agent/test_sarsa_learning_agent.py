@@ -42,12 +42,12 @@ class TestSarsaLearningAgent(unittest.TestCase):
         rewards = [0] * 3 + [1] * 3
 
         # Testing whther sarsa learning agent changes trained variable.
-        agent.apply_learning(observations, actions, rewards)
+        agent.apply_learning([observations], [actions], [rewards])
         self.assertTrue(agent.usable)
 
         # pylint: disable=unused-variable
         for i in range(5):
-            agent.apply_learning(observations, actions, rewards)
+            agent.apply_learning([observations], [actions], [rewards])
 
     def test_make_decision(self):
         """A test to see if agent can make decisions.
