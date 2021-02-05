@@ -3,6 +3,7 @@ gym
 numpy>=1.16.5
 pandas
 parameterized
+progressbar2
 pyyaml
 torch
 yfinance
