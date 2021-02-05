@@ -1,0 +1,6 @@
+name: sarsa_learning_agent
+discount_factor: 0.4
+num_epochs: 5
+initial_num_epochs: 10 
+learning_rate: 0.075
+epsilon: 0.05

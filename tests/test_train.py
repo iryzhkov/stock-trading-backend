@@ -12,7 +12,7 @@ class TestTraining(unittest.TestCase):
     """Unit tests for training.
     """
     @parameterized.expand([
-        ("sarsa_learning_agent_1", "default", "net_worth_ratio", "linear"),
+        ("sarsa_learning_agent_0", "generated_1", "net_worth_ratio", "linear"),
     ])
     def test_training(self, agent_name, data_collection_name, reward_name, model_name):
         """Checks if training works.
@@ -24,7 +24,8 @@ class TestTraining(unittest.TestCase):
             model_name: the model to test training with.
         """
         agent = api.get_agent_object(agent_name, data_collection_name, reward_name, model_name)
-        _, loss_history = train_agent(agent, episode_batch_size=4, num_episodes=12)
+        _, loss_history = train_agent(agent, episode_batch_size=2, num_episodes=4,
+                                      min_duration=10, max_duration=20)
         self.assertTrue(loss_history[0] > loss_history[-1])
         self.assertTrue(agent.usable)
 
