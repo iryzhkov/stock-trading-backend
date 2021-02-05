@@ -39,7 +39,7 @@ class TestSarsaLearningAgent(unittest.TestCase):
 
         observations = pd.DataFrame([[0]] * 6, columns=["balance"])
         actions = [[0]] * 3 + [[1]] * 3
-        rewards = [[0]] * 3 + [[1]] * 3
+        rewards = [0] * 3 + [1] * 3
 
         # Testing whther sarsa learning agent changes trained variable.
         agent.apply_learning(observations, actions, rewards)
