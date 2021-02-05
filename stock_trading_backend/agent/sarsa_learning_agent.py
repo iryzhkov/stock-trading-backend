@@ -72,6 +72,8 @@ class SARSALearningAgent(Agent):
         _observations = pd.DataFrame(columns=observations_batch[0].columns)
         _actions = []
         _expected_values = []
+        q_values = None
+        rewards = None
 
         # Unpack episodes in a batch
         for observations, actions, rewards in zip(observations_batch, actions_batch, rewards_batch):

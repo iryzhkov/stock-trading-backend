@@ -13,6 +13,24 @@ from stock_trading_backend.backtest import backtest_agent
 class TestBacktest(unittest.TestCase):
     """Unit tests for backtesting.
     """
+    def is_output_valid(self, output):
+        """Checks if the backtesting output is valid.
+
+        Args:
+            output: output dict to check.
+        """
+        self.assertIn("reward", output)
+        self.assertIn("stock_names", output)
+        self.assertIn("net_worth_history", output)
+        self.assertIn("balance_history", output)
+        self.assertIn("owned_stocks_history", output)
+        self.assertIn("action_history", output)
+        self.assertIn("stocks_price_history", output)
+        self.assertEqual(len(output["net_worth_history"]), len(output["balance_history"]))
+        self.assertEqual(len(output["owned_stocks_history"]), len(output["balance_history"]))
+        self.assertEqual(len(output["stocks_price_history"]), len(output["balance_history"]))
+        self.assertEqual(len(output["action_history"]) + 1, len(output["balance_history"]))
+
     @parameterized.expand([
         ("following_feature_agent_1", "default"),
         ("following_feature_agent_1", "real_stock_1"),
@@ -25,10 +43,9 @@ class TestBacktest(unittest.TestCase):
             data_collection_name: the data collection to test backtesting with.
         """
         agent = api.get_agent_object(agent_name, data_collection_name)
-        reward = backtest_agent(agent)
-        reward = backtest_agent(agent, from_date=datetime(2015, 2, 1),
+        output = backtest_agent(agent, from_date=datetime(2015, 2, 1),
                                 to_date=datetime(2015, 3, 1))
-        self.assertTrue(reward > -0.5)
+        self.is_output_valid(output)
 
     def test_not_usable_agent(self):
         """Checks if non-usable agents raise error with backtest.
@@ -41,7 +58,7 @@ class TestBacktest(unittest.TestCase):
         """Checks if can run the backtest multiple times on an agent.
         """
         agent = api.get_agent_object()
-        reward = backtest_agent(agent)
-        self.assertTrue(reward > -0.5)
-        reward = backtest_agent(agent)
-        self.assertTrue(reward > -0.5)
+        output = backtest_agent(agent)
+        self.is_output_valid(output)
+        output = backtest_agent(agent)
+        self.is_output_valid(output)

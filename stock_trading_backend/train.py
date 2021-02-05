@@ -50,7 +50,7 @@ def train_agent(agent, from_date=None, to_date=None, min_duration=60, max_durati
     overall_reward_history = []
     loss_history = []
 
-    with progressbar.ProgressBar(max_value=num_episodes) as bar:
+    with progressbar.ProgressBar(max_value=num_episodes) as progress_bar:
         while num_episodes_run < num_episodes:
             batch_rewards = []
             batch_observations = []
@@ -80,7 +80,7 @@ def train_agent(agent, from_date=None, to_date=None, min_duration=60, max_durati
                 batch_actions.append(actions)
                 num_episodes_run += 1
                 num_episodes_left_in_batch -= 1
-                bar.update(num_episodes_run)
+                progress_bar.update(num_episodes_run)
 
             # Utilize data from the simulations to train agents.
             loss = agent.apply_learning(batch_observations, batch_actions, batch_rewards)
