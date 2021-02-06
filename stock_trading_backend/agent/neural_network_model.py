@@ -11,19 +11,22 @@ from stock_trading_backend.agent.model import Model
 class NNModel(nn.Module):
     """Torch neural network model.
     """
-    def __init__(self, num_inputs):
+    def __init__(self, num_inputs, num_hidden_layers, num_inner_features):
         """Initializer for linear model.
 
         Args:
             num_inputs: the dimension of input data.
+            num_hidden_layers: the number of hidden layers.
+            num_inner_features: the number of features in the hidden layers
         """
         super(NNModel, self).__init__()
-        self.fc1 = nn.Linear(num_inputs, 120)
-        self.fc2 = nn.Linear(120, 120)
-        self.fc3 = nn.Linear(120, 120)
-        self.fc4 = nn.Linear(120, 120)
-        self.fc5 = nn.Linear(120, 120)
-        self.fc6 = nn.Linear(120, 1)
+        self.input_layer = nn.Linear(num_inputs, num_inner_features)
+        hidden_layers = []
+        for _ in range(num_hidden_layers):
+            hidden_layers.append(nn.Linear(num_inner_features, num_inner_features))
+            hidden_layers.append(nn.ReLU())
+        self.hidden_layers = nn.Sequential(*hidden_layers)
+        self.output_layer = nn.Linear(num_inner_features, 1)
 
     def forward(self, input_tensor):
         """Forward pass on the neural network model.
@@ -34,12 +37,9 @@ class NNModel(nn.Module):
         Returns:
             Tensor with model results.
         """
-        output = F.relu(self.fc1(input_tensor))
-        output = F.relu(self.fc2(output))
-        output = F.relu(self.fc3(output))
-        output = F.relu(self.fc4(output))
-        output = F.relu(self.fc5(output))
-        output = self.fc6(output)
+        output = F.relu(self.input_layer(input_tensor))
+        output = self.hidden_layers(output)
+        output = self.output_layer(output)
         return output
 
 
@@ -48,17 +48,21 @@ class NeuralNetworkModel(Model):
     """
     name = "neural_network_model"
 
-    def __init__(self, learning_rate=1e-3):
+    def __init__(self, learning_rate=1e-3, num_hidden_layers=1, num_inner_features=100):
         """Initializer for model class.
 
         Args:
             learning_rate: the learning rate of the model.
+            num_hidden_layers: number of hidden layers in the network.
+            num_inner_features: number of features in the hidden layers.
         """
         super(NeuralNetworkModel, self).__init__()
         self.model = None
         self.optimizer = None
         self.criterion = nn.MSELoss()
         self.learning_rate = learning_rate
+        self.num_hidden_layers = num_hidden_layers
+        self.num_inner_features = num_inner_features
 
     def _init_model(self, num_inputs):
         """Initializes internal linear model.
@@ -66,7 +70,7 @@ class NeuralNetworkModel(Model):
         Args:
             num_inputs: number of inputs that model will have.
         """
-        self.model = NNModel(num_inputs)
+        self.model = NNModel(num_inputs, self.num_hidden_layers, self.num_inner_features)
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
 
     def _predict(self, state_action_tensor):

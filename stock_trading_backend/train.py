@@ -82,8 +82,8 @@ def train_agent(agent, from_date=None, to_date=None, min_duration=60, max_durati
                     rewards.append(reward)
 
                 overall_reward = simulation.overall_reward
-                batch_reward += overall_reward
-                rewards = np.asarray(rewards) + overall_reward
+                overall_reward_history.append(overall_reward)
+                rewards = np.asarray(rewards)
                 batch_rewards.append(rewards)
                 batch_observations.append(observations)
                 batch_actions.append(actions)
@@ -95,9 +95,7 @@ def train_agent(agent, from_date=None, to_date=None, min_duration=60, max_durati
 
             # Utilize data from the simulations to train agents.
             losses = agent.apply_learning(batch_observations, batch_actions, batch_rewards,
-                                        **batch_kwargs)
-
-            overall_reward_history += [batch_reward / episode_batch_size]
+                                          **batch_kwargs)
             loss_history.extend(losses)
 
     return overall_reward_history, loss_history
