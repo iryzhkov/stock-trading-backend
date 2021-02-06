@@ -9,19 +9,21 @@ class NetWorthRatioReward(Reward):
     name = "net_worth_ratio_reward"
 
     # pylint: disable=unused-argument
-    def __init__(self, from_date=None, to_date=None, scaling_factor=1):
+    def __init__(self, from_date=None, to_date=None, scaling_factor=1, bias=-0.05):
         """Initializer for reward class.
 
         Args:
             from_date: datetime start of the date range.
             to_date: datetime end of the date range.
             scaling_factor: number to multiply the output by.
+            bias: the reward when there is no change in the net worth.
         """
         super(NetWorthRatioReward, self).__init__(from_date, to_date)
         self.prev_net_worth = 0
         self.first_net_worth = 0
         self.num_days = 0
         self.scaling_factor = scaling_factor
+        self.bias = bias
 
     # pylint: disable=unused-argument
     def calculate_value(self, observation, date):
@@ -37,13 +39,13 @@ class NetWorthRatioReward(Reward):
         result = (curr_net_worth / self.prev_net_worth) - 1
         self.prev_net_worth = curr_net_worth
         self.num_days += 1
-        return result * self.scaling_factor
+        return result * self.scaling_factor + self.bias
 
     def calculate_overall_reward(self):
         """Calculates the value of the reward for the whole episode.
         """
         result = ((self.prev_net_worth / self.first_net_worth)  - 1) / self.num_days
-        return result * self.scaling_factor
+        return result * self.scaling_factor + self.bias
 
     # pylint: disable=unused-argument
     def reset(self, observation, date):

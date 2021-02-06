@@ -10,13 +10,13 @@ class TestNetWorthRatioReward(unittest.TestCase):
     def test_initializes(self):
         """Checks if the reward is initialized properly.
         """
-        reward = NetWorthRatioReward()
+        reward = NetWorthRatioReward(bias=0)
         self.assertIsInstance(reward, NetWorthRatioReward)
 
     def test_calculate_value(self):
         """Checks if calculate value works properly.
         """
-        reward = NetWorthRatioReward()
+        reward = NetWorthRatioReward(bias=0)
         reward.reset({"net_worth": 100}, None)
         self.assertEqual(0, reward.calculate_value({"net_worth": 100}, None))
         self.assertEqual(1, reward.calculate_value({"net_worth": 200}, None))
@@ -24,7 +24,7 @@ class TestNetWorthRatioReward(unittest.TestCase):
     def test_overall_reward(self):
         """Checks if overall reward works properly.
         """
-        reward = NetWorthRatioReward()
+        reward = NetWorthRatioReward(bias=0)
         reward.reset({"net_worth": 100}, None)
         self.assertEqual(1, reward.calculate_value({"net_worth": 200}, None))
         self.assertEqual(0, reward.calculate_value({"net_worth": 200}, None))
@@ -35,7 +35,7 @@ class TestNetWorthRatioReward(unittest.TestCase):
     def test_handles_zero(self):
         """Checks if calculaet value handles zero properly.
         """
-        reward = NetWorthRatioReward()
+        reward = NetWorthRatioReward(bias=0)
         reward.reset({"net_worth": 100}, None)
         self.assertEqual(-1, reward.calculate_value({"net_worth": 0}, None))
         self.assertEqual(-1, reward.calculate_value({"net_worth": 0}, None))
@@ -43,7 +43,7 @@ class TestNetWorthRatioReward(unittest.TestCase):
     def test_resets(self):
         """Checks if resets properly.
         """
-        reward = NetWorthRatioReward()
+        reward = NetWorthRatioReward(bias=0)
         reward.reset({"net_worth": 100}, None)
         self.assertEqual(1, reward.calculate_value({"net_worth": 200}, None))
         reward.reset({"net_worth": 100}, None)
