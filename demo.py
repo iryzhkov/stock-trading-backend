@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from stock_trading_backend import api, train, backtest
 
 agent = api.get_agent_object("sarsa_learning_agent_1", "generated_1",
-                             "net_worth_ratio", "linear")
+                             "net_worth_ratio", "neural_network")
 reward_history, loss_history = train.train_agent(agent, episode_batch_size=5, num_episodes=10)
 
 fig, axs =  plt.subplots(2, figsize=(10, 10))
@@ -42,6 +42,3 @@ for episode, actions in enumerate(backtest_output["action_history"]):
         add_action(episode, stock_id, action)
 
 plt.savefig("demo_backtesting.png")
-
-#print(reward_history)
-#print(loss_history)

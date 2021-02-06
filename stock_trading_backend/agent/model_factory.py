@@ -3,9 +3,11 @@
 from copy import deepcopy
 
 from stock_trading_backend.agent.polynomial_model import PolynomialModel
+from stock_trading_backend.agent.neural_network_model import NeuralNetworkModel
 
 MODEL_CLASSES = [
     PolynomialModel,
+    NeuralNetworkModel,
 ]
 MODEL_NAME_MAPPING = {model.name:model for model in MODEL_CLASSES}
 
