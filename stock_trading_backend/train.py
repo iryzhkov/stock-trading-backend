@@ -11,7 +11,7 @@ from stock_trading_backend.simulation import StockMarketSimulation
 # pylint: disable=too-many-arguments
 # pylint: disable=too-many-locals
 def train_agent(agent, from_date=None, to_date=None, min_duration=60, max_duration=90, commission=0,
-                max_stock_owned=1, min_start_balance=1000, max_start_balance=4000,
+                max_stock_owned=1, min_start_balance=1000, max_start_balance=4000, training=True,
                 stock_data_randomization=False, episode_batch_size=5, num_episodes=10):
     """Train an agent with provided params.
 
@@ -29,6 +29,7 @@ def train_agent(agent, from_date=None, to_date=None, min_duration=60, max_durati
         stock_data_randomization: whether to add stock data randomization.
         episode_batch_size: the number of episodes in a training batch.
         num_episodes: number of episodes that training going to last.
+        training: the param passed to make_decision in the agent.
     """
     if not agent.requires_learning:
         raise ValueError("This agent does not need learning")
@@ -73,7 +74,7 @@ def train_agent(agent, from_date=None, to_date=None, min_duration=60, max_durati
                 observations = pd.DataFrame(columns=observation.index)
 
                 while not simulation.done:
-                    action, _kwargs = agent.make_decision(observation, simulation, True)
+                    action, _kwargs = agent.make_decision(observation, simulation, training)
                     observations = observations.append(observation, ignore_index=True)
                     actions.append(action)
                     for key in _kwargs:

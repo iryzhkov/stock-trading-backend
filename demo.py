@@ -26,6 +26,24 @@ axs[1].set_title("Loss history vs batch number")
 axs[1].set_yscale("log")
 plt.savefig("demo_training.png")
 
+reward_history, loss_history = train.train_agent(agent, episode_batch_size=5, num_episodes=10,
+                                                 min_duration=100, max_duration=150,
+                                                 commission=0.03, training=False)
+
+N = 15
+reward_history = np.array(reward_history)
+reward_history_avg = np.convolve(reward_history, np.ones(N)/N, mode="same")
+fig, axs =  plt.subplots(2, figsize=(10, 10))
+axs[0].plot(reward_history)
+axs[0].plot(reward_history_avg)
+axs[0].plot([-1, len(reward_history)], [0, 0], 'r--')
+axs[0].set_title("Reward history vs batch number")
+
+axs[1].plot(loss_history)
+axs[1].set_title("Loss history vs batch number")
+axs[1].set_yscale("log")
+plt.savefig("demo_training_without_exploration.png")
+
 backtest_output = backtest.backtest_agent(agent, commission=0.03)
 num_stocks = len(agent.stock_names)
 fix, axs = plt.subplots(num_stocks + 3, figsize=(10, 15))
