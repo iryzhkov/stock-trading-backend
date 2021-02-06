@@ -11,14 +11,16 @@ class SharpeRatioReward(Reward):
     """
     name = "sharpe_ratio_reward"
 
-    def __init__(self, from_date=None, to_date=None):
+    def __init__(self, from_date=None, to_date=None, scaling_factor=1):
         """Initializer for reward class.
 
         Args:
             from_date: datetime start of the date range.
             to_date: datetime end of the date range.
+            scaling_factor: number by which to multiply output.
         """
         super(SharpeRatioReward, self).__init__(from_date, to_date)
+        self.scaling_factor = scaling_factor
         self.first_net_worth = 0
         self.prev_net_worth = 0
         self.first_market_value = 0
@@ -51,7 +53,7 @@ class SharpeRatioReward(Reward):
 
         self.prev_net_worth = curr_net_worth
         self.prev_market_value = curr_market_value
-        return result
+        return result * self.scaling_factor
 
     def calculate_overall_reward(self):
         """Calculates the value of the reward for the whole episode.
@@ -63,7 +65,7 @@ class SharpeRatioReward(Reward):
         if len(self.returns) > 1:
             result /= np.std(self.returns)
 
-        return result
+        return result * self.scaling_factor
 
     def reset(self, observation, date):
         """Resets the internal reward state.

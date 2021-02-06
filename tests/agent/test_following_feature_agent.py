@@ -37,17 +37,17 @@ class TestFollowingAgent(unittest.TestCase):
                                            max_stock_owned=2)
         observation = simulation.reset()
 
-        def check(val_1, val_2, reverse):
+        def check(val_1, val_2, exp_1, exp_2):
             observation["ra_5_stock_data_GOOG"] = val_1
             observation["ra_5_stock_data_AMZN"] = val_2
-            expected = [val_1, val_2] if not reverse else [1 - val_1, 1 - val_2]
+            expected = [exp_1, exp_2]
             action, _ = agent.make_decision(observation, simulation)
             self.assertTrue((expected == action))
 
         for i, j in itertools.combinations([0, 1], 2):
-            check(i, j, False)
+            check(i, j, i + 1, j + 1)
 
-        observation, _, _ = simulation.step([1, 1])
+        observation, _, _ = simulation.step([2, 2])
 
         for i, j in itertools.combinations([0, 1], 2):
-            check(i, j, True)
+            check(i, j, i, j)

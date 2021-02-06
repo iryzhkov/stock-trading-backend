@@ -31,10 +31,11 @@ class StockMarketSimulation(gym.Env):
         Note: See data sub-package for more information.
 
     Actions:
-        Type: MultiBinary(len(stock_names))
+        Type: MultiDiscrete([3] * len(stock_names))
         Num Action
-        0   Hold. Does not do anything with the ith stock.
-        1   Buy/Sell. If stock is owned, then sell, if not, then buy.
+        0  Sell. If stock is owned, then sell, if not then hold.
+        1   Hold. Does not do anything with the ith stock.
+        2   Buy. If stock is not owned, then buy, if not, then do nothing.
 
         Note: Sell action is not always executed. When there is not enough balance, the first stocks
         are bought first, the last sell orders are ignored if not enough balance.
@@ -129,7 +130,9 @@ class StockMarketSimulation(gym.Env):
         self.max_stock_owned = max_stock_owned
 
         # Setting up action space.
-        self.action_space = gym.spaces.MultiBinary(len(self.data_collection.stock_names))
+        self.action_space = (
+            gym.spaces.MultiDiscrete([3] * len(self.data_collection.stock_names))
+        )
 
         # Setting up reward function.
         if reward_config is None:
@@ -158,9 +161,9 @@ class StockMarketSimulation(gym.Env):
             indexes_iter = itertools.combinations(range(num_not_owned_stocks), num_purchases)
             for indexes in indexes_iter:
                 sell_actions = itertools.product([0, 1], repeat=num_owned_stocks)
-                purchase_action = [0] * num_not_owned_stocks
+                purchase_action = [1] * num_not_owned_stocks
                 for i in indexes:
-                    purchase_action[i] = 1
+                    purchase_action[i] = 2
                 for sell_action in sell_actions:
                     action = [0] * len(self.owned_stocks)
                     sell_index, purchase_index = 0, 0
@@ -228,14 +231,14 @@ class StockMarketSimulation(gym.Env):
         sale_return = 0
         purchase_price = 0
         for index, sub_action in enumerate(action):
-            if sub_action == 1:
-                if self.owned_stocks[index] > 0:
-                    sale_return += self.owned_stocks[index] * stock_prices[index]
-                    self.owned_stocks[index] = 0
-                elif num_owned_stocks < self.max_stock_owned:
-                    num_stock_purchased = math.floor(max_purchase_price / stock_prices[index])
-                    if num_stock_purchased > 0:
-                        num_owned_stocks += 1
+            if sub_action == 0 and self.owned_stocks[index] > 0:
+                sale_return += self.owned_stocks[index] * stock_prices[index]
+                self.owned_stocks[index] = 0
+            elif (sub_action == 2 and num_owned_stocks < self.max_stock_owned and
+                  self.owned_stocks[index] == 0):
+                num_stock_purchased = math.floor(max_purchase_price / stock_prices[index])
+                if num_stock_purchased > 0:
+                    num_owned_stocks += 1
                     purchase_price += num_stock_purchased * stock_prices[index]
                     self.owned_stocks[index] = num_stock_purchased
         sale_return *= 1 - self.commission

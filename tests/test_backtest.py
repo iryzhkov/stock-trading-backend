@@ -19,7 +19,7 @@ class TestBacktest(unittest.TestCase):
         Args:
             output: output dict to check.
         """
-        self.assertIn("reward", output)
+        self.assertIn("overall_reward", output)
         self.assertIn("stock_names", output)
         self.assertIn("net_worth_history", output)
         self.assertIn("balance_history", output)
@@ -30,6 +30,7 @@ class TestBacktest(unittest.TestCase):
         self.assertEqual(len(output["owned_stocks_history"]), len(output["balance_history"]))
         self.assertEqual(len(output["stocks_price_history"]), len(output["balance_history"]))
         self.assertEqual(len(output["action_history"]) + 1, len(output["balance_history"]))
+        self.assertEqual(len(output["reward_history"]) + 1, len(output["balance_history"]))
 
     @parameterized.expand([
         ("following_feature_agent_1", "default"),

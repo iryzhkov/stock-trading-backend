@@ -33,7 +33,7 @@ def backtest_agent(agent, from_date=None, to_date=None, start_balance=1000, comm
     if from_date is None or to_date is None:
         today = datetime.today()
         today = datetime(today.year, today.month, today.day)
-        from_date = today - timedelta(days=60)
+        from_date = today - timedelta(days=90)
         to_date = today - timedelta(days=1)
 
     simulation = StockMarketSimulation(agent.data_collection_config, from_date=from_date,
@@ -46,6 +46,10 @@ def backtest_agent(agent, from_date=None, to_date=None, start_balance=1000, comm
     balance_history = []
     owned_stocks_history = []
     stock_price_history = []
+    reward_history = []
+    observation = simulation.reset()
+    _, kwargs = agent.make_decision(observation, simulation, False)
+    output = {key:[] for key in kwargs}
 
     def record_history():
         balance, net_worth, owned_stocks, _ = agent.unpack_observation(observation)
@@ -64,8 +68,11 @@ def backtest_agent(agent, from_date=None, to_date=None, start_balance=1000, comm
     observation = simulation.reset()
     while not simulation.done:
         record_history()
-        action, _ = agent.make_decision(observation, simulation)
-        observation, _, _ = simulation.step(action)
+        action, kwargs = agent.make_decision(observation, simulation)
+        for key in kwargs:
+            output[key].append(kwargs[key])
+        observation, reward, _ = simulation.step(action)
+        reward_history.append(reward)
 
     record_history()
     net_worth_history = np.array(net_worth_history)
@@ -74,13 +81,12 @@ def backtest_agent(agent, from_date=None, to_date=None, start_balance=1000, comm
     stock_price_history = np.array(stock_price_history)
     action_history = owned_stocks_history[1:] - owned_stocks_history[:-1]
 
-    output = {
-        "reward": simulation.overall_reward,
-        "stock_names": simulation.stock_names,
-        "net_worth_history": net_worth_history,
-        "balance_history": balance_history,
-        "owned_stocks_history": owned_stocks_history,
-        "action_history": action_history,
-        "stocks_price_history": stock_price_history,
-    }
+    output["overall_reward"] = simulation.overall_reward
+    output["reward_history"] = reward_history
+    output["stock_names"] = simulation.stock_names
+    output["net_worth_history"] = net_worth_history
+    output["balance_history"] = balance_history
+    output["owned_stocks_history"] = owned_stocks_history
+    output["action_history"] = action_history
+    output["stocks_price_history"] = stock_price_history
     return output

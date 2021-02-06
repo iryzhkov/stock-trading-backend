@@ -35,22 +35,25 @@ class TestStockMarketSimulation(unittest.TestCase):
         simulation = StockMarketSimulation()
         simulation.reset()
 
-        # 3 possible actions: [0, 0], [1, 0], [1, 1]
-        self.assertEqual(3, len(list(simulation.action_space_generator())))
-        for action in simulation.action_space_generator():
-            self.assertEqual(2, len(action))
+        # 3 possible actions: [1, 1], [2, 1], [1, 2]
+        possible_actions = list(simulation.action_space_generator())
+        self.assertEqual(3, len(possible_actions))
+        for action in [[1, 1], [2, 1], [1, 2]]:
+            self.assertIn(action, possible_actions)
 
-        # 2 possible actions: [0, 0], [1, 0]
+        # 2 possible actions: [0, 1], [1, 1]
         simulation.owned_stocks[0] = 1
-        self.assertEqual(2, len(list(simulation.action_space_generator())))
-        for action in simulation.action_space_generator():
-            self.assertEqual(2, len(action))
+        possible_actions = list(simulation.action_space_generator())
+        self.assertEqual(2, len(possible_actions))
+        for action in [[0, 1], [1, 1]]:
+            self.assertIn(action, possible_actions)
 
-        # 4 possible actions: [0, 0], [1, 0], [0, 1], [1, 1]
+        # 4 possible actions: [1, 1], [0, 1], [1, 2], [0, 2]
         simulation.max_stock_owned = 2
-        self.assertEqual(4, len(list(simulation.action_space_generator())))
-        for action in simulation.action_space_generator():
-            self.assertEqual(2, len(action))
+        possible_actions = list(simulation.action_space_generator())
+        self.assertEqual(4, len(possible_actions))
+        for action in [[1, 1], [0, 1], [1, 2], [0, 2]]:
+            self.assertIn(action, possible_actions)
 
     def test_initializes_from_gym(self):
         """Test if simulation can be initialized with gym.make()
@@ -98,7 +101,7 @@ class TestStockMarketSimulation(unittest.TestCase):
                                            min_start_balance=100, max_start_balance=100,
                                            max_stock_owned=2, reward_config=reward_config)
         _ = simulation.reset()
-        _, reward, _ = simulation.step([0, 0])
+        _, reward, _ = simulation.step([1, 1])
         self.assertEqual(5, reward)
         self.assertEqual(5, simulation.overall_reward)
 
@@ -113,28 +116,32 @@ class TestStockMarketSimulation(unittest.TestCase):
                                            max_stock_owned=2)
         _ = simulation.reset()
 
-        observation, _, done = simulation.step([1, 0])
+        # Buy GOOG
+        observation, _, done = simulation.step([2, 1])
         self.assertEqual(60, observation["balance"])
         self.assertEqual(100, observation["net_worth"])
         self.assertEqual(1, observation["owned_GOOG"])
         self.assertEqual(0, observation["owned_AMZN"])
         self.assertFalse(done)
 
-        observation, _, done = simulation.step([0, 1])
+        # Buy AMZN
+        observation, _, done = simulation.step([1, 2])
         self.assertEqual(0, observation["balance"])
         self.assertEqual(100, observation["net_worth"])
         self.assertEqual(1, observation["owned_GOOG"])
         self.assertEqual(1, observation["owned_AMZN"])
         self.assertFalse(done)
 
-        observation, _, done = simulation.step([1, 0])
+        # Sell AMZN
+        observation, _, done = simulation.step([0, 1])
         self.assertEqual(40, observation["balance"])
         self.assertEqual(100, observation["net_worth"])
         self.assertEqual(0, observation["owned_GOOG"])
         self.assertEqual(1, observation["owned_AMZN"])
         self.assertFalse(done)
 
-        observation, _, done = simulation.step([0, 1])
+        # Sell GOOG
+        observation, _, done = simulation.step([1, 0])
         self.assertEqual(100, observation["balance"])
         self.assertEqual(100, observation["net_worth"])
         self.assertEqual(0, observation["owned_GOOG"])
@@ -152,14 +159,14 @@ class TestStockMarketSimulation(unittest.TestCase):
                                            max_stock_owned=1)
         _ = simulation.reset()
 
-        observation, _, done = simulation.step([1, 1])
+        observation, _, done = simulation.step([2, 2])
         self.assertEqual(0, observation["balance"])
         self.assertEqual(10, observation["net_worth"])
         self.assertEqual(0, observation["owned_GOOG"])
         self.assertEqual(1, observation["owned_AMZN"])
         self.assertFalse(done)
 
-        observation, _, done = simulation.step([1, 0])
+        observation, _, done = simulation.step([2, 1])
         self.assertEqual(0, observation["balance"])
         self.assertEqual(10, observation["net_worth"])
         self.assertEqual(0, observation["owned_GOOG"])

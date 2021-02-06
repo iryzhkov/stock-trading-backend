@@ -47,11 +47,11 @@ class FollowingFeatureAgent(Agent):
         _, _, owned_stocks, _ = self.unpack_observation(observation)
         feature = self.extract_stock_feature(observation, self.feature_template)
 
-        action = [0] * len(owned_stocks)
+        action = [1] * len(owned_stocks)
         for stock_index, num_owned in enumerate(owned_stocks):
             if feature[stock_index] > 0 == num_owned:
-                action[stock_index] = 1
+                action[stock_index] = 2
             elif feature[stock_index] <= 0 < num_owned:
-                action[stock_index] = 1
+                action[stock_index] = 0
 
         return action, {}

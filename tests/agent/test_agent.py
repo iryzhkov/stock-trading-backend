@@ -26,7 +26,7 @@ class TestAgent(TestWithSimulation):
         self.assertTrue(([0, 0] == owned_stocks))
         self.assertTrue(([20, 10] == stock_prices))
 
-        observation, _, _ = self.simulation.step([1, 1])
+        observation, _, _ = self.simulation.step([2, 2])
         balance, net_worth, owned_stocks, stock_prices = agent.unpack_observation(observation)
         self.assertEqual(10, balance)
         self.assertEqual(100, net_worth)
