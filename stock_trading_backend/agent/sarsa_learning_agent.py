@@ -40,9 +40,8 @@ class SARSALearningAgent(Agent):
         self.learning_rate = learning_rate
         self.num_epochs = num_epochs
         self.initial_num_epochs = initial_num_epochs
-        self.id_str = "{}_{}_{}_{}".format(self.name, discount_factor, epsilon, learning_rate,
-                                           num_epochs, initial_num_epochs)
-        self._add_id_with_hash_values
+        self.id_str = "{}_{}".format(self.name, discount_factor)
+        self._add_id_with_hash_values()
 
     # pylint: disable=unused-argument
     def make_decision(self, observation, env, training=False, **kwargs):
