@@ -63,6 +63,8 @@ class NeuralNetworkModel(Model):
         self.learning_rate = learning_rate
         self.num_hidden_layers = num_hidden_layers
         self.num_inner_features = num_inner_features
+        self.id_str = "{}_{}_{}_{}".format(self.name, learning_rate, num_hidden_layers,
+                                           num_inner_features)
 
     def _init_model(self, num_inputs):
         """Initializes internal linear model.

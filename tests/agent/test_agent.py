@@ -1,13 +1,26 @@
 """Unit tests for agent.
 """
+from datetime import datetime
+
+import unittest
+
 from stock_trading_backend.agent import Agent
+from stock_trading_backend.simulation import StockMarketSimulation
+from stock_trading_backend.util import read_config_file
 
-from tests.agent.test_with_simulation import TestWithSimulation
 
-
-class TestAgent(TestWithSimulation):
+class TestAgent(unittest.TestCase):
     """Unit tests for agent.
     """
+    def setUp(self):
+        """Set up for the unit tests.
+        """
+        from_date = datetime(2016, 1, 1)
+        to_date = datetime(2016, 2, 1)
+        self.data_collection_config = read_config_file("test/simulation.yaml")
+        self.simulation = StockMarketSimulation(self.data_collection_config, from_date, to_date,
+                                                min_start_balance=100, max_start_balance=100,
+                                                max_stock_owned=2)
     def test_initializes(self):
         """A test to see if agent is initialized properly.
         """
@@ -45,3 +58,9 @@ class TestAgent(TestWithSimulation):
             observation, _, _ = self.simulation.step(action)
             _, net_worth, _, _ = agent.unpack_observation(observation)
             self.assertEqual(100, net_worth)
+
+    def test_id_str_with_hash(self):
+        """A test to see if agent id str with hash is set up properly.
+        """
+        agent = Agent(self.data_collection_config, None)
+        self.assertEqual(4, len(agent.id_str_with_hash.split("_")))

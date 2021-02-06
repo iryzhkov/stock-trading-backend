@@ -17,6 +17,12 @@ class TestSharpeRatioReward(unittest.TestCase):
         reward = SharpeRatioReward(from_date, to_date)
         self.assertIsInstance(reward, SharpeRatioReward)
 
+    def test_initializes_without_dates(self):
+        """Checks if the reward is initialized properly without dates.
+        """
+        reward = SharpeRatioReward()
+        self.assertIsInstance(reward, SharpeRatioReward)
+
     def test_calculate_value(self):
         """Checks if calculate value works properly.
         """

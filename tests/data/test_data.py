@@ -55,6 +55,12 @@ class TestData(unittest.TestCase):
         with self.assertRaises(LookupError):
             _ = data[6]
 
+    def test_hash(self):
+        """Tests __hash__ function.
+        """
+        data = Data()
+        self.assertIsNotNone(hash(data))
+
     def test_setitem(self):
         """Tests if the data can be set properly.
         """

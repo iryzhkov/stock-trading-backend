@@ -2,6 +2,10 @@
 """
 from abc import ABCMeta
 
+from stock_trading_backend.data import create_data_collection
+from stock_trading_backend.agent.model_factory import create_model
+from stock_trading_backend.simulation import create_reward
+
 
 class Agent(metaclass=ABCMeta):
     """Base class for stock market agent.
@@ -18,11 +22,26 @@ class Agent(metaclass=ABCMeta):
             model_config: configuration for model used by the agent.
         """
         self.data_collection_config = data_collection_config
+        self.stock_names = data_collection_config["stock_names"]
         self.reward_config = reward_config
         self.model_config = model_config
-        self.stock_names = data_collection_config["stock_names"]
         self.id_str = self.name
         self.trained = False
+        self.id_str_with_hash = None
+        self._add_id_with_hash_values()
+
+    def _add_id_with_hash_values(self):
+        """Adds hash values to the id_str
+        """
+        data_collection = create_data_collection(self.data_collection_config)
+        reward = None
+        model = None
+        if not self.reward_config is None:
+            reward = create_reward(self.reward_config, None, None)
+        if not self.model_config is None:
+            model = create_model(self.model_config)
+        self.id_str_with_hash = "{}_{}_{}_{}".format(self.id_str, hash(data_collection),
+                                                     hash(reward), hash(model))
 
     @property
     def usable(self):

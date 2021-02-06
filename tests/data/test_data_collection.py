@@ -148,3 +148,10 @@ class TestDataCollection(unittest.TestCase):
         data_collection.prepare_data()
         available_dates = data_collection.get_available_dates()
         self.assertTrue((expected_index == data_collection[available_dates[0]].index.tolist()))
+
+    def test_hash(self):
+        """Checks if __hash__ works.
+        """
+        config = read_config_file("test/data_collection.yaml")
+        data_collection = create_data_collection(config)
+        self.assertIsNotNone(hash(data_collection))

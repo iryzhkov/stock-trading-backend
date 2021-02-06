@@ -26,6 +26,7 @@ class TestRewardFactory(unittest.TestCase):
         to_date = datetime(2016, 2, 1)
         reward = create_reward(reward_config, from_date, to_date)
         self.assertIsInstance(reward, expected_class)
+        self.assertIsNotNone(hash(reward))
 
     def test_raises_lookup_error(self):
         """Tests if creat_reward raises lookup error when name is incorrect.

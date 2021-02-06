@@ -48,6 +48,15 @@ class TestBacktest(unittest.TestCase):
                                 to_date=datetime(2015, 3, 1))
         self.is_output_valid(output)
 
+    def test_backtest_with_kwargs(self):
+        """Checks if backtesting works for agents that produce kwargs.
+        """
+        agent = api.get_agent_object("sarsa_learning_agent_1", model_name="linear")
+        agent.trained = True
+        output = backtest_agent(agent)
+        self.is_output_valid(output)
+        self.assertIn("sa_value", output)
+
     def test_not_usable_agent(self):
         """Checks if non-usable agents raise error with backtest.
         """

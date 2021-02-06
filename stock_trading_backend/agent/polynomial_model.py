@@ -49,7 +49,7 @@ class PolynomialModel(Model):
             raise ValueError("polynomial model does not work with degree of {}".format(degree))
 
         self.degree = degree
-        self.id_str = "{}_{}".format(self.name, degree)
+        self.id_str = "{}_{}_{}".format(self.name, degree, learning_rate)
         self.model = None
         self.optimizer = None
         self.criterion = nn.MSELoss()

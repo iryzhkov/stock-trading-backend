@@ -19,6 +19,7 @@ class NetWorthRatioReward(Reward):
             bias: the reward when there is no change in the net worth.
         """
         super(NetWorthRatioReward, self).__init__(from_date, to_date)
+        self.id_str = "{}_{}_{}".format(self.name, scaling_factor, bias)
         self.prev_net_worth = 0
         self.first_net_worth = 0
         self.num_days = 0

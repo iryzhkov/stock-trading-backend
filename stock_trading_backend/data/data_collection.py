@@ -191,3 +191,9 @@ class DataCollection:
             DataFrame row with the data.
         """
         return self.visible_df.loc[date]
+
+    def __hash__(self):
+        """Returns hash of concatenation of id_str of data objects.
+        """
+        string = "_".join([data.id_str for data in self.data_objects])
+        return hash(string)

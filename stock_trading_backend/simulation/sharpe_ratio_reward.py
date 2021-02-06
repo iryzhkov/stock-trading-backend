@@ -20,6 +20,7 @@ class SharpeRatioReward(Reward):
             scaling_factor: number by which to multiply output.
         """
         super(SharpeRatioReward, self).__init__(from_date, to_date)
+        self.id_str = "{}_{}".format(self.name, scaling_factor)
         self.scaling_factor = scaling_factor
         self.first_net_worth = 0
         self.prev_net_worth = 0
@@ -27,7 +28,10 @@ class SharpeRatioReward(Reward):
         self.prev_market_value = 0
         self.returns = []
         self.market_returns = []
-        self.market_data = get_stock_data(["SPY"], from_date, to_date)
+        if not from_date is None and not to_date is None:
+            self.market_data = get_stock_data(["SPY"], from_date, to_date)
+        else:
+            self.market_data = None
 
     def calculate_value(self, observation, date):
         """Calculates the value of the reward given the observation.

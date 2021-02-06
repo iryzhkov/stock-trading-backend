@@ -119,6 +119,11 @@ class Data(metaclass=ABCMeta):
         """
         return self.data.__iter__()
 
+    def __hash__(self):
+        """Returns hash of id_str.
+        """
+        return hash(self.id_str)
+
     def __setitem__(self, date, value):
         """Setter for the value.
 

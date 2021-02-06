@@ -15,6 +15,7 @@ class Reward(metaclass=ABCMeta):
             from_date: datetime start of the date range.
             to_date: datetime end of the date range.
         """
+        self.id_str = self.name
 
     def calculate_value(self, observation, date):
         """Calculates the value of the reward given the observation.
@@ -27,6 +28,11 @@ class Reward(metaclass=ABCMeta):
     def calculate_overall_reward(self):
         """Calculates the value of the reward for the whole episode.
         """
+
+    def __hash__(self):
+        """Returns hash of self.id_str
+        """
+        return hash(self.id_str)
 
     def reset(self, observation, date):
         """Resets the internal reward state.
