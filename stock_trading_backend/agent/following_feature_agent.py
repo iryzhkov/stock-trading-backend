@@ -31,13 +31,17 @@ class FollowingFeatureAgent(Agent):
         self.feature_template = followed_data.feature_template
 
     # pylint: disable=unused-argument
-    def make_decision(self, observation, env, training=False):
+    def make_decision(self, observation, env, training=False, **kwargv):
         """Make decision based on the given data.
 
         Args:
             observation: current state of the environment.
             env: the gym environment.
             training: boolean flag for specifying if this is training or testing.
+            kwargs: other arguments passed to the function. Usually output of previous call.
+
+        Returns:
+            action: the action that the agent decided to take.
         """
         # Prepare information for decision making.
         _, _, owned_stocks, _ = self.unpack_observation(observation)
@@ -50,4 +54,4 @@ class FollowingFeatureAgent(Agent):
             elif feature[stock_index] <= 0 < num_owned:
                 action[stock_index] = 1
 
-        return action
+        return action, {}

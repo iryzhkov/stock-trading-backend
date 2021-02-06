@@ -64,7 +64,7 @@ def backtest_agent(agent, from_date=None, to_date=None, start_balance=1000, comm
     observation = simulation.reset()
     while not simulation.done:
         record_history()
-        action = agent.make_decision(observation, simulation)
+        action, _ = agent.make_decision(observation, simulation)
         observation, _, _ = simulation.step(action)
 
     record_history()

@@ -3,6 +3,7 @@
 from datetime import datetime
 
 import unittest
+import itertools
 
 from stock_trading_backend.agent import FollowingFeatureAgent
 from stock_trading_backend.simulation import StockMarketSimulation
@@ -36,32 +37,17 @@ class TestFollowingAgent(unittest.TestCase):
                                            max_stock_owned=2)
         observation = simulation.reset()
 
-        observation["ra_5_stock_data_GOOG"] = 0
-        observation["ra_5_stock_data_AMZN"] = 0
-        self.assertTrue(([0, 0] == agent.make_decision(observation, simulation)))
+        def check(val_1, val_2, reverse):
+            observation["ra_5_stock_data_GOOG"] = val_1
+            observation["ra_5_stock_data_AMZN"] = val_2
+            expected = [val_1, val_2] if not reverse else [1 - val_1, 1 - val_2]
+            action, _ = agent.make_decision(observation, simulation)
+            self.assertTrue((expected == action))
 
-        observation["ra_5_stock_data_GOOG"] = 1
-        observation["ra_5_stock_data_AMZN"] = 0
-        self.assertTrue(([1, 0] == agent.make_decision(observation, simulation)))
-
-        observation["ra_5_stock_data_GOOG"] = 1
-        observation["ra_5_stock_data_AMZN"] = 1
-        self.assertTrue(([1, 1] == agent.make_decision(observation, simulation)))
+        for i, j in itertools.combinations([0, 1], 2):
+            check(i, j, False)
 
         observation, _, _ = simulation.step([1, 1])
 
-        observation["ra_5_stock_data_GOOG"] = 1
-        observation["ra_5_stock_data_AMZN"] = 1
-        self.assertTrue(([0, 0] == agent.make_decision(observation, simulation)))
-
-        observation["ra_5_stock_data_GOOG"] = 1
-        observation["ra_5_stock_data_AMZN"] = 0
-        self.assertTrue(([0, 1] == agent.make_decision(observation, simulation)))
-
-        observation["ra_5_stock_data_GOOG"] = 0
-        observation["ra_5_stock_data_AMZN"] = 0
-        self.assertTrue(([1, 1] == agent.make_decision(observation, simulation)))
-
-        observation["ra_5_stock_data_GOOG"] = 0
-        observation["ra_5_stock_data_AMZN"] = 1
-        self.assertTrue(([1, 0] == agent.make_decision(observation, simulation)))
+        for i, j in itertools.combinations([0, 1], 2):
+            check(i, j, True)

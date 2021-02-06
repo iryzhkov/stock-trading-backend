@@ -42,29 +42,35 @@ class SARSALearningAgent(Agent):
         self.initial_num_epochs = initial_num_epochs
 
     # pylint: disable=unused-argument
-    def make_decision(self, observation, env, training=False):
+    def make_decision(self, observation, env, training=False, **kwargs):
         """Make decision based on the given data.
 
         Args:
             observation: current state of the environment.
             env: the gym environment.
             training: boolean flag for specifying if this is training or testing.
+            kwargs: other arguments passed to the function. Usually output of previous call.
+
+        Returns:
+            action: the action that agent decided to take.
         """
         possible_actions = list(env.action_space_generator())
-        if random.random() < self.epsilon: # pragma: no cover
-            return random.choice(possible_actions)
-
         state_action_values = self.model.predict(observation, possible_actions)
-        return possible_actions[np.argmax(state_action_values)]
+        if training and random.random() < self.epsilon: # pragma: no cover
+            index = random.randrange(0, len(possible_actions))
+        else:
+            index = np.argmax(state_action_values)
+        return possible_actions[index], {"sa_value": state_action_values[index]}
 
     # pylint: disable=too-many-locals
-    def apply_learning(self, observations_batch, actions_batch, rewards_batch):
+    def apply_learning(self, observations_batch, actions_batch, rewards_batch, sa_values_batch):
         """Applies learning for provided data.
 
         Args:
             observations_batch: a list of DataFrames with observations.
             actions_batch: a list of a list of actions.
             rewards_batch: a list of a list of rewards.
+            sa_values_batch: a list of a list of state action values
 
         Returns:
             Loss before training.
@@ -72,16 +78,13 @@ class SARSALearningAgent(Agent):
         _observations = pd.DataFrame(columns=observations_batch[0].columns)
         _actions = []
         _expected_values = []
-        q_values = None
-        rewards = None
 
         # Unpack episodes in a batch
-        for observations, actions, rewards in zip(observations_batch, actions_batch, rewards_batch):
-            q_values = self.model.predict_with_multiple_observations(observations, actions).tolist()
-
+        zipped_input = zip(observations_batch, actions_batch, rewards_batch, sa_values_batch)
+        for observations, actions, rewards, sa_values in zipped_input:
             def calculate_expected_value(i):
-                result = q_values[i] * (1 - self.learning_rate)
-                result += self.learning_rate * (rewards[i] + q_values[i+1] * self.discount_factor)
+                result = sa_values[i] * (1 - self.learning_rate)
+                result += self.learning_rate * (rewards[i] + sa_values[i+1] * self.discount_factor)
                 return result
 
             if self.trained:

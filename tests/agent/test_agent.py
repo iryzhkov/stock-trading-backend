@@ -40,7 +40,7 @@ class TestAgent(TestWithSimulation):
         observation = self.simulation.reset()
 
         while not self.simulation.done:
-            action = agent.make_decision(observation, self.simulation)
+            action, _ = agent.make_decision(observation, self.simulation)
             self.assertEqual(2, len(action))
             observation, _, _ = self.simulation.step(action)
             _, net_worth, _, _ = agent.unpack_observation(observation)

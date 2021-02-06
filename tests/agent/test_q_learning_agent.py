@@ -29,7 +29,7 @@ class TestQLearningAgent(unittest.TestCase):
         observation = simulation.reset()
 
         # Testing whether q learning makes a valid decision.
-        action = agent.make_decision(observation, simulation)
+        action, _ = agent.make_decision(observation, simulation)
         self.assertEqual(2, len(action))
 
     def test_apply_learning(self):

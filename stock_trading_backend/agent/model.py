@@ -50,24 +50,6 @@ class Model(metaclass=ABCMeta):
         state_action_tensor = torch.tensor(state_action_df.values, dtype=torch.float64)
         return self._predict(state_action_tensor)
 
-    def predict_with_multiple_observations(self, observations, actions):
-        """Use provided information to make a prediction.
-
-        Args:
-            state_action_tensor: pytorch tensor with state-action expected_values.
-            expected_values: pytorch tensor with expected values for each state-action.
-
-        Returns:
-            Predicted values for observation-action tensors.
-        """
-        action_df = pd.DataFrame(actions)
-        observation_df = pd.DataFrame(observations)
-        state_action_df = observation_df.merge(action_df, left_index=True, right_index=True)
-        # pylint: disable=no-member
-        # pylint: disable=not-callable
-        state_action_tensor = torch.tensor(state_action_df.values, dtype=torch.float64)
-        return self._predict(state_action_tensor)
-
     # pylint: disable=no-self-use
     def _train(self, state_action_tensor, expected_values_tensor):
         """Train the model for 1 epoch.

@@ -40,14 +40,15 @@ class TestSarsaLearningAgent(unittest.TestCase):
         observations = pd.DataFrame([[0]] * 6, columns=["balance"])
         actions = [[0]] * 3 + [[1]] * 3
         rewards = [0] * 3 + [1] * 3
+        sa_values = [0] * 3 + [1] * 3
 
         # Testing whther sarsa learning agent changes trained variable.
-        agent.apply_learning([observations], [actions], [rewards])
+        agent.apply_learning([observations], [actions], [rewards], [sa_values])
         self.assertTrue(agent.usable)
 
         # pylint: disable=unused-variable
         for i in range(5):
-            agent.apply_learning([observations], [actions], [rewards])
+            agent.apply_learning([observations], [actions], [rewards], [sa_values])
 
     def test_make_decision(self):
         """A test to see if agent can make decisions.
@@ -60,5 +61,5 @@ class TestSarsaLearningAgent(unittest.TestCase):
         observation = simulation.reset()
 
         # Testing whether sarsa learning agent makes a valid decision.
-        action = agent.make_decision(observation, simulation)
+        action, _ = agent.make_decision(observation, simulation)
         self.assertEqual(2, len(action))

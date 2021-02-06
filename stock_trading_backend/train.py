@@ -50,8 +50,14 @@ def train_agent(agent, from_date=None, to_date=None, min_duration=60, max_durati
     overall_reward_history = []
     loss_history = []
 
+    observation = simulation.reset()
+    _, kwargs = agent.make_decision(observation, simulation, False)
+    kwargs_keys = kwargs.keys()
+    batch_kwargs_keys = ["{}s_batch".format(key) for key in kwargs_keys]
+
     with progressbar.ProgressBar(max_value=num_episodes) as progress_bar:
         while num_episodes_run < num_episodes:
+            batch_kwargs = {key: [] for key in batch_kwargs_keys}
             batch_rewards = []
             batch_observations = []
             batch_actions = []
@@ -62,13 +68,16 @@ def train_agent(agent, from_date=None, to_date=None, min_duration=60, max_durati
             while num_episodes_left_in_batch > 0 and num_episodes_run < num_episodes:
                 rewards = []
                 actions = []
+                kwargs = {key: [] for key in kwargs_keys}
                 observation = simulation.reset()
                 observations = pd.DataFrame(columns=observation.index)
 
                 while not simulation.done:
-                    action = agent.make_decision(observation, simulation, True)
+                    action, _kwargs = agent.make_decision(observation, simulation, True)
                     observations = observations.append(observation, ignore_index=True)
                     actions.append(action)
+                    for key in _kwargs:
+                        kwargs[key].append(_kwargs[key])
                     observation, reward, _ = simulation.step(action)
                     rewards.append(reward)
 
@@ -78,12 +87,15 @@ def train_agent(agent, from_date=None, to_date=None, min_duration=60, max_durati
                 batch_rewards.append(rewards)
                 batch_observations.append(observations)
                 batch_actions.append(actions)
+                for key in kwargs:
+                    batch_kwargs["{}s_batch".format(key)].append(kwargs[key])
                 num_episodes_run += 1
                 num_episodes_left_in_batch -= 1
                 progress_bar.update(num_episodes_run)
 
             # Utilize data from the simulations to train agents.
-            loss = agent.apply_learning(batch_observations, batch_actions, batch_rewards)
+            loss = agent.apply_learning(batch_observations, batch_actions, batch_rewards,
+                                        **batch_kwargs)
 
             overall_reward_history += [batch_reward / episode_batch_size]
             loss_history.append(loss)

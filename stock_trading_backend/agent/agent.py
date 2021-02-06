@@ -68,11 +68,13 @@ class Agent(metaclass=ABCMeta):
             observation: current state of the environment.
             env: the gym environment.
             training: boolean flag for specifying if this is training or testing.
+            kwargs: other arguments passed to the function. Usually output of previous call.
 
         Returns:
             action: the action that agent decided to take.
+            empty dict, since there is no additional information.
         """
-        return env.action_space.sample()
+        return env.action_space.sample(), {}
 
     def apply_learning(self, observations_batch, actions_batch, rewards_batch):
         """Applies learning for provided data.
