@@ -108,4 +108,4 @@ class SARSALearningAgent(Agent):
             losses.append(self.model.train(_observations, _actions, _expected_values))
 
         self.trained = True
-        return losses[0]
+        return losses

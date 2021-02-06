@@ -62,7 +62,7 @@ class PolynomialModel(Model):
             num_inputs: number of inputs that model will have.
         """
         self.model = LinearModel(num_inputs)
-        self.optimizer = optim.SGD(self.model.parameters(), lr=self.learning_rate)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
 
     def _convert_tensor_to_polynomial(self, tensor):
         """Converts tensor to polynomial tensor.

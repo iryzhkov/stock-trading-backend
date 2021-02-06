@@ -19,8 +19,11 @@ class NNModel(nn.Module):
         """
         super(NNModel, self).__init__()
         self.fc1 = nn.Linear(num_inputs, 120)
-        self.fc2 = nn.Linear(120, 60)
-        self.fc3 = nn.Linear(60, 1)
+        self.fc2 = nn.Linear(120, 120)
+        self.fc3 = nn.Linear(120, 120)
+        self.fc4 = nn.Linear(120, 120)
+        self.fc5 = nn.Linear(120, 120)
+        self.fc6 = nn.Linear(120, 1)
 
     def forward(self, input_tensor):
         """Forward pass on the neural network model.
@@ -33,7 +36,10 @@ class NNModel(nn.Module):
         """
         output = F.relu(self.fc1(input_tensor))
         output = F.relu(self.fc2(output))
-        output = self.fc3(output)
+        output = F.relu(self.fc3(output))
+        output = F.relu(self.fc4(output))
+        output = F.relu(self.fc5(output))
+        output = self.fc6(output)
         return output
 
 
@@ -61,7 +67,7 @@ class NeuralNetworkModel(Model):
             num_inputs: number of inputs that model will have.
         """
         self.model = NNModel(num_inputs)
-        self.optimizer = optim.SGD(self.model.parameters(), lr=self.learning_rate)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
 
     def _predict(self, state_action_tensor):
         """Use provided information to make a prediction.
