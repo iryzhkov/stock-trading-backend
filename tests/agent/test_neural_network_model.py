@@ -1,5 +1,6 @@
 """Unit tests for Neural Network Model class
 """
+import os
 import unittest
 
 import pandas as pd
@@ -33,3 +34,16 @@ class TestNeuralNetworkModel(unittest.TestCase):
         expected_values = [[0]] * 5 + [[1]] * 5
         losses = [model.train(observations, actions, expected_values) for i in range(10)]
         self.assertTrue(losses[0] > losses[-1])
+
+    def test_save_and_load(self):
+        """Checks if saving and loading functin works properly.
+        """
+        file_path = "data/test/test.pkl"
+        model = NeuralNetworkModel()
+        observation = pd.Series([1, 2, 3], ["balance", "net_worth", "owned"])
+        predictions_1 = model.predict(observation, [[0, 1]] * 5)
+        model.save(file_path)
+        model.load(file_path)
+        predictions_2 = model.predict(observation, [[0, 1]] * 5)
+        self.assertTrue(all(predictions_1 == predictions_2))
+        os.remove(file_path)

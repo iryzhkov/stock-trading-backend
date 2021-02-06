@@ -1,5 +1,6 @@
 """Unit tests for PolynomialModel class
 """
+import os
 import unittest
 
 import pandas as pd
@@ -17,6 +18,19 @@ class TestPolynomialModel(unittest.TestCase):
         self.assertEqual(5, model.degree)
         with self.assertRaises(ValueError):
             _ = PolynomialModel(degree=0)
+
+    def test_save_and_load(self):
+        """Checks if saving and loading functin works properly.
+        """
+        file_path = "data/test/test.pkl"
+        model = PolynomialModel()
+        observation = pd.Series([1, 2, 3], ["balance", "net_worth", "owned"])
+        predictions_1 = model.predict(observation, [[0, 1]] * 5)
+        model.save(file_path)
+        model.load(file_path)
+        predictions_2 = model.predict(observation, [[0, 1]] * 5)
+        self.assertTrue(all(predictions_1 == predictions_2))
+        os.remove(file_path)
 
     def test_predict(self):
         """Checks if predict function works properly.

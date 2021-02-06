@@ -1,11 +1,15 @@
 """Base class for stock market agent.
 """
 from abc import ABCMeta
+from os.path import join
 
-from stock_trading_backend.data import create_data_collection
 from stock_trading_backend.agent.model_factory import create_model
+from stock_trading_backend.data import create_data_collection
 from stock_trading_backend.simulation import create_reward
+from stock_trading_backend.util import read_manifest_file, write_manifest_file
 
+AGENT_PATH = "data/agent"
+MODEL_PATH_TEMPLATE = join(AGENT_PATH, "{}.pkl")
 
 class Agent(metaclass=ABCMeta):
     """Base class for stock market agent.
@@ -107,10 +111,44 @@ class Agent(metaclass=ABCMeta):
             Loss before training.
         """
 
-    def save_agent(self):
+    def can_be_loaded(self):
+        """Checks if the agent can be loaded.
+        """
+        if not self.requires_learning:
+            return True
+        agent_manifest = read_manifest_file(join(AGENT_PATH, "manifest.json"))
+        return self.id_str_with_hash in agent_manifest
+
+    def save(self):
         """Saves the agent for future re-use.
         """
+        if not self.requires_learning:
+            return
 
-    def load_agent(self):
+        if not self.trained:
+            raise ValueError("Agent must be trained before saving it.")
+
+        manifest_path = join(AGENT_PATH, "manifest.json")
+        model_path = join(MODEL_PATH_TEMPLATE.format(self.id_str_with_hash))
+        agent_manifest = read_manifest_file(manifest_path)
+        agent_manifest[self.id_str_with_hash] = {
+            "trained": True
+        }
+        self.model.save(model_path)
+        write_manifest_file(agent_manifest, manifest_path)
+
+    def load(self):
         """Loads the saved version of the agent.
         """
+        if not self.requires_learning:
+            return
+
+        path = join(AGENT_PATH, "manifest.json")
+        agent_manifest = read_manifest_file(path)
+
+        if self.id_str_with_hash not in agent_manifest:
+            raise LookupError("Couldn't find the saved version.")
+
+        model_path = join(MODEL_PATH_TEMPLATE.format(self.id_str_with_hash))
+        self.model.load(model_path)
+        self.trained = True

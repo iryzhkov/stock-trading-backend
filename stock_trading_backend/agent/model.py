@@ -8,6 +8,8 @@ import torch
 # pylint: disable=no-member
 torch.set_default_dtype(torch.float64)
 
+from stock_trading_backend.util import save_torch_model, load_torch_model
+
 
 class Model(metaclass=ABCMeta):
     """Base model class.
@@ -18,6 +20,7 @@ class Model(metaclass=ABCMeta):
         """Initializer for model class.
         """
         self.id_str = self.name
+        self.model = None
 
     # pylint: disable=no-self-use
     def _predict(self, state_action_tensor):
@@ -82,3 +85,13 @@ class Model(metaclass=ABCMeta):
         # pylint: disable=not-callable
         expected_values_tensor = torch.tensor(expected_values, dtype=torch.float64).reshape(-1, 1)
         return self._train(state_action_tensor, expected_values_tensor)
+
+    def save(self, file_path):
+        """Saves the model in the provided file path.
+        """
+        save_torch_model(self.model, file_path)
+
+    def load(self, file_path):
+        """Loads the model from the provided file path.
+        """
+        load_torch_model(file_path)

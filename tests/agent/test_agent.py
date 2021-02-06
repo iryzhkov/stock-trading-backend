@@ -59,6 +59,24 @@ class TestAgent(unittest.TestCase):
             _, net_worth, _, _ = agent.unpack_observation(observation)
             self.assertEqual(100, net_worth)
 
+    def test_save_and_load(self):
+        """A test to see if agent uses save and load properly.
+        """
+        agent = Agent(self.data_collection_config)
+        self.assertTrue(agent.can_be_loaded())
+        agent.save()
+        self.assertTrue(agent.can_be_loaded())
+        agent.load()
+        self.assertTrue(agent.can_be_loaded())
+
+    def test_load_lookup_error(self):
+        """A test to see if look up error works properly.
+        """
+        agent = Agent(self.data_collection_config)
+        agent.requires_learning = True
+        with self.assertRaises(LookupError):
+            agent.load()
+
     def test_id_str_with_hash(self):
         """A test to see if agent id str with hash is set up properly.
         """

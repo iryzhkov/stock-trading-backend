@@ -8,6 +8,8 @@ import pandas as pd
 
 from stock_trading_backend.util import read_config_file, FileSourceType, read_manifest_file
 from stock_trading_backend.util import read_csv_file, write_csv_file, write_manifest_file
+from stock_trading_backend.util import load_torch_model, save_torch_model
+from stock_trading_backend.agent import PolynomialModel
 
 
 class TestFileUtilsData(unittest.TestCase):
@@ -37,7 +39,13 @@ class TestFileUtilsData(unittest.TestCase):
             _ = read_csv_file("data/test/test.csv", FileSourceType.aws)
 
         with self.assertRaises(NotImplementedError):
-            write_csv_file(pd.DataFrame(), "data/test/test.csv", FileSourceType.aws)
+            write_csv_file(None, "data/test/test.csv", FileSourceType.aws)
+
+        with self.assertRaises(NotImplementedError):
+            _ = load_torch_model("data/test/test.pkl", FileSourceType.aws)
+
+        with self.assertRaises(NotImplementedError):
+            save_torch_model(None, "data/test/test.pkl", FileSourceType.aws)
 
     def test_read_manifest(self):
         """Test for manifest reader.

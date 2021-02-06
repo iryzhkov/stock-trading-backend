@@ -63,3 +63,28 @@ class TestSarsaLearningAgent(unittest.TestCase):
         # Testing whether sarsa learning agent makes a valid decision.
         action, _ = agent.make_decision(observation, simulation)
         self.assertEqual(2, len(action))
+
+    def test_save_and_load(self):
+        """Checks if saving and loading functin works properly.
+        """
+        data_collection_config = read_config_file("test/simulation.yaml")
+        model_config = read_config_file("model/linear.yaml")
+        agent = SARSALearningAgent(data_collection_config=data_collection_config,
+                                   model_config=model_config)
+        simulation = StockMarketSimulation(data_collection_config)
+        observation = simulation.reset()
+        _, _ = agent.make_decision(observation, simulation)
+
+        agent.id_str_with_hash = "test"
+        agent.trained = True
+        agent.save()
+
+        self.assertTrue(agent.can_be_loaded())
+        agent.trained = False
+
+        agent.load()
+        self.assertTrue(agent.trained)
+
+        with self.assertRaises(ValueError):
+            agent.trained = False
+            agent.save()
