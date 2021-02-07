@@ -11,7 +11,7 @@ class DataCollection:
     """Class that contains multiple Data classes.
     """
     def __init__(self, data_objects, stock_names, stock_data_randomization=False,
-                 use_relative_stock_data=False):
+                 use_relative_stock_data=False, scaling_factor=1):
         """Initializer for DataCollection class.
 
         Args:
@@ -20,6 +20,7 @@ class DataCollection:
             stock_data_randomization: whether to add stock data randomization.
             use_relative_stock_data: whether to use relative price as stock data. This works as a
                                      pseudo-normalization for stock price data.
+            scaling_factor: scaling factor for relative stock data
         """
         self.stock_names = stock_names
         self.data_objects = []
@@ -37,7 +38,8 @@ class DataCollection:
             data_objects.insert(0, randomization_layer)
 
         if use_relative_stock_data:
-            relative_layer = RelativeStockData(dependencies=[self.absolute_stock_data_id])
+            relative_layer = RelativeStockData(dependencies=[self.absolute_stock_data_id],
+                                               scaling_factor=scaling_factor)
             self.stock_data_id = relative_layer.id_str
             data_objects.insert(0, relative_layer)
         else:

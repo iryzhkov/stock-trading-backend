@@ -4,6 +4,7 @@ from copy import deepcopy
 
 from stock_trading_backend.agent.following_feature_agent import FollowingFeatureAgent
 from stock_trading_backend.agent.sarsa_learning_agent import SARSALearningAgent
+from stock_trading_backend.agent.q_learning_agent import QLearningAgent
 
 AGENT_CLASSES = [
     FollowingFeatureAgent,

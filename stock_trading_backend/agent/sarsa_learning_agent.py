@@ -5,9 +5,8 @@ import random
 import numpy as np
 import pandas as pd
 
-from stock_trading_backend.agent.agent import Agent, AGENT_PATH
+from stock_trading_backend.agent.agent import Agent
 from stock_trading_backend.agent.model_factory import create_model
-from stock_trading_backend.util import read_manifest_file, write_manifest_file
 
 # pylint: disable=too-many-arguments
 class SARSALearningAgent(Agent):
