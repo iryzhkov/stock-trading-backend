@@ -9,6 +9,7 @@ from stock_trading_backend.agent.q_learning_agent import QLearningAgent
 AGENT_CLASSES = [
     FollowingFeatureAgent,
     SARSALearningAgent,
+    QLearningAgent,
 ]
 AGENT_NAME_MAPPING = {agent.name:agent for agent in AGENT_CLASSES}
 
