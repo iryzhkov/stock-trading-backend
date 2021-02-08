@@ -21,6 +21,13 @@ class TestQLearningAgent(unittest.TestCase):
         self.assertEqual(data_collection_config, agent.data_collection_config)
         self.assertFalse(agent.usable)
 
+    def test_raises_error_wihtout_model(self):
+        """Checks if raises error when model is not specified.
+        """
+        with self.assertRaises(ValueError):
+            data_collection_config = read_config_file("test/simulation.yaml")
+            QLearningAgent(data_collection_config)
+
     def test_make_decision(self):
         """A test to see if agent can make decisions.
         """
@@ -51,6 +58,6 @@ class TestQLearningAgent(unittest.TestCase):
         self.assertTrue(agent.usable)
 
         # Test applying learning multiple times.
-        for _ in range(5)
+        for _ in range(5):
             agent.apply_learning([observations], [actions], [rewards], [sa_values], [sa_values])
             self.assertTrue(agent.usable)
