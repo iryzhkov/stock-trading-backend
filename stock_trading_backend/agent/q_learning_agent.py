@@ -32,7 +32,7 @@ class QLearningAgent(Agent):
         super(QLearningAgent, self).__init__(data_collection_config, reward_config, model_config)
         if model_config is None:
             raise ValueError("Learning agents require model.")
-        self.num_applied_learning = 0
+        self.num_applied_learning = 1
         self.model = create_model(model_config)
         self.discount_factor = discount_factor
         self.epsilon = epsilon
