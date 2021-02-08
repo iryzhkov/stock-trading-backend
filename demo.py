@@ -6,11 +6,11 @@ import numpy as np
 
 from stock_trading_backend import api, train, backtest
 
-agent = api.get_agent_object("sarsa_learning_agent_1", "generated_1",
+agent = api.get_agent_object("q_learning_agent_0", "generated_1",
                              "net_worth_ratio", "neural_network")
-reward_history, loss_history = train.train_agent(agent, episode_batch_size=5, num_episodes=10,
+reward_history, loss_history = train.train_agent(agent, episode_batch_size=5, num_episodes=50,
                                                  min_duration=100, max_duration=150,
-                                                 commission=0.03)
+                                                 commission=0.01)
 
 N = 15
 reward_history = np.array(reward_history)
@@ -26,9 +26,9 @@ axs[1].set_title("Loss history vs batch number")
 axs[1].set_yscale("log")
 plt.savefig("demo_training.png")
 
-reward_history, loss_history = train.train_agent(agent, episode_batch_size=5, num_episodes=10,
+reward_history, loss_history = train.train_agent(agent, episode_batch_size=5, num_episodes=50,
                                                  min_duration=100, max_duration=150,
-                                                 commission=0.03, training=False)
+                                                 commission=0.01, training=False)
 
 N = 15
 reward_history = np.array(reward_history)
@@ -44,7 +44,7 @@ axs[1].set_title("Loss history vs batch number")
 axs[1].set_yscale("log")
 plt.savefig("demo_training_without_exploration.png")
 
-backtest_output = backtest.backtest_agent(agent, commission=0.03)
+backtest_output = backtest.backtest_agent(agent, commission=0.01)
 num_stocks = len(agent.stock_names)
 fix, axs = plt.subplots(num_stocks + 3, figsize=(10, 15))
 axs[0].plot(backtest_output["net_worth_history"], label="net_worth")

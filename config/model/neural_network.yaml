@@ -1,2 +1,4 @@
 name: neural_network_model
-learning_rate: 0.00001
+learning_rate: 0.001
+num_hidden_layers: 4
+num_inner_features: 40

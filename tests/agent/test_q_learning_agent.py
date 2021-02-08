@@ -44,8 +44,13 @@ class TestQLearningAgent(unittest.TestCase):
         observations = pd.DataFrame([[1]] * 6, columns=["shmalance"])
         actions = [[0]] * 3 + [[1]] * 3
         rewards = [-1] * 3 + [1] * 3
-        q_values = [0] * 3 + [1] * 3
+        sa_values = [0] * 3 + [1] * 3
 
         # Testing whther q learning agent changes trained variable.
-        agent.apply_learning([observations], [actions], [rewards], [q_values])
+        agent.apply_learning([observations], [actions], [rewards], [sa_values], [sa_values])
         self.assertTrue(agent.usable)
+
+        # Test applying learning multiple times.
+        for _ in range(5)
+            agent.apply_learning([observations], [actions], [rewards], [sa_values], [sa_values])
+            self.assertTrue(agent.usable)

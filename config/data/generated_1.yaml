@@ -1,5 +1,3 @@
-use_relative_stock_data: True
-scaling_factor: 10
 stock_names:
   - STOCK_1
   - STOCK_2

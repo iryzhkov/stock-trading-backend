@@ -1,6 +1,6 @@
 name: q_learning_agent
-discount_factor: 0.4
+discount_factor: 0.8
 num_epochs: 5
-initial_num_epochs: 100
-learning_rate: 0.075
+initial_num_epochs: 10
+learning_rate: 0.1
 epsilon: 0.05

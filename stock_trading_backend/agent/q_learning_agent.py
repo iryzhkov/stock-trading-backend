@@ -55,22 +55,25 @@ class QLearningAgent(Agent):
             action: the action that agent decided to take.
         """
         possible_actions = list(env.action_space_generator())
-        q_values = self.model.predict(observation, possible_actions)
-        best_index = np.argmax(q_values)
+        sa_values = self.model.predict(observation, possible_actions)
+        best_index = np.argmax(sa_values)
         if training and random.random() < self.epsilon: # pragma: no cover
             index = random.randrange(0, len(possible_actions))
         else:
             index = best_index
-        return possible_actions[index], {"q_value": q_values[best_index]}
+        return possible_actions[index], {"sa_value": sa_values[index],
+                                         "q_value": sa_values[best_index]}
 
     # pylint: disable=too-many-locals
-    def apply_learning(self, observations_batch, actions_batch, rewards_batch, q_values_batch):
+    def apply_learning(self, observations_batch, actions_batch, rewards_batch, sa_values_batch,
+                       q_values_batch):
         """Applies learning for provided data.
 
         Args:
             observations_batch: a list of DataFrames with observations.
             actions_batch: a list of a list of actions.
             rewards_batch: a list of a list of rewards.
+            q_values_batch: a list of a list of sa values
             q_values_batch: a list of a list of q values
 
         Returns:
@@ -81,10 +84,11 @@ class QLearningAgent(Agent):
         _expected_values = []
 
         # Unpack episodes in a batch
-        zipped_input = zip(observations_batch, actions_batch, rewards_batch, q_values_batch)
-        for observations, actions, rewards, q_values in zipped_input:
+        zipped_input = zip(observations_batch, actions_batch, rewards_batch, sa_values_batch,
+                           q_values_batch)
+        for observations, actions, rewards, sa_values, q_values in zipped_input:
             def calculate_expected_value(i):
-                result = q_values[i] * (1 - self.learning_rate)
+                result = sa_values[i] * (1 - self.learning_rate)
                 result += self.learning_rate * (rewards[i] + q_values[i+1] * self.discount_factor)
                 return result
 
