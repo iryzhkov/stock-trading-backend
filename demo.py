@@ -6,7 +6,7 @@ import numpy as np
 
 from stock_trading_backend import api, train, backtest
 
-agent = api.get_agent_object("q_learning_agent_0", "generated_1",
+agent = api.get_agent_object("q_learning_agent", "generated_1",
                              "net_worth_ratio", "neural_network")
 reward_history, loss_history = train.train_agent(agent, episode_batch_size=5, num_episodes=50,
                                                  min_duration=100, max_duration=150,

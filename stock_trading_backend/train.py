@@ -84,6 +84,7 @@ def train_agent(agent, from_date=None, to_date=None, min_duration=60, max_durati
 
                 overall_reward = simulation.overall_reward
                 overall_reward_history.append(overall_reward)
+                rewards[-2] += overall_reward
                 rewards = np.asarray(rewards)
                 batch_rewards.append(rewards)
                 batch_observations.append(observations)

@@ -32,6 +32,7 @@ class QLearningAgent(Agent):
         super(QLearningAgent, self).__init__(data_collection_config, reward_config, model_config)
         if model_config is None:
             raise ValueError("Learning agents require model.")
+        self.num_applied_learning = 0
         self.model = create_model(model_config)
         self.discount_factor = discount_factor
         self.epsilon = epsilon
@@ -57,8 +58,8 @@ class QLearningAgent(Agent):
         possible_actions = list(env.action_space_generator())
         sa_values = self.model.predict(observation, possible_actions)
         best_index = np.argmax(sa_values)
-        if training and random.random() < self.epsilon: # pragma: no cover
-            index = random.randrange(0, len(possible_actions))
+        if training and random.random() < self.epsilon / self.num_applied_learning ** 0.5:
+            index = random.randrange(0, len(possible_actions)) # pragma: no cover
         else:
             index = best_index
         return possible_actions[index], {"sa_value": sa_values[index],
@@ -79,6 +80,7 @@ class QLearningAgent(Agent):
         Returns:
             Loss before training.
         """
+        self.num_applied_learning += 1
         _observations = pd.DataFrame(columns=observations_batch[0].columns)
         _actions = []
         _expected_values = []
@@ -88,8 +90,9 @@ class QLearningAgent(Agent):
                            q_values_batch)
         for observations, actions, rewards, sa_values, q_values in zipped_input:
             def calculate_expected_value(i):
-                result = sa_values[i] * (1 - self.learning_rate)
-                result += self.learning_rate * (rewards[i] + q_values[i+1] * self.discount_factor)
+                learning_rate = self.learning_rate / self.num_applied_learning ** 0.5
+                result = sa_values[i] * (1 - learning_rate)
+                result += learning_rate * (rewards[i] + q_values[i+1] * self.discount_factor)
                 return result
 
             if self.trained:
